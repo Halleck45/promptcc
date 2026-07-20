@@ -16,9 +16,11 @@ Download a binary from the [releases page](https://github.com/halleck45/promptcc
 go install github.com/halleck45/promptcc/cmd/promptcc@latest
 ```
 
-The binary is pure Go, statically linked, no libc dependency.
+Linux and Windows release binaries are fully static (no libc dependency). Building from source needs a C compiler (the tree-sitter grammars used by `promptcc scan` are C code).
 
 ## Usage
+
+### Analyze a prompt
 
 ```bash
 promptcc prompt.txt              # analyze a prompt file
@@ -27,6 +29,35 @@ promptcc a.txt b.txt             # compare several prompts
 promptcc --json prompt.txt       # machine-readable output
 promptcc --fail-over 22 p.txt    # CI gate: exit 1 above the threshold
 ```
+
+### Scan a codebase
+
+`promptcc scan` extracts prompts directly from source code (Python, TypeScript, PHP, parsed with tree-sitter) and analyzes each one where it lives:
+
+```bash
+promptcc scan ./src                        # scan a directory
+promptcc scan --full ./src                 # full report per prompt
+promptcc scan --json ./src                 # machine-readable output
+promptcc scan --min-confidence high ./src  # only prompts inside known SDK calls
+promptcc scan --fail-over 22 ./src         # CI gate
+```
+
+```
+src/agent.py:5  [medium]  var SYSTEM_PROMPT
+    score 13.2 [HIGH]  decisions=3 density=0.6 routes=2 inject=1 guards=1
+src/agent.py:19  [high]  call client.messages.create
+    score 12.5 [HIGH]  decisions=1 density=1 routes=0 inject=1 guards=0
+
+2 prompt(s) in 1 file(s)
+```
+
+A string literal is reported as a prompt with a confidence level:
+
+- **high**: passed to a known LLM SDK call (Anthropic, OpenAI, Google, LangChain, Vercel AI SDK, Bedrock, Ollama)
+- **medium**: bound to a prompt-like name (`system_prompt = ...`, `system:`, `'instructions' =>`)
+- **low**: a long natural-language literal with no other evidence
+
+Interpolations (f-strings, template literals, PHP `$variables`, heredocs) are decoded and counted as injection surface, exactly what a grep-based approach cannot see. Values under keys like `model`, `role` or `url` are never reported.
 
 Example output:
 
@@ -77,7 +108,8 @@ The weights are an honest v0 heuristic: the relative ordering follows published 
 
 ## Roadmap
 
-- [ ] Extract prompts directly from source code (Python, TypeScript, PHP) via tree-sitter, so the tool works as a linter on repositories rather than on isolated text files
+- [x] Extract prompts directly from source code (Python, TypeScript, PHP) via tree-sitter, so the tool works as a linter on repositories rather than on isolated text files
+- [ ] More grammars (JavaScript, Go, Java, Ruby)
 - [ ] SARIF output for GitHub code scanning
 - [ ] pre-commit hook and GitHub Action
 - [ ] Score calibration against a labeled corpus

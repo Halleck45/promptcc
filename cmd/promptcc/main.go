@@ -20,11 +20,14 @@ Usage:
   promptcc [flags] <file> [<file>...]
   promptcc [flags] -            read the prompt from stdin
   cat prompt.txt | promptcc     stdin is used when piped
+  promptcc scan <path>          extract and analyze prompts from source code
 
 Flags:
   --json             output JSON instead of text
   --fail-over SCORE  exit with code 1 if any prompt scores above SCORE
   --version          print version and exit
+
+Run "promptcc scan" with no argument for scan-specific flags.
 `
 
 func main() {
@@ -32,6 +35,9 @@ func main() {
 }
 
 func run(args []string, stdin io.Reader, stdout, stderr io.Writer) int {
+	if len(args) > 0 && args[0] == "scan" {
+		return runScan(args[1:], stdout, stderr)
+	}
 	fs := flag.NewFlagSet("promptcc", flag.ContinueOnError)
 	fs.SetOutput(stderr)
 	fs.Usage = func() { fmt.Fprint(stderr, usage) }

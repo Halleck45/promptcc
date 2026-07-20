@@ -14,11 +14,14 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: actions/setup-go@v5
-        with:
-          go-version-file: go.mod
-      - uses: goreleaser/goreleaser-action@v6
-        with:
-          args: release --clean
+      # tree-sitter needs cgo, so cross-compilation runs in the
+      # goreleaser-cross image, which bundles toolchains for every target.
+      - name: Release
+        run: |
+          docker run --rm \
+            -v "$PWD:/src" -w /src \
+            -e GITHUB_TOKEN \
+            ghcr.io/goreleaser/goreleaser-cross:v1.24 \
+            release --clean
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

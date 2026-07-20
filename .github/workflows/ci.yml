@@ -10,7 +10,10 @@ permissions:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
@@ -23,7 +26,7 @@ jobs:
       - name: Test
         run: go test -race -cover ./...
       - name: Build
-        run: CGO_ENABLED=0 go build ./cmd/promptcc
+        run: go build ./cmd/promptcc
 
   goreleaser-check:
     runs-on: ubuntu-latest

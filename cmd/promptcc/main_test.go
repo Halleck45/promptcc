@@ -101,3 +101,35 @@ func TestRunVersion(t *testing.T) {
 		t.Errorf("version output = %q", stdout.String())
 	}
 }
+
+func TestRunScanTestdata(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := run([]string{"scan", "--json", filepath.Join("..", "..", "internal", "extractor", "testdata")},
+		strings.NewReader(""), &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("exit code = %d, stderr = %s", code, stderr.String())
+	}
+	var decoded []map[string]any
+	if err := json.Unmarshal(stdout.Bytes(), &decoded); err != nil {
+		t.Fatalf("invalid JSON: %v", err)
+	}
+	if len(decoded) < 5 {
+		t.Errorf("decoded %d prompts, want at least 5 across the three fixtures", len(decoded))
+	}
+}
+
+func TestRunScanFailOver(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := run([]string{"scan", "--fail-over", "0.1", filepath.Join("..", "..", "internal", "extractor", "testdata")},
+		strings.NewReader(""), &stdout, &stderr)
+	if code != 1 {
+		t.Errorf("exit code = %d, want 1 above threshold", code)
+	}
+}
+
+func TestRunScanNoArgs(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	if code := run([]string{"scan"}, strings.NewReader(""), &stdout, &stderr); code != 2 {
+		t.Errorf("exit code = %d, want 2 (usage)", code)
+	}
+}
