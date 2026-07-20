@@ -1,0 +1,14 @@
+# Binaries
+/promptcc
+/promptcc.exe
+dist/
+
+# Test and coverage artifacts
+*.out
+coverage.html
+
+# Editor / OS
+.idea/
+.vscode/
+*.swp
+.DS_Store
