@@ -681,3 +681,23 @@ func TestErrorScopesAndAssertHelpersCarryNoEvidence(t *testing.T) {
 		t.Fatalf("found %d prompts, want only the StoryPromptBuilder heredoc", len(found))
 	}
 }
+
+func TestScanSkipsGeneratedFiles(t *testing.T) {
+	dir := t.TempDir()
+	code := `SYSTEM_PROMPT = "If asked about billing, escalate to a human. Never guess amounts."`
+	for _, name := range []string{"model_pb2.py", "app.min.js", "ok.py"} {
+		if err := os.WriteFile(filepath.Join(dir, name), []byte(code), 0o644); err != nil {
+			t.Fatal(err)
+		}
+	}
+	prompts, err := Scan([]string{dir}, Options{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(prompts) != 1 || filepath.Base(prompts[0].File) != "ok.py" {
+		for _, p := range prompts {
+			t.Logf("found: %s", p.File)
+		}
+		t.Fatalf("found %d prompts, want 1 from ok.py only", len(prompts))
+	}
+}

@@ -33,10 +33,9 @@ func TestHTMLReport(t *testing.T) {
 		"client.messages.create",
 		"${team}",
 		"1.2.3",
-		"2 prompt(s) in 2 file(s)",
 		"Score distribution", "score ≥ 22",
-		"Score composition",
-		"<mark>If</mark>",
+		"Severity breakdown", "Prompt text",
+		`id="page-dashboard"`, `id="page-explorer"`, `id="page-help"`,
 	} {
 		if !strings.Contains(out, want) {
 			t.Errorf("HTML report missing %q", want)
@@ -45,6 +44,32 @@ func TestHTMLReport(t *testing.T) {
 	// Sorted by score: the branchy prompt must appear before the greeting.
 	if strings.Index(out, "src/b.ts:10") > strings.Index(out, "src/a.py:3") {
 		t.Error("HTML report not sorted by score descending")
+	}
+}
+
+func TestHTMLReportLowConfidenceToggle(t *testing.T) {
+	entries := sampleEntries()
+	entries[0].Confidence = "low"
+	out, err := HTML(entries, "dev")
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, want := range []string{
+		`id="showlow"`,
+		"Show 1 low-confidence prompt(s)",
+		"lowconf",
+	} {
+		if !strings.Contains(out, want) {
+			t.Errorf("HTML report missing %q", want)
+		}
+	}
+	// Without low-confidence entries the toggle must not render.
+	out, err = HTML(sampleEntries(), "dev")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if strings.Contains(out, `id="showlow"`) {
+		t.Error("toggle rendered without low-confidence entries")
 	}
 }
 
@@ -68,7 +93,28 @@ func TestHTMLReportEmpty(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if !strings.Contains(out, "0 prompt(s)") {
+	if !strings.Contains(out, "No prompts found.") {
 		t.Error("empty report should render")
+	}
+}
+
+func TestHTMLMedianIgnoresInertFragments(t *testing.T) {
+	inert := analyzer.Analyze("Some plain text with nothing branchy at all.", "a:1")
+	branchy := analyzer.Analyze("If A, escalate. When B, use tool X. Unless C, route to D.", "b:1")
+	entries := []ScanEntry{
+		{File: "a.py", Line: 1, Confidence: "medium", Metrics: inert},
+		{File: "a.py", Line: 2, Confidence: "medium", Metrics: inert},
+		{File: "a.py", Line: 3, Confidence: "medium", Metrics: inert},
+		{File: "b.py", Line: 1, Confidence: "medium", Metrics: branchy},
+	}
+	out, err := HTML(entries, "dev")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if strings.Contains(out, ">0.00</div><div class=\"text-xs text-[var(--muted)] mt-0.5\">median score") {
+		t.Error("median should be computed over scored prompts, not pinned to 0 by inert fragments")
+	}
+	if !strings.Contains(out, "inert fragments") {
+		t.Error("report should surface the inert fragment count")
 	}
 }

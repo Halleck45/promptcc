@@ -81,10 +81,20 @@ var skipDirs = map[string]bool{
 	"i18n": true, "l10n": true,
 }
 
-// skipFile reports whether a file name is never worth scanning: Storybook
-// stories are UI documentation and display fixtures, not model input.
+// skipFilePatterns mark files never worth scanning: Storybook stories are
+// UI documentation, the rest is generated or minified code.
+var skipFilePatterns = []string{
+	".stories.", "_pb2.py", "_pb2_grpc.py", ".pb.go", ".min.js", ".generated.",
+}
+
 func skipFile(name string) bool {
-	return strings.Contains(strings.ToLower(name), ".stories.")
+	l := strings.ToLower(name)
+	for _, p := range skipFilePatterns {
+		if strings.Contains(l, p) {
+			return true
+		}
+	}
+	return false
 }
 
 // Scan walks the given paths and extracts prompts from every supported
