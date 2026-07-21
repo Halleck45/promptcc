@@ -12,7 +12,11 @@ make test    # gofmt check + go vet + go test -race
 make eval    # scan pinned real-world repos, diff against eval/expected/
 ```
 
-If `make eval` reports a mismatch caused by an intentional change (new rule, adjusted weights), refresh the snapshots with `make eval-update` and commit the diff in `eval/expected/` along with your change.
+## Evaluation on real code
+
+`make eval` scans pinned commits of three open-source LLM projects (aider, cline, prism) and compares the results against the snapshots in [`eval/expected/`](eval/expected). Any change in extraction or scoring shows up as a diff. Every rule in the extractor was motivated by a real finding on real code and is locked by a regression fixture, so false-positive families are caught before release.
+
+If a mismatch is caused by an intentional change (new rule, adjusted weights), refresh the snapshots with `make eval-update` and commit the updated `eval/expected/` files along with your change.
 
 ## Adding a language to the lexicons
 

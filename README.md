@@ -28,7 +28,7 @@ Static analysis assumes a program's behavior lives in its code. In LLM-integrate
 
 **promptcc** measures what actually predicts prompt maintenance pain: **branching, not volume**. It counts distinct things (decision points, tool routing, injection surface, output schema depth) and reports a composite branching score, in the spirit of McCabe's cyclomatic complexity, extracted straight from your source code.
 
-> Background reading (in French): [Quand la complexité du code vit dans le prompt](https://blog.lepine.pro/quand-la-complexite-du-code-vit-dans-le-prompt)
+> Background reading: [When code complexity lives in the prompt](https://blog.lepine.pro/en/when-code-complexity-lives-in-the-prompt/) (also available [in French](https://blog.lepine.pro/quand-la-complexite-du-code-vit-dans-le-prompt))
 
 ## Install
 
@@ -150,10 +150,6 @@ Bands: `LOW` (< 5), `MODERATE` (< 12), `HIGH` (< 22), `CRITICAL` (>= 22).
 
 The weights are an honest v0 heuristic: the relative ordering follows published correlations for LLM-integrated applications (decision density dominates, prompt length predicts nothing, explicit guardrails correlate negatively with maintenance pain), but the absolute values are a judgment call. Calibrating them against a labeled corpus is on the roadmap.
 
-## Evaluation on real code
-
-`make eval` scans pinned commits of three open-source LLM projects (aider, cline, prism) and compares the results against the snapshots in [`eval/expected/`](eval/expected). Any change in extraction or scoring shows up as a diff; refresh intentional changes with `make eval-update`. Every rule in the extractor was motivated by a real finding on real code and is locked by a regression fixture, so false-positive families are caught before release.
-
 ## Roadmap
 
 - [x] Extract prompts directly from source code (Python, TypeScript, JavaScript, PHP) via tree-sitter, so the tool works as a linter on repositories rather than on isolated text files
@@ -166,13 +162,7 @@ The weights are an honest v0 heuristic: the relative ordering follows published 
 
 ## Contributing
 
-The lexicons in [`internal/analyzer/lexicon.go`](internal/analyzer/lexicon.go) are plain word lists: adding support for your language is the perfect first contribution. Entries match whole word tokens, case-insensitively; `*` skips up to three words ("ne * jamais").
-
-```bash
-make test
-```
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for the full workflow, including the real-world evaluation harness.
+Contributions are welcome, and adding a language to the lexicons is a great first PR. See [CONTRIBUTING.md](CONTRIBUTING.md) for the development workflow, the lexicon format, and the real-world evaluation harness.
 
 ## License
 
