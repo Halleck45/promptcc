@@ -72,9 +72,17 @@ func (w *worker) extractFile(path string) ([]Prompt, error) {
 
 // extractString decodes a string literal and classifies it as a prompt.
 func (w *worker) extractString(lang *language, n *sitter.Node, src []byte, path string) (Prompt, bool) {
+	// A bare string statement does nothing at runtime: it is a docstring
+	// (Python) or dead code, never a prompt handed to a model.
+	if p := n.Parent(); p != nil && p.Kind() == "expression_statement" {
+		return Prompt{}, false
+	}
 	text, slots := decodeString(lang, n, src)
-	confidence, context, ok := classify(lang, n, src)
-	if !ok {
+	confidence, context, v := classify(lang, n, src)
+	switch v {
+	case notPrompt:
+		return Prompt{}, false
+	case noEvidence:
 		if !looksLikeProse(text) {
 			return Prompt{}, false
 		}
@@ -87,8 +95,8 @@ func (w *worker) extractString(lang *language, n *sitter.Node, src []byte, path 
 	}
 	// SQL reads like prose (CASE WHEN ... THEN ... ELSE) and is full of
 	// decision keywords; only strings handed to a known SDK call escape
-	// this check.
-	if confidence != High && looksLikeSQL(text) {
+	// this check. Same for CLI signature DSLs.
+	if confidence != High && (looksLikeSQL(text) || looksLikeSpec(text)) {
 		return Prompt{}, false
 	}
 	if len([]rune(text)) < minLength(confidence) {
@@ -274,6 +282,30 @@ func looksLikeSQL(s string) bool {
 		}
 	}
 	return false
+}
+
+// looksLikeSpec detects CLI signature DSLs such as Laravel's artisan
+// signatures: "{--service=openai : openai or nano_banana}". These are option
+// specs, not prompts, however wordy their inline descriptions are.
+func looksLikeSpec(s string) bool {
+	if strings.Contains(s, "{--") {
+		return true
+	}
+	lines, spec := 0, 0
+	for _, l := range strings.Split(s, "\n") {
+		l = strings.TrimSpace(l)
+		if l == "" {
+			continue
+		}
+		lines++
+		// "{name=default : description}" lines; JSON example lines in real
+		// prompts contain double quotes and are not counted.
+		if strings.HasPrefix(l, "{") && strings.HasSuffix(l, "}") &&
+			strings.Contains(l, " : ") && !strings.Contains(l, `"`) {
+			spec++
+		}
+	}
+	return lines >= 2 && spec*2 > lines
 }
 
 func letterRatio(s string) float64 {

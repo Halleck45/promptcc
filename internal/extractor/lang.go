@@ -116,9 +116,9 @@ var phpLang = &language{
 	assignmentKinds: map[string]string{
 		"assignment_expression": "left",
 	},
-	keyedKinds: map[string]string{
-		"named_argument": "name",
-	},
+	// PHP named arguments (kind "argument" with a leading name child) are
+	// handled structurally in classify, alongside array pairs.
+	keyedKinds: map[string]string{},
 	callKinds: map[string]func(n *sitter.Node, src []byte) string{
 		"function_call_expression": func(n *sitter.Node, src []byte) string {
 			return fieldText(n, "function", src)

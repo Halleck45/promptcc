@@ -266,3 +266,54 @@ func TestLooksLikeSQL(t *testing.T) {
 		})
 	}
 }
+
+func TestScanDocumentationIsNotAPrompt(t *testing.T) {
+	// Regression: artisan signatures, command descriptions, step
+	// self-documentation (summary:, notes:) and Python docstrings are
+	// documentation, not prompts.
+	all := scanTestdata(t, Low)
+	for _, name := range []string{"artisan_command.php", "step_description.php", "docstrings.py"} {
+		for _, p := range promptsForFile(all, name) {
+			t.Errorf("false positive: %s:%d [%s] %s %q", p.File, p.Line, p.Confidence, p.Context, p.Text)
+		}
+	}
+}
+
+func TestLooksLikeSpec(t *testing.T) {
+	tests := []struct {
+		name string
+		in   string
+		want bool
+	}{
+		{"artisan options", "app:generate\n  {--service=openai : which provider}\n  {--dry-run : do nothing}", true},
+		{"artisan single line", "app:test {--template : use a template}", true},
+		{"prompt with json example", "Respond with JSON:\n{\"action\": \"refund\"}\n{\"action\": \"escalate\"}", false},
+		{"plain prompt", "You are a support agent. If asked, escalate.", false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := looksLikeSpec(tt.in); got != tt.want {
+				t.Errorf("looksLikeSpec(%q) = %v, want %v", tt.in, got, tt.want)
+			}
+		})
+	}
+}
+
+func TestLastIdentSegment(t *testing.T) {
+	tests := []struct {
+		in   string
+		want string
+	}{
+		{"'prompt'", "prompt"},
+		{"$systemPrompt", "systemprompt"},
+		{"$this->systemPrompt", "systemprompt"},
+		{"prompt.required_without", "required_without"},
+		{"self::PROMPT", "prompt"},
+		{"", ""},
+	}
+	for _, tt := range tests {
+		if got := lastIdentSegment(tt.in); got != tt.want {
+			t.Errorf("lastIdentSegment(%q) = %q, want %q", tt.in, got, tt.want)
+		}
+	}
+}

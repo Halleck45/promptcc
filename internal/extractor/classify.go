@@ -33,31 +33,64 @@ var sdkCallees = []string{
 // promptishRe matches identifiers that conventionally hold prompts.
 var promptishRe = regexp.MustCompile(`(?i)prompt|system|instruction|persona`)
 
-// identKeyRe matches plain identifier keys. Keys that are paths or specs
-// ("prompt.required_without", "rules.*") never name a prompt argument.
-var identKeyRe = regexp.MustCompile(`^[a-z_$][a-z0-9_-]*$`)
+// segmentRe extracts identifier segments from a binding name, so that
+// "$this->systemPrompt" yields "systemprompt" and "prompt.required_without"
+// yields "required_without". Deny and promptish decisions look at the LAST
+// segment: it is the one that names the value ("prompt.hint" is a hint).
+var segmentRe = regexp.MustCompile(`[a-z0-9_-]+`)
 
-// denyKeys are argument and object keys whose string values are never
-// prompts, even inside an SDK call: model ids, roles, urls, api keys...
-// Only the key nearest to the string literal is considered.
+func lastIdentSegment(s string) string {
+	segments := segmentRe.FindAllString(normalizeBinding(s), -1)
+	if len(segments) == 0 {
+		return ""
+	}
+	return segments[len(segments)-1]
+}
+
+// denyKeys are binding names (argument keys, object keys, variable and
+// property names) whose string values are never prompts: model ids, roles,
+// urls, api keys, and human-facing documentation fields. Only the binding
+// nearest to the string literal is considered.
 var denyKeys = map[string]bool{
 	"model": true, "role": true, "name": true, "id": true, "type": true,
 	"url": true, "uri": true, "path": true, "file": true, "filename": true,
 	"version": true, "format": true, "encoding": true, "method": true,
 	"key": true, "api_key": true, "apikey": true, "token": true,
 	"lang": true, "language": true,
+	// documentation fields: prose about the code, not prompts for a model
+	"description": true, "summary": true, "notes": true, "note": true,
+	"comment": true, "comments": true, "doc": true, "docs": true,
+	"help": true, "usage": true, "label": true, "title": true,
+	"caption": true, "hint": true, "placeholder": true, "alt": true,
+	"signature": true, "slug": true,
+}
+
+// normalizeBinding lowercases a binding name and strips quotes and sigils
+// so that '$systemPrompt', '"prompt"' and 'prompt' compare equal.
+func normalizeBinding(s string) string {
+	return strings.Trim(strings.ToLower(s), "'\"$ \t")
 }
 
 // maxClimb bounds the ancestor walk during classification.
 const maxClimb = 15
 
+// verdict is the outcome of classification. The distinction between
+// noEvidence and notPrompt matters: a string with no evidence may still be
+// rescued by the prose heuristic, a vetoed string may not.
+type verdict int
+
+const (
+	noEvidence verdict = iota // nothing found, heuristic may apply
+	isPrompt                  // positive evidence (SDK call, prompt-like name)
+	notPrompt                 // definitive veto (key node, denylisted binding)
+)
+
 // classify walks up from a string node looking for evidence that it is a
 // prompt: an enclosing SDK call (high), or a prompt-like binding name
-// (medium). It returns ok=false when no evidence is found, or when the
-// string is provably not a prompt (a key, or a denylisted value).
-func classify(lang *language, n *sitter.Node, src []byte) (Confidence, string, bool) {
+// (medium).
+func classify(lang *language, n *sitter.Node, src []byte) (Confidence, string, verdict) {
 	var mediumContext string
-	sawNearestKey := false
+	sawNearestBinding := false
 	child := n
 	for p, depth := n.Parent(), 0; p != nil && depth < maxClimb; p, depth = p.Parent(), depth+1 {
 		kind := p.Kind()
@@ -65,41 +98,50 @@ func classify(lang *language, n *sitter.Node, src []byte) (Confidence, string, b
 		if render, ok := lang.callKinds[kind]; ok {
 			callee := render(p, src)
 			if isSDKCallee(callee) {
-				return High, "call " + compactCallee(callee), true
+				return High, "call " + compactCallee(callee), isPrompt
 			}
 		}
 
-		var keyNode *sitter.Node
+		var nameNode *sitter.Node
+		prefix := "arg "
 		if field, ok := lang.keyedKinds[kind]; ok {
-			keyNode = p.ChildByFieldName(field)
-		} else if kind == "array_element_initializer" && p.NamedChildCount() >= 2 {
-			// PHP array pairs ('system' => "...") have no field names, and
-			// keyless list items ([$a, $b]) have a single named child.
-			keyNode = p.NamedChild(0)
-		}
-		if keyNode != nil {
-			if child.Id() == keyNode.Id() {
-				return Low, "", false // the string IS a key, not a value
-			}
-			if !sawNearestKey {
-				sawNearestKey = true
-				key := strings.ToLower(strings.Trim(keyNode.Utf8Text(src), `'"`))
-				if identKeyRe.MatchString(key) {
-					if denyKeys[key] {
-						return Low, "", false
-					}
-					if promptishRe.MatchString(key) && mediumContext == "" {
-						mediumContext = "arg " + key
-					}
+			nameNode = p.ChildByFieldName(field)
+		} else if kind == "array_element_initializer" || kind == "property_element" || kind == "argument" {
+			// PHP array pairs ('system' => "..."), property declarations
+			// (protected $prompt = ...) and named arguments (notes: "...")
+			// have no field names; their name is the first named child.
+			// Keyless variants ([$a, $b], positional arguments) have a
+			// single named child and carry no name evidence.
+			if p.NamedChildCount() >= 2 {
+				nameNode = p.NamedChild(0)
+				if kind == "property_element" {
+					prefix = "var "
 				}
 			}
-		}
-
-		if field, ok := lang.assignmentKinds[kind]; ok {
+		} else if field, ok := lang.assignmentKinds[kind]; ok {
 			// Only the right-hand side of an assignment is a value.
 			if left := p.ChildByFieldName(field); left != nil && child.Id() != left.Id() {
-				if name := left.Utf8Text(src); promptishRe.MatchString(name) && mediumContext == "" {
-					mediumContext = "var " + name
+				nameNode = left
+				prefix = "var "
+			}
+		}
+
+		if nameNode != nil {
+			if child.Id() == nameNode.Id() {
+				return Low, "", notPrompt // the string IS a key, not a value
+			}
+			raw := nameNode.Utf8Text(src)
+			if name := lastIdentSegment(raw); name != "" {
+				// Deny decisions belong to the binding nearest to the
+				// literal; prompt-like evidence is accepted at any depth.
+				if !sawNearestBinding {
+					sawNearestBinding = true
+					if denyKeys[name] {
+						return Low, "", notPrompt
+					}
+				}
+				if promptishRe.MatchString(name) && mediumContext == "" {
+					mediumContext = prefix + raw
 				}
 			}
 		}
@@ -107,9 +149,9 @@ func classify(lang *language, n *sitter.Node, src []byte) (Confidence, string, b
 		child = p
 	}
 	if mediumContext != "" {
-		return Medium, mediumContext, true
+		return Medium, mediumContext, isPrompt
 	}
-	return Low, "", false
+	return Low, "", noEvidence
 }
 
 func isSDKCallee(callee string) bool {
