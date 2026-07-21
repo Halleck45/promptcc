@@ -236,3 +236,33 @@ func TestLooksLikeInstruction(t *testing.T) {
 		}
 	}
 }
+
+func TestScanSQLIsNotAPrompt(t *testing.T) {
+	// Regression: SQL CASE WHEN ... THEN ... ELSE reads like prose and is
+	// full of decision keywords, but it is not a prompt.
+	found := promptsForFile(scanTestdata(t, Low), "sql_controller.php")
+	for _, p := range found {
+		t.Errorf("false positive: %s:%d [%s] %s %q", p.File, p.Line, p.Confidence, p.Context, p.Text)
+	}
+}
+
+func TestLooksLikeSQL(t *testing.T) {
+	tests := []struct {
+		name string
+		in   string
+		want bool
+	}{
+		{"aggregation query", "SELECT SUM(CASE WHEN status = ? THEN 1 ELSE 0 END) AS completed, COUNT(*) AS total FROM items", true},
+		{"case when like", "CASE WHEN payload LIKE '%AudioStep%' THEN 'audio' ELSE 'other' END AS step", true},
+		{"prose with select", "Select the best answer from the list and explain why.", false},
+		{"prompt with conditions", "If the user asks for a refund, then check the date. When angry, escalate.", false},
+		{"plain prompt", "You are a support agent. Never guess.", false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := looksLikeSQL(tt.in); got != tt.want {
+				t.Errorf("looksLikeSQL(%q) = %v, want %v", tt.in, got, tt.want)
+			}
+		})
+	}
+}

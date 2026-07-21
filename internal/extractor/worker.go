@@ -85,6 +85,12 @@ func (w *worker) extractString(lang *language, n *sitter.Node, src []byte, path 
 	if confidence == Medium && !looksLikeInstruction(text) {
 		return Prompt{}, false
 	}
+	// SQL reads like prose (CASE WHEN ... THEN ... ELSE) and is full of
+	// decision keywords; only strings handed to a known SDK call escape
+	// this check.
+	if confidence != High && looksLikeSQL(text) {
+		return Prompt{}, false
+	}
 	if len([]rune(text)) < minLength(confidence) {
 		return Prompt{}, false
 	}
@@ -238,6 +244,36 @@ func looksLikeProse(s string) bool {
 // enum values bound to prompt-like names.
 func looksLikeInstruction(s string) bool {
 	return len(strings.Fields(s)) >= 4 && letterRatio(s) >= 0.5
+}
+
+// sqlMarkers score SQL-specific constructs. Strong markers (2 points) are
+// unambiguous SQL; weak markers (1 point) also occur in instruction prose.
+var sqlMarkers = []struct {
+	marker string
+	weight int
+}{
+	{"select ", 2}, {"insert into", 2}, {"delete from", 2}, {"update ", 1},
+	{"group by", 2}, {"order by", 2}, {"inner join", 2}, {"left join", 2},
+	{"right join", 2}, {"case when", 2}, {"like '%", 2}, {"union ", 2},
+	{"having ", 2}, {"sum(", 2}, {"count(", 2}, {"end as", 2},
+	{"where ", 1}, {" from ", 1}, {"then ", 1}, {"values (", 1},
+}
+
+// looksLikeSQL reports whether a string is more plausibly a SQL query than
+// a prompt. Threshold is 4 points so that prose mentioning a single SQL-ish
+// word ("select the best answer from the list") is not rejected.
+func looksLikeSQL(s string) bool {
+	l := strings.ToLower(s)
+	score := 0
+	for _, m := range sqlMarkers {
+		if strings.Contains(l, m.marker) {
+			score += m.weight
+			if score >= 4 {
+				return true
+			}
+		}
+	}
+	return false
 }
 
 func letterRatio(s string) float64 {
