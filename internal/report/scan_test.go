@@ -34,6 +34,9 @@ func TestHTMLReport(t *testing.T) {
 		"${team}",
 		"1.2.3",
 		"2 prompt(s) in 2 file(s)",
+		"Score distribution", "score ≥ 22",
+		"Score composition",
+		"<mark>If</mark>",
 	} {
 		if !strings.Contains(out, want) {
 			t.Errorf("HTML report missing %q", want)

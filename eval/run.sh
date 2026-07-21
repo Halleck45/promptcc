@@ -39,7 +39,7 @@ fetch() { # fetch <name> <url> <sha>
 
 summarize() { # summarize <name>: full per-prompt listing, repo-relative paths
     name=$1
-    "$BIN" scan --verbose "$CACHE/$name" 2>/dev/null \
+    "$BIN" --verbose "$CACHE/$name" 2>/dev/null \
         | sed "s|$CACHE/$name/||g" \
         | grep -v '^Use --verbose'
 }

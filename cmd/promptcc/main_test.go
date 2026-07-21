@@ -104,7 +104,7 @@ func TestRunVersion(t *testing.T) {
 
 func TestRunScanTestdata(t *testing.T) {
 	var stdout, stderr bytes.Buffer
-	code := run([]string{"scan", "--json", filepath.Join("..", "..", "internal", "extractor", "testdata")},
+	code := run([]string{"--json", filepath.Join("..", "..", "internal", "extractor", "testdata")},
 		strings.NewReader(""), &stdout, &stderr)
 	if code != 0 {
 		t.Fatalf("exit code = %d, stderr = %s", code, stderr.String())
@@ -120,23 +120,42 @@ func TestRunScanTestdata(t *testing.T) {
 
 func TestRunScanFailOver(t *testing.T) {
 	var stdout, stderr bytes.Buffer
-	code := run([]string{"scan", "--fail-over", "0.1", filepath.Join("..", "..", "internal", "extractor", "testdata")},
+	code := run([]string{"--fail-over", "0.1", filepath.Join("..", "..", "internal", "extractor", "testdata")},
 		strings.NewReader(""), &stdout, &stderr)
 	if code != 1 {
 		t.Errorf("exit code = %d, want 1 above threshold", code)
 	}
 }
 
-func TestRunScanNoArgs(t *testing.T) {
+func TestRunSourceFileGoesThroughExtractor(t *testing.T) {
+	// A supported source file must be scanned for prompts, not analyzed as
+	// one big prompt text.
 	var stdout, stderr bytes.Buffer
-	if code := run([]string{"scan"}, strings.NewReader(""), &stdout, &stderr); code != 2 {
-		t.Errorf("exit code = %d, want 2 (usage)", code)
+	code := run([]string{filepath.Join("..", "..", "internal", "extractor", "testdata", "sample.py")},
+		strings.NewReader(""), &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("exit code = %d, stderr = %s", code, stderr.String())
+	}
+	if !strings.Contains(stdout.String(), "prompt(s) in") {
+		t.Errorf("source file should produce scan output:\n%s", stdout.String())
+	}
+}
+
+func TestRunRemovedScanSubcommandStillWorks(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := run([]string{"scan", filepath.Join("..", "..", "internal", "extractor", "testdata")},
+		strings.NewReader(""), &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("exit code = %d, stderr = %s", code, stderr.String())
+	}
+	if !strings.Contains(stderr.String(), "removed") {
+		t.Errorf("expected a removal notice on stderr, got: %s", stderr.String())
 	}
 }
 
 func TestRunScanDefaultIsSummaryOnly(t *testing.T) {
 	var stdout, stderr bytes.Buffer
-	code := run([]string{"scan", filepath.Join("..", "..", "internal", "extractor", "testdata")},
+	code := run([]string{filepath.Join("..", "..", "internal", "extractor", "testdata")},
 		strings.NewReader(""), &stdout, &stderr)
 	if code != 0 {
 		t.Fatalf("exit code = %d", code)
@@ -152,7 +171,7 @@ func TestRunScanDefaultIsSummaryOnly(t *testing.T) {
 
 func TestRunScanVerbose(t *testing.T) {
 	var stdout, stderr bytes.Buffer
-	code := run([]string{"scan", "--verbose", filepath.Join("..", "..", "internal", "extractor", "testdata")},
+	code := run([]string{"--verbose", filepath.Join("..", "..", "internal", "extractor", "testdata")},
 		strings.NewReader(""), &stdout, &stderr)
 	if code != 0 {
 		t.Fatalf("exit code = %d", code)
@@ -165,7 +184,7 @@ func TestRunScanVerbose(t *testing.T) {
 func TestRunScanHTMLReport(t *testing.T) {
 	path := filepath.Join(t.TempDir(), "report.html")
 	var stdout, stderr bytes.Buffer
-	code := run([]string{"scan", "--html-report", path, filepath.Join("..", "..", "internal", "extractor", "testdata")},
+	code := run([]string{"--report-html", path, filepath.Join("..", "..", "internal", "extractor", "testdata")},
 		strings.NewReader(""), &stdout, &stderr)
 	if code != 0 {
 		t.Fatalf("exit code = %d, stderr = %s", code, stderr.String())

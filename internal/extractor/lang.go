@@ -184,3 +184,9 @@ var extensions = map[string]*language{
 func languageFor(path string) *language {
 	return extensions[strings.ToLower(filepath.Ext(path))]
 }
+
+// Supports reports whether path is a source file promptcc can extract
+// prompts from.
+func Supports(path string) bool {
+	return languageFor(path) != nil
+}

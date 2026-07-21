@@ -16,9 +16,11 @@ Download a binary from the [releases page](https://github.com/halleck45/promptcc
 go install github.com/halleck45/promptcc/cmd/promptcc@latest
 ```
 
-Linux and Windows release binaries are fully static (no libc dependency). Building from source needs a C compiler (the tree-sitter grammars used by `promptcc scan` are C code).
+Linux and Windows release binaries are fully static (no libc dependency). Building from source needs a C compiler (the tree-sitter grammars are C code).
 
 ## Usage
+
+promptcc figures out what to do from what you give it: a directory or a source file is scanned for prompts in the code; any other file (or stdin) is analyzed as one prompt.
 
 ### Analyze a prompt
 
@@ -32,16 +34,16 @@ promptcc --fail-over 22 p.txt    # CI gate: exit 1 above the threshold
 
 ### Scan a codebase
 
-`promptcc scan` extracts prompts directly from source code (Python, TypeScript, JavaScript, PHP, parsed with tree-sitter) and analyzes each one where it lives:
+Pointed at a directory or a source file, promptcc extracts prompts directly from the code (Python, TypeScript, JavaScript, PHP, parsed with tree-sitter) and analyzes each one where it lives:
 
 ```bash
-promptcc scan ./src                        # summary and worst offenders
-promptcc scan --verbose ./src              # one line per prompt
-promptcc scan --full ./src                 # full text report per prompt
-promptcc scan --html-report report.html .  # detailed, self-contained HTML report
-promptcc scan --json ./src                 # machine-readable output
-promptcc scan --min-confidence high ./src  # only prompts inside known SDK calls
-promptcc scan --fail-over 22 ./src         # CI gate
+promptcc ./src                        # summary and worst offenders
+promptcc --verbose ./src              # one line per prompt
+promptcc --full ./src                 # full text report per prompt
+promptcc --report-html report.html .  # detailed, self-contained HTML report
+promptcc --json ./src                 # machine-readable output
+promptcc --min-confidence high ./src  # only prompts inside known SDK calls
+promptcc --fail-over 22 ./src         # CI gate
 ```
 
 ```
@@ -129,8 +131,10 @@ The weights are an honest v0 heuristic: the relative ordering follows published 
 The lexicons in [`internal/analyzer/lexicon.go`](internal/analyzer/lexicon.go) are plain word lists: adding support for your language is the perfect first contribution. Entries match whole word tokens, case-insensitively; `*` skips up to three words ("ne * jamais").
 
 ```bash
-go test ./...
+make test
 ```
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the full workflow, including the real-world evaluation harness.
 
 ## License
 
