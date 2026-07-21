@@ -35,21 +35,25 @@ promptcc --fail-over 22 p.txt    # CI gate: exit 1 above the threshold
 `promptcc scan` extracts prompts directly from source code (Python, TypeScript, PHP, parsed with tree-sitter) and analyzes each one where it lives:
 
 ```bash
-promptcc scan ./src                        # scan a directory
-promptcc scan --full ./src                 # full report per prompt
+promptcc scan ./src                        # summary and worst offenders
+promptcc scan --verbose ./src              # one line per prompt
+promptcc scan --full ./src                 # full text report per prompt
+promptcc scan --html-report report.html .  # detailed, self-contained HTML report
 promptcc scan --json ./src                 # machine-readable output
 promptcc scan --min-confidence high ./src  # only prompts inside known SDK calls
 promptcc scan --fail-over 22 ./src         # CI gate
 ```
 
 ```
-src/agent.py:5  [medium]  var SYSTEM_PROMPT
-    score 13.2 [HIGH]  decisions=3 density=0.6 routes=2 inject=1 guards=1
-src/agent.py:19  [high]  call client.messages.create
-    score 12.5 [HIGH]  decisions=1 density=1 routes=0 inject=1 guards=0
+9 prompt(s) in 4 file(s)
 
-2 prompt(s) in 1 file(s)
+── worst offenders ──────────────────────────
+     14.40  HIGH      src/billing.php:3
+     13.20  HIGH      src/agent.py:5
+     12.50  HIGH      src/agent.py:19
 ```
+
+The HTML report shows every metric per prompt (decision keywords, injection channels, interpolated values, the decoded prompt text) with severity chips, sorted worst first.
 
 A string literal is reported as a prompt with a confidence level:
 

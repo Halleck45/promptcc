@@ -133,3 +133,49 @@ func TestRunScanNoArgs(t *testing.T) {
 		t.Errorf("exit code = %d, want 2 (usage)", code)
 	}
 }
+
+func TestRunScanDefaultIsSummaryOnly(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := run([]string{"scan", filepath.Join("..", "..", "internal", "extractor", "testdata")},
+		strings.NewReader(""), &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("exit code = %d", code)
+	}
+	out := stdout.String()
+	if strings.Contains(out, "decisions=") {
+		t.Errorf("default output should not contain per-prompt detail:\n%s", out)
+	}
+	if !strings.Contains(out, "worst offenders") {
+		t.Errorf("default output should contain the summary table:\n%s", out)
+	}
+}
+
+func TestRunScanVerbose(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := run([]string{"scan", "--verbose", filepath.Join("..", "..", "internal", "extractor", "testdata")},
+		strings.NewReader(""), &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("exit code = %d", code)
+	}
+	if !strings.Contains(stdout.String(), "decisions=") {
+		t.Errorf("verbose output should contain per-prompt detail:\n%s", stdout.String())
+	}
+}
+
+func TestRunScanHTMLReport(t *testing.T) {
+	path := filepath.Join(t.TempDir(), "report.html")
+	var stdout, stderr bytes.Buffer
+	code := run([]string{"scan", "--html-report", path, filepath.Join("..", "..", "internal", "extractor", "testdata")},
+		strings.NewReader(""), &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("exit code = %d, stderr = %s", code, stderr.String())
+	}
+	b, err := os.ReadFile(path)
+	if err != nil {
+		t.Fatalf("HTML report not written: %v", err)
+	}
+	html := string(b)
+	if !strings.Contains(html, "<!doctype html>") || !strings.Contains(html, "sample.py") {
+		t.Errorf("HTML report looks wrong (%d bytes)", len(b))
+	}
+}

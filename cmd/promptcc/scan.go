@@ -5,7 +5,9 @@ import (
 	"flag"
 	"fmt"
 	"io"
+	"os"
 	"sort"
+	"time"
 
 	"github.com/halleck45/promptcc/internal/analyzer"
 	"github.com/halleck45/promptcc/internal/extractor"
@@ -20,28 +22,22 @@ Usage:
 Supported languages: Python, TypeScript, PHP.
 
 Flags:
+  --verbose                 print one line per prompt (default: summary only)
+  --full                    print the full text report for each prompt
   --json                    output JSON instead of text
-  --full                    print the full report for each prompt
+  --html-report FILE        also write a detailed HTML report to FILE
   --min-confidence LEVEL    low, medium or high (default low)
   --fail-over SCORE         exit with code 1 if any prompt scores above SCORE
 `
-
-type scanResult struct {
-	File       string           `json:"file"`
-	Line       int              `json:"line"`
-	EndLine    int              `json:"end_line"`
-	Confidence string           `json:"confidence"`
-	Context    string           `json:"context"`
-	Slots      []string         `json:"slots,omitempty"`
-	Metrics    analyzer.Metrics `json:"metrics"`
-}
 
 func runScan(args []string, stdout, stderr io.Writer) int {
 	fs := flag.NewFlagSet("promptcc scan", flag.ContinueOnError)
 	fs.SetOutput(stderr)
 	fs.Usage = func() { fmt.Fprint(stderr, scanUsage) }
 	jsonOut := fs.Bool("json", false, "output JSON")
+	verbose := fs.Bool("verbose", false, "one line per prompt")
 	full := fs.Bool("full", false, "full report per prompt")
+	htmlReport := fs.String("html-report", "", "write a detailed HTML report to this file")
 	failOver := fs.Float64("fail-over", -1, "exit 1 if any score exceeds this value")
 	minConfidence := fs.String("min-confidence", "low", "low, medium or high")
 	if err := fs.Parse(args); err != nil {
@@ -57,43 +53,58 @@ func runScan(args []string, stdout, stderr io.Writer) int {
 		return 2
 	}
 
+	stopSpinner := startSpinner(!*jsonOut)
 	prompts, err := extractor.Scan(fs.Args(), extractor.Options{MinConfidence: minConf})
 	if err != nil {
+		stopSpinner()
 		fmt.Fprintf(stderr, "promptcc: %v\n", err)
 		return 2
 	}
 
-	results := make([]scanResult, 0, len(prompts))
+	entries := make([]report.ScanEntry, 0, len(prompts))
 	for _, p := range prompts {
 		name := fmt.Sprintf("%s:%d", p.File, p.Line)
-		m := analyzer.Analyze(p.Text, name)
-		results = append(results, scanResult{
+		entries = append(entries, report.ScanEntry{
 			File:       p.File,
 			Line:       p.Line,
 			EndLine:    p.EndLine,
 			Confidence: p.Confidence.String(),
 			Context:    p.Context,
 			Slots:      p.Slots,
-			Metrics:    m,
+			Text:       p.Text,
+			Metrics:    analyzer.Analyze(p.Text, name),
 		})
+	}
+	stopSpinner()
+
+	if *htmlReport != "" {
+		html, err := report.HTML(entries, version)
+		if err == nil {
+			err = os.WriteFile(*htmlReport, []byte(html), 0o644)
+		}
+		if err != nil {
+			fmt.Fprintf(stderr, "promptcc: writing HTML report: %v\n", err)
+			return 2
+		}
+		fmt.Fprintf(stderr, "HTML report written to %s\n", *htmlReport)
 	}
 
 	if *jsonOut {
-		b, err := json.MarshalIndent(results, "", "  ")
+		b, err := json.MarshalIndent(entries, "", "  ")
 		if err != nil {
 			fmt.Fprintf(stderr, "promptcc: %v\n", err)
 			return 2
 		}
 		fmt.Fprintln(stdout, string(b))
 	} else {
-		renderScan(stdout, results, *full)
+		renderScan(stdout, entries, *verbose || *full, *full)
 	}
 
 	if *failOver >= 0 {
-		for _, r := range results {
-			if r.Metrics.BranchingScore > *failOver {
+		for _, e := range entries {
+			if e.Metrics.BranchingScore > *failOver {
 				fmt.Fprintf(stderr, "promptcc: %s scores %g, above threshold %g\n",
-					r.Metrics.Name, r.Metrics.BranchingScore, *failOver)
+					e.Metrics.Name, e.Metrics.BranchingScore, *failOver)
 				return 1
 			}
 		}
@@ -101,44 +112,90 @@ func runScan(args []string, stdout, stderr io.Writer) int {
 	return 0
 }
 
-func renderScan(w io.Writer, results []scanResult, full bool) {
-	if len(results) == 0 {
+func renderScan(w io.Writer, entries []report.ScanEntry, verbose, full bool) {
+	if len(entries) == 0 {
 		fmt.Fprintln(w, "No prompts found.")
 		return
 	}
-	for _, r := range results {
-		if full {
-			fmt.Fprintf(w, "%s  [%s]  %s\n", r.Metrics.Name, r.Confidence, r.Context)
-			fmt.Fprintln(w, report.Text(r.Metrics))
-			continue
+
+	if verbose {
+		for _, e := range entries {
+			fmt.Fprintf(w, "%s  [%s]  %s\n", e.Metrics.Name, e.Confidence, e.Context)
+			if full {
+				fmt.Fprintln(w, report.Text(e.Metrics))
+				continue
+			}
+			band := analyzer.BandFor(e.Metrics.BranchingScore)
+			fmt.Fprintf(w, "    score %g [%s]  decisions=%d density=%g routes=%d inject=%d guards=%d\n",
+				e.Metrics.BranchingScore, band.Label, e.Metrics.Decisions,
+				e.Metrics.DecisionRatio, e.Metrics.ToolRoutes,
+				e.Metrics.InjectionChannels, e.Metrics.Constraints)
 		}
-		band := analyzer.BandFor(r.Metrics.BranchingScore)
-		fmt.Fprintf(w, "%s  [%s]  %s\n", r.Metrics.Name, r.Confidence, r.Context)
-		fmt.Fprintf(w, "    score %g [%s]  decisions=%d density=%g routes=%d inject=%d guards=%d\n",
-			r.Metrics.BranchingScore, band.Label, r.Metrics.Decisions,
-			r.Metrics.DecisionRatio, r.Metrics.ToolRoutes,
-			r.Metrics.InjectionChannels, r.Metrics.Constraints)
+		fmt.Fprintln(w)
 	}
 
 	files := map[string]bool{}
-	for _, r := range results {
-		files[r.File] = true
+	for _, e := range entries {
+		files[e.File] = true
 	}
-	fmt.Fprintf(w, "\n%d prompt(s) in %d file(s)\n", len(results), len(files))
+	fmt.Fprintf(w, "%d prompt(s) in %d file(s)\n", len(entries), len(files))
 
-	sorted := make([]scanResult, len(results))
-	copy(sorted, results)
+	sorted := make([]report.ScanEntry, len(entries))
+	copy(sorted, entries)
 	sort.SliceStable(sorted, func(i, j int) bool {
 		return sorted[i].Metrics.BranchingScore > sorted[j].Metrics.BranchingScore
 	})
 	fmt.Fprintln(w, "\n── worst offenders "+repeatRune('─', 26))
-	for i, r := range sorted {
+	for i, e := range sorted {
 		if i >= 10 {
 			break
 		}
-		band := analyzer.BandFor(r.Metrics.BranchingScore)
-		fmt.Fprintf(w, "  %8.2f  %-9s %s\n", r.Metrics.BranchingScore, band.Label, r.Metrics.Name)
+		band := analyzer.BandFor(e.Metrics.BranchingScore)
+		fmt.Fprintf(w, "  %8.2f  %-9s %s\n", e.Metrics.BranchingScore, band.Label, e.Metrics.Name)
 	}
+	if !verbose {
+		fmt.Fprintln(w, "\nUse --verbose for per-prompt detail, or --html-report report.html.")
+	}
+}
+
+// startSpinner shows a scanning indicator on stderr while the scan runs.
+// It is enabled only when stderr is an interactive terminal, so piped and
+// CI output stays clean. The returned function stops it synchronously.
+func startSpinner(enabled bool) func() {
+	if !enabled || !stderrIsTerminal() {
+		return func() {}
+	}
+	done := make(chan struct{})
+	stopped := make(chan struct{})
+	go func() {
+		defer close(stopped)
+		frames := []rune("⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏")
+		ticker := time.NewTicker(80 * time.Millisecond)
+		defer ticker.Stop()
+		i := 0
+		for {
+			select {
+			case <-done:
+				fmt.Fprint(os.Stderr, "\r\x1b[K")
+				return
+			case <-ticker.C:
+				fmt.Fprintf(os.Stderr, "\r%c scanning...", frames[i%len(frames)])
+				i++
+			}
+		}
+	}()
+	return func() {
+		close(done)
+		<-stopped
+	}
+}
+
+func stderrIsTerminal() bool {
+	info, err := os.Stderr.Stat()
+	if err != nil {
+		return false
+	}
+	return info.Mode()&os.ModeCharDevice != 0
 }
 
 func repeatRune(r rune, n int) string {

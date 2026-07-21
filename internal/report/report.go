@@ -48,14 +48,14 @@ func Text(m analyzer.Metrics) string {
 		w("")
 		w("  Decision keywords:")
 		for _, kv := range sortedByCount(m.Detail.DecisionsByKeyword) {
-			w("    %3d× %s", kv.n, kv.k)
+			w("    %3d× %s", kv.N, kv.K)
 		}
 	}
 	if len(m.Detail.InjectionByChannel) > 0 {
 		w("")
 		w("  Injection channels:")
 		for _, kv := range sortedByCount(m.Detail.InjectionByChannel) {
-			w("    %3d× %s", kv.n, kv.k)
+			w("    %3d× %s", kv.N, kv.K)
 		}
 	}
 	return b.String()
@@ -78,8 +78,8 @@ func Comparison(results []analyzer.Metrics) string {
 }
 
 type kv struct {
-	k string
-	n int
+	K string
+	N int
 }
 
 func sortedByCount(m map[string]int) []kv {
@@ -88,10 +88,10 @@ func sortedByCount(m map[string]int) []kv {
 		out = append(out, kv{k, n})
 	}
 	sort.Slice(out, func(i, j int) bool {
-		if out[i].n != out[j].n {
-			return out[i].n > out[j].n
+		if out[i].N != out[j].N {
+			return out[i].N > out[j].N
 		}
-		return out[i].k < out[j].k
+		return out[i].K < out[j].K
 	})
 	return out
 }
