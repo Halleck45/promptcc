@@ -332,6 +332,12 @@ var sqlMarkers = []struct {
 	{"right join", 2}, {"case when", 2}, {"like '%", 2}, {"union ", 2},
 	{"having ", 2}, {"sum(", 2}, {"count(", 2}, {"end as", 2},
 	{"where ", 1}, {" from ", 1}, {"then ", 1}, {"values (", 1},
+	// DDL (schema fixtures in tests are a common false positive)
+	{"create table", 2}, {"alter table", 2}, {"drop table", 2},
+	{"create index", 2}, {"primary key", 2}, {"foreign key", 2},
+	{"not null", 2}, {"varchar(", 2}, {"autoincrement", 2},
+	{"auto_increment", 2}, {"tinyint", 2}, {"references ", 1},
+	{"default ", 1},
 }
 
 // looksLikeSQL reports whether a string is more plausibly a SQL query than

@@ -408,3 +408,18 @@ func TestLooksLikeMarkup(t *testing.T) {
 		})
 	}
 }
+
+func TestLooksLikeSQLDDL(t *testing.T) {
+	ddl := `CREATE TABLE IF NOT EXISTS activity (
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		name VARCHAR(255) NOT NULL,
+		created_at DATETIME
+	)`
+	if !looksLikeSQL(ddl) {
+		t.Error("CREATE TABLE DDL should be detected as SQL")
+	}
+	prompt := "If the table is empty, ask the user to create content first. Never invent rows."
+	if looksLikeSQL(prompt) {
+		t.Error("prose mentioning tables should not be detected as SQL")
+	}
+}

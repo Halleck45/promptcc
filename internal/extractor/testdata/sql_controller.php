@@ -38,3 +38,22 @@ class PipelineMonitorController
         ", [$completed, $running, $pending, $failed, $planId]);
     }
 }
+
+// DDL schema fixtures (common in unit tests) are SQL too.
+class ActivityRepositoryTest
+{
+    public function setUp(): void
+    {
+        $this->db->exec('
+            CREATE TABLE IF NOT EXISTS activity (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name VARCHAR(255) NOT NULL,
+                is_available_for_free TINYINT NOT NULL DEFAULT 0,
+                language_code VARCHAR(10),
+                disabled_at DATETIME NULL,
+                created_at DATETIME,
+                updated_at DATETIME
+            )
+        ');
+    }
+}
