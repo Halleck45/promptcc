@@ -43,12 +43,11 @@ builds:
         ldflags:
           - -s -w -X main.version={{.Version}} -linkmode external -extldflags "-static"
 
+# Publish raw binaries (directly downloadable) instead of tar.gz/zip archives.
+# goreleaser appends .exe automatically for Windows.
 archives:
-  - formats: [tar.gz]
-    format_overrides:
-      - goos: windows
-        formats: [zip]
-    files: [LICENSE, README.md]
+  - formats: [binary]
+    name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
 
 checksum:
   name_template: checksums.txt
