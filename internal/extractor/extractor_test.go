@@ -317,3 +317,94 @@ func TestLastIdentSegment(t *testing.T) {
 		}
 	}
 }
+
+func TestScanConcatenationPHP(t *testing.T) {
+	found := promptsForFile(scanTestdata(t, Low), "realworld.php")
+	if len(found) != 1 {
+		for _, p := range found {
+			t.Logf("found: %s:%d [%s] %s %q", p.File, p.Line, p.Confidence, p.Context, p.Text)
+		}
+		t.Fatalf("found %d prompts, want 1 (the concatenated system message)", len(found))
+	}
+	p := found[0]
+	if !strings.HasPrefix(p.Text, "Respond with JSON only, for example: {") {
+		t.Errorf("concatenation not merged into one prompt:\n%s", p.Text)
+	}
+	if len(p.Slots) != 1 || !strings.Contains(p.Slots[0], "json_encode") {
+		t.Errorf("Slots = %v, want the json_encode operand", p.Slots)
+	}
+	if p.Confidence != Medium {
+		t.Errorf("confidence = %s, want medium (bound to $prompts[])", p.Confidence)
+	}
+}
+
+func TestScanConcatenationPython(t *testing.T) {
+	found := promptsForFile(scanTestdata(t, Low), "realworld.py")
+	if len(found) != 1 {
+		for _, p := range found {
+			t.Logf("found: %s:%d [%s] %s %q", p.File, p.Line, p.Confidence, p.Context, p.Text)
+		}
+		t.Fatalf("found %d prompts, want 1 (SQL, description, help must be excluded)", len(found))
+	}
+	p := found[0]
+	if !strings.Contains(p.Text, "You are a grader.") || !strings.Contains(p.Text, "{get_rubric_context}") {
+		t.Errorf("concatenated prompt not merged with slot:\n%s", p.Text)
+	}
+	if len(p.Slots) != 1 || !strings.Contains(p.Slots[0], "get_rubric") {
+		t.Errorf("Slots = %v, want the get_rubric operand", p.Slots)
+	}
+}
+
+func TestScanConcatenationTypeScript(t *testing.T) {
+	found := promptsForFile(scanTestdata(t, Low), "realworld.ts")
+	if len(found) != 1 {
+		for _, p := range found {
+			t.Logf("found: %s:%d [%s] %s %q", p.File, p.Line, p.Confidence, p.Context, p.Text)
+		}
+		t.Fatalf("found %d prompts, want 1 (SQL and description must be excluded)", len(found))
+	}
+	p := found[0]
+	if !strings.Contains(p.Text, "You are a grader.") || !strings.Contains(p.Text, "{getRubric_context}") {
+		t.Errorf("concatenated prompt not merged with slot:\n%s", p.Text)
+	}
+	if p.Confidence != Medium {
+		t.Errorf("confidence = %s, want medium (bound to systemPrompt)", p.Confidence)
+	}
+}
+
+func TestScanHTMLContentIsNotAPrompt(t *testing.T) {
+	// Regression: translated marketing HTML reads like prose and is full of
+	// decision words, but markup is never a prompt.
+	found := promptsForFile(scanTestdata(t, Low), "html_content.php")
+	for _, p := range found {
+		t.Errorf("false positive: %s:%d [%s] %s", p.File, p.Line, p.Confidence, p.Context)
+	}
+}
+
+func TestScanSkipsTranslationDirs(t *testing.T) {
+	for _, p := range scanTestdata(t, Low) {
+		if strings.Contains(p.File, string(filepath.Separator)+"lang"+string(filepath.Separator)) {
+			t.Errorf("lang/ directory should be skipped: %s:%d", p.File, p.Line)
+		}
+	}
+}
+
+func TestLooksLikeMarkup(t *testing.T) {
+	tests := []struct {
+		name string
+		in   string
+		want bool
+	}{
+		{"marketing html", `<p>If you train daily, <a href="https://x.co" class="link">you improve</a>.</p>`, true},
+		{"hubspot embed", `<span class="hs-cta-wrapper"><script src="https://js.example.net/x.js"></script></span>`, true},
+		{"prompt with semantic xml", "<instructions>If asked, escalate.</instructions>\n<context>Billing support.</context>", false},
+		{"plain prompt", "You are a support agent. Never guess.", false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := looksLikeMarkup(tt.in); got != tt.want {
+				t.Errorf("looksLikeMarkup(%q) = %v, want %v", tt.in, got, tt.want)
+			}
+		})
+	}
+}

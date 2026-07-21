@@ -56,6 +56,15 @@ func (w *worker) extractFile(path string) ([]Prompt, error) {
 	var prompts []Prompt
 	var visit func(n *sitter.Node)
 	visit = func(n *sitter.Node) {
+		if isConcat(lang, n, src) {
+			if leaves := flattenConcat(lang, n, src); concatHasString(lang, leaves) {
+				if p, ok := w.extractConcat(lang, n, leaves, src, path); ok {
+					prompts = append(prompts, p)
+				}
+				return // the whole expression was consumed as one prompt
+			}
+			// no string operand (arithmetic): descend normally
+		}
 		if lang.stringRoots[n.Kind()] {
 			if p, ok := w.extractString(lang, n, src, path); ok {
 				prompts = append(prompts, p)
@@ -70,6 +79,59 @@ func (w *worker) extractFile(path string) ([]Prompt, error) {
 	return prompts, nil
 }
 
+// isConcat reports whether n is a string concatenation expression.
+func isConcat(lang *language, n *sitter.Node, src []byte) bool {
+	if lang.concatKind == "" || n.Kind() != lang.concatKind {
+		return false
+	}
+	op := n.ChildByFieldName("operator")
+	return op != nil && op.Utf8Text(src) == lang.concatOp
+}
+
+// flattenConcat turns a left-nested concatenation tree into its operands,
+// in source order.
+func flattenConcat(lang *language, n *sitter.Node, src []byte) []*sitter.Node {
+	if isConcat(lang, n, src) {
+		left, right := n.ChildByFieldName("left"), n.ChildByFieldName("right")
+		if left != nil && right != nil {
+			return append(flattenConcat(lang, left, src), flattenConcat(lang, right, src)...)
+		}
+	}
+	return []*sitter.Node{n}
+}
+
+func concatHasString(lang *language, leaves []*sitter.Node) bool {
+	for _, l := range leaves {
+		if lang.stringRoots[l.Kind()] {
+			return true
+		}
+	}
+	return false
+}
+
+// extractConcat merges a concatenation into a single prompt: string operands
+// contribute their decoded text, every other operand becomes an injection
+// slot ('Respond with JSON, for example: ' . json_encode($example)).
+func (w *worker) extractConcat(lang *language, n *sitter.Node, leaves []*sitter.Node, src []byte, path string) (Prompt, bool) {
+	if p := n.Parent(); p != nil && p.Kind() == "expression_statement" {
+		return Prompt{}, false
+	}
+	var b strings.Builder
+	var slots []string
+	for _, leaf := range leaves {
+		if lang.stringRoots[leaf.Kind()] {
+			text, s := decodeString(lang, leaf, src)
+			b.WriteString(text)
+			slots = append(slots, s...)
+			continue
+		}
+		expr := leaf.Utf8Text(src)
+		slots = append(slots, expr)
+		b.WriteString("{" + slotName(expr, len(slots)) + "}")
+	}
+	return w.finishPrompt(lang, n, src, path, b.String(), slots)
+}
+
 // extractString decodes a string literal and classifies it as a prompt.
 func (w *worker) extractString(lang *language, n *sitter.Node, src []byte, path string) (Prompt, bool) {
 	// A bare string statement does nothing at runtime: it is a docstring
@@ -78,6 +140,11 @@ func (w *worker) extractString(lang *language, n *sitter.Node, src []byte, path 
 		return Prompt{}, false
 	}
 	text, slots := decodeString(lang, n, src)
+	return w.finishPrompt(lang, n, src, path, text, slots)
+}
+
+// finishPrompt classifies a decoded literal and applies the content gates.
+func (w *worker) finishPrompt(lang *language, n *sitter.Node, src []byte, path, text string, slots []string) (Prompt, bool) {
 	confidence, context, v := classify(lang, n, src)
 	switch v {
 	case notPrompt:
@@ -95,8 +162,8 @@ func (w *worker) extractString(lang *language, n *sitter.Node, src []byte, path 
 	}
 	// SQL reads like prose (CASE WHEN ... THEN ... ELSE) and is full of
 	// decision keywords; only strings handed to a known SDK call escape
-	// this check. Same for CLI signature DSLs.
-	if confidence != High && (looksLikeSQL(text) || looksLikeSpec(text)) {
+	// this check. Same for CLI signature DSLs and HTML markup.
+	if confidence != High && (looksLikeSQL(text) || looksLikeSpec(text) || looksLikeMarkup(text)) {
 		return Prompt{}, false
 	}
 	if len([]rune(text)) < minLength(confidence) {
@@ -306,6 +373,36 @@ func looksLikeSpec(s string) bool {
 		}
 	}
 	return lines >= 2 && spec*2 > lines
+}
+
+// markupMarkers score HTML-specific constructs. Prompts legitimately use a
+// few bare semantic XML tags (<context>, <instructions>); real HTML carries
+// attributes, presentational tags and entities, which prompts do not.
+var markupMarkers = []struct {
+	marker string
+	weight int
+}{
+	{"href=", 2}, {"class=", 2}, {"style=", 2}, {"<script", 2},
+	{"<img", 2}, {"<div", 2}, {"<span", 2}, {"</a>", 2},
+	{"<p>", 2}, {"</p>", 2}, {"<h1", 2}, {"<h2", 2}, {"<h3", 2},
+	{"<br", 1}, {"<li>", 1}, {"<ul>", 1}, {"<strong>", 1}, {"&nbsp;", 1},
+	{"<!--", 1},
+}
+
+// looksLikeMarkup reports whether a string is more plausibly HTML content
+// (templates, translated marketing pages) than a prompt.
+func looksLikeMarkup(s string) bool {
+	l := strings.ToLower(s)
+	score := 0
+	for _, m := range markupMarkers {
+		if strings.Contains(l, m.marker) {
+			score += m.weight
+			if score >= 4 {
+				return true
+			}
+		}
+	}
+	return false
 }
 
 func letterRatio(s string) float64 {

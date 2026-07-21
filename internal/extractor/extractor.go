@@ -70,11 +70,15 @@ type Options struct {
 
 const defaultMaxFileSize = 1 << 20
 
-// skipDirs are directory names never worth scanning.
+// skipDirs are directory names never worth scanning: dependencies, build
+// output, and translation/content directories whose long marketing prose
+// would otherwise flood the natural-language heuristic.
 var skipDirs = map[string]bool{
 	".git": true, "node_modules": true, "vendor": true, "dist": true,
 	"build": true, "__pycache__": true, ".venv": true, "venv": true,
 	".idea": true, ".vscode": true,
+	"lang": true, "locale": true, "locales": true, "translations": true,
+	"i18n": true, "l10n": true,
 }
 
 // Scan walks the given paths and extracts prompts from every supported

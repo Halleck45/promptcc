@@ -36,6 +36,12 @@ type language struct {
 	keyedKinds map[string]string
 	// callKinds map a call node kind to a function that renders its callee.
 	callKinds map[string]func(n *sitter.Node, src []byte) string
+
+	// concatKind and concatOp identify string concatenation expressions
+	// ("a" . $x in PHP, "a" + x elsewhere), which are merged into a single
+	// prompt whose non-literal operands become injection slots.
+	concatKind string
+	concatOp   string
 }
 
 func fieldText(n *sitter.Node, field string, src []byte) string {
@@ -66,6 +72,8 @@ var pythonLang = &language{
 			return fieldText(n, "function", src)
 		},
 	},
+	concatKind: "binary_operator",
+	concatOp:   "+",
 }
 
 var typescriptLang = &language{
@@ -88,6 +96,8 @@ var typescriptLang = &language{
 			return fieldText(n, "function", src)
 		},
 	},
+	concatKind: "binary_expression",
+	concatOp:   "+",
 }
 
 var tsxLang = func() *language {
@@ -133,6 +143,8 @@ var phpLang = &language{
 			return "new " + firstNamedChildText(n, src)
 		},
 	},
+	concatKind: "binary_expression",
+	concatOp:   ".",
 }
 
 func firstNamedChildText(n *sitter.Node, src []byte) string {
