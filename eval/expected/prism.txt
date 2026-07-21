@@ -1,50 +1,18 @@
 src/Providers/Anthropic/Handlers/StructuredStrategies/ToolStructuredStrategy.php:25  [low]  heuristic: natural language literal
     score 7.33 [MODERATE]  decisions=1 density=0.333 routes=2 inject=0 guards=0
-src/Providers/Gemini/Handlers/Structured.php:181  [low]  heuristic: natural language literal
-    score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
-tests/Providers/Anthropic/AnthropicTextTest.php:47  [low]  heuristic: natural language literal
-    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=1
-tests/Providers/Anthropic/AnthropicTextTest.php:65  [low]  heuristic: natural language literal
-    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 tests/Providers/Anthropic/AnthropicTextTest.php:519  [low]  heuristic: natural language literal
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-tests/Providers/Anthropic/AnthropicTextTest.php:522  [low]  heuristic: natural language literal
-    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=1
 tests/Providers/Anthropic/AnthropicTextTest.php:569  [low]  heuristic: natural language literal
     score 4.5 [LOW]  decisions=2 density=0.25 routes=0 inject=0 guards=0
-tests/Providers/Anthropic/AnthropicTextTest.php:572  [low]  heuristic: natural language literal
-    score 4.33 [LOW]  decisions=1 density=0.333 routes=0 inject=0 guards=0
 tests/Providers/DeepSeek/MessageMapTest.php:195  [medium]  arg systemPrompts
     score 0.5 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 tests/Providers/DeepSeek/MessageMapTest.php:196  [medium]  arg systemPrompts
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-tests/Providers/DeepSeek/TextTest.php:73  [low]  heuristic: natural language literal
-    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-tests/Providers/DeepSeek/TextTest.php:74  [low]  heuristic: natural language literal
-    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-tests/Providers/DeepSeek/TextTest.php:75  [low]  heuristic: natural language literal
-    score 4.33 [LOW]  decisions=1 density=0.333 routes=0 inject=0 guards=0
-tests/Providers/DeepSeek/TextTest.php:76  [low]  heuristic: natural language literal
-    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-tests/Providers/Gemini/GeminiStreamTest.php:128  [low]  heuristic: natural language literal
-    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-tests/Providers/Gemini/GeminiTextTest.php:46  [low]  heuristic: natural language literal
-    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=1
-tests/Providers/Gemini/GeminiTextTest.php:308  [low]  heuristic: natural language literal
-    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-tests/Providers/Gemini/GeminiTextTest.php:344  [low]  heuristic: natural language literal
-    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-tests/Providers/Gemini/GeminiTextTest.php:516  [low]  heuristic: natural language literal
-    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 tests/Providers/Gemini/MessageMapTest.php:253  [medium]  arg systemPrompts
-    score 0.5 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-tests/Providers/Gemini/MessageMapTest.php:260  [medium]  arg 'system_instruction'
     score 0.5 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 tests/Providers/Gemini/MessageMapTest.php:270  [medium]  arg systemPrompts
     score 0.5 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 tests/Providers/Gemini/MessageMapTest.php:271  [medium]  arg systemPrompts
-    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-tests/Providers/Groq/GroqTextTest.php:58  [low]  heuristic: natural language literal
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 tests/Providers/Groq/MessageMapTest.php:197  [medium]  arg systemPrompts
     score 0.5 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
@@ -59,12 +27,6 @@ tests/Providers/Mistral/MessageMapTest.php:157  [medium]  arg systemPrompts
 tests/Providers/Mistral/MessageMapTest.php:158  [medium]  arg systemPrompts
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 tests/Providers/Mistral/StreamTest.php:197  [medium]  var $systemPrompt
-    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-tests/Providers/Ollama/TextTest.php:33  [low]  heuristic: natural language literal
-    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-tests/Providers/Ollama/TextTest.php:51  [low]  heuristic: natural language literal
-    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-tests/Providers/Ollama/TextTest.php:71  [low]  heuristic: natural language literal
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 tests/Providers/OpenAI/AudioTest.php:202  [medium]  arg 'prompt'
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
@@ -84,43 +46,25 @@ tests/Providers/OpenRouter/MessageMapTest.php:236  [medium]  arg systemPrompts
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 tests/Providers/OpenRouter/MessageMapTest.php:262  [medium]  arg systemPrompts
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-tests/Providers/OpenRouter/TextTest.php:96  [low]  heuristic: natural language literal
-    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-tests/Providers/OpenRouter/TextTest.php:97  [low]  heuristic: natural language literal
-    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-tests/Providers/OpenRouter/TextTest.php:98  [low]  heuristic: natural language literal
-    score 4.33 [LOW]  decisions=1 density=0.333 routes=0 inject=0 guards=0
-tests/Providers/OpenRouter/TextTest.php:99  [low]  heuristic: natural language literal
-    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-tests/Providers/Perplexity/TextTest.php:28  [low]  heuristic: natural language literal
-    score 0.5 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 tests/Providers/XAI/MessageMapTest.php:133  [medium]  arg systemPrompts
     score 0.5 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 tests/Providers/XAI/MessageMapTest.php:134  [medium]  arg systemPrompts
-    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-tests/Providers/XAI/XAITextTest.php:82  [low]  heuristic: natural language literal
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 tests/Providers/Z/MessageMapTest.php:28  [medium]  var $systemPrompts
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 tests/Providers/Z/ZStructuredTest.php:67  [low]  heuristic: natural language literal
     score 0.5 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-tests/Providers/Z/ZStructuredTest.php:73  [low]  heuristic: natural language literal
-    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-tests/Providers/Z/ZTextTest.php:58  [low]  heuristic: natural language literal
-    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=1
-tests/Providers/Z/ZTextTest.php:104  [low]  heuristic: natural language literal
-    score 3 [LOW]  decisions=1 density=0.2 routes=0 inject=0 guards=0
 
-56 prompt(s) in 26 file(s)
+28 prompt(s) in 16 file(s)
 
 ── worst offenders ──────────────────────────
       7.33  MODERATE  src/Providers/Anthropic/Handlers/StructuredStrategies/ToolStructuredStrategy.php:25
       4.50  LOW       tests/Providers/Anthropic/AnthropicTextTest.php:569
-      4.33  LOW       tests/Providers/Anthropic/AnthropicTextTest.php:572
-      4.33  LOW       tests/Providers/DeepSeek/TextTest.php:75
-      4.33  LOW       tests/Providers/OpenRouter/TextTest.php:98
-      3.00  LOW       tests/Providers/Z/ZTextTest.php:104
-      1.50  LOW       src/Providers/Gemini/Handlers/Structured.php:181
       0.50  LOW       tests/Providers/DeepSeek/MessageMapTest.php:195
       0.50  LOW       tests/Providers/Gemini/MessageMapTest.php:253
-      0.50  LOW       tests/Providers/Gemini/MessageMapTest.php:260
+      0.50  LOW       tests/Providers/Gemini/MessageMapTest.php:270
+      0.50  LOW       tests/Providers/Groq/MessageMapTest.php:197
+      0.50  LOW       tests/Providers/Mistral/MessageMapTest.php:157
+      0.50  LOW       tests/Providers/OpenAI/MessageMapTest.php:247
+      0.50  LOW       tests/Providers/OpenRouter/MessageMapTest.php:235
+      0.50  LOW       tests/Providers/XAI/MessageMapTest.php:133

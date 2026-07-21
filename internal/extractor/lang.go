@@ -96,6 +96,9 @@ var typescriptLang = &language{
 		"call_expression": func(n *sitter.Node, src []byte) string {
 			return fieldText(n, "function", src)
 		},
+		"new_expression": func(n *sitter.Node, src []byte) string {
+			return "new " + fieldText(n, "constructor", src)
+		},
 	},
 	concatKind: "binary_expression",
 	concatOp:   "+",

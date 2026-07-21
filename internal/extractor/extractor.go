@@ -81,6 +81,12 @@ var skipDirs = map[string]bool{
 	"i18n": true, "l10n": true,
 }
 
+// skipFile reports whether a file name is never worth scanning: Storybook
+// stories are UI documentation and display fixtures, not model input.
+func skipFile(name string) bool {
+	return strings.Contains(strings.ToLower(name), ".stories.")
+}
+
 // Scan walks the given paths and extracts prompts from every supported
 // source file. Files are processed concurrently; results are returned in
 // deterministic (file, line) order.
@@ -97,7 +103,7 @@ func Scan(paths []string, opts Options) ([]Prompt, error) {
 			return nil, err
 		}
 		if !info.IsDir() {
-			if languageFor(root) != nil {
+			if languageFor(root) != nil && !skipFile(filepath.Base(root)) {
 				files = append(files, root)
 			}
 			continue
@@ -112,7 +118,7 @@ func Scan(paths []string, opts Options) ([]Prompt, error) {
 				}
 				return nil
 			}
-			if languageFor(path) == nil {
+			if languageFor(path) == nil || skipFile(d.Name()) {
 				return nil
 			}
 			if info, err := d.Info(); err == nil && info.Size() > maxSize {

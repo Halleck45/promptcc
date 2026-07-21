@@ -114,6 +114,9 @@ var denyKeys = map[string]bool{
 	// presentation: styling values, never prompts
 	"style": true, "styles": true, "class": true, "classname": true,
 	"classes": true, "css": true, "icon": true,
+	// database artifacts ("query" stays allowed: in LLM code a userQuery is
+	// often real model input, and SQL content is caught by looksLikeSQL)
+	"sql": true, "statement": true, "stmt": true, "columns": true,
 }
 
 // normalizeBinding strips quotes and sigils from a binding name so that
@@ -121,6 +124,49 @@ var denyKeys = map[string]bool{
 // for camelCase analysis; callers lowercase where needed.
 func normalizeBinding(s string) string {
 	return strings.Trim(s, "'\"$ \t")
+}
+
+// denyCallees are call sites whose string arguments are never prompts:
+// test assertions hold expected MODEL OUTPUT, loggers and consoles hold
+// diagnostics, UI input boxes hold labels, database handles hold SQL,
+// styled-components hold CSS. Matching is case-insensitive substring on the
+// rendered callee; the call nearest to the string literal decides.
+var denyCallees = []string{
+	// test assertions: expected model output, not model input
+	"expect(", "->tobe", "->tocontain", "->toequal", "->tomatch", "->tothrow",
+	".tobe(", ".tocontain", ".toequal", ".tomatch", ".tostrictequal",
+	"assertequals", "assertsame", "assertcontains", "assertstringcontains",
+	"assertmatch",
+	// diagnostics
+	"console.", "logger.", "log.error", "log.warn", "log.info", "log.debug",
+	"log.log", "log.trace",
+	// UI copy
+	"showinputbox", "showquickpick", "showinformationmessage",
+	"showerrormessage", "showwarningmessage", "addhelptext", "styled.",
+	// database handles
+	"db.", "database.", ".prepare(",
+}
+
+// denyExactCallees are denied only on exact match: the string argument is a
+// question shown to the user, not model input.
+var denyExactCallees = map[string]bool{"input": true, "print": true}
+
+// isDeniedCallee reports whether a rendered callee is a deny-listed call or
+// an error/exception constructor ("new PrismException", "RuntimeError").
+func isDeniedCallee(callee string) bool {
+	c := strings.ToLower(strings.ReplaceAll(callee, " ", ""))
+	if strings.HasSuffix(c, "error") || strings.HasSuffix(c, "exception") {
+		return true
+	}
+	if denyExactCallees[c] {
+		return true
+	}
+	for _, pattern := range denyCallees {
+		if strings.Contains(c, pattern) {
+			return true
+		}
+	}
+	return false
 }
 
 // maxClimb bounds the ancestor walk during classification.
@@ -149,6 +195,9 @@ func classify(lang *language, n *sitter.Node, src []byte) (Confidence, string, v
 
 		if render, ok := lang.callKinds[kind]; ok {
 			callee := render(p, src)
+			if isDeniedCallee(callee) {
+				return Low, "", notPrompt
+			}
 			if isSDKCallee(callee) {
 				return High, "call " + compactCallee(callee), isPrompt
 			}

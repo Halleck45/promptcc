@@ -1,7 +1,3 @@
-aider/args_formatter.py:19  [low]  heuristic: natural language literal
-    score 2.5 [LOW]  decisions=0 density=0 routes=0 inject=2 guards=0
-aider/args_formatter.py:92  [low]  heuristic: natural language literal
-    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 aider/coders/architect_prompts.py:7  [low]  heuristic: natural language literal
     score 0.9 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=2
 aider/coders/architect_prompts.py:21  [low]  heuristic: natural language literal
@@ -116,8 +112,6 @@ benchmark/prompts.py:1  [medium]  var instructions_addendum
     score 0.9 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=2
 benchmark/refactor_tools.py:170  [low]  heuristic: natural language literal
     score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
-benchmark/refactor_tools.py:178  [low]  heuristic: natural language literal
-    score 3.27 [LOW]  decisions=1 density=0.077 routes=0 inject=1 guards=0
 scripts/30k-image.py:121  [low]  heuristic: natural language literal
     score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
 scripts/history_prompts.py:1  [medium]  var history_prompt
@@ -135,7 +129,7 @@ tests/basic/test_wholefile.py:195  [low]  heuristic: natural language literal
 tests/basic/test_wholefile.py:300  [low]  heuristic: natural language literal
     score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
 
-68 prompt(s) in 32 file(s)
+65 prompt(s) in 31 file(s)
 
 ── worst offenders ──────────────────────────
      13.05  HIGH      aider/coders/editblock_fenced_prompts.py:97

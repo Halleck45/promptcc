@@ -571,3 +571,77 @@ const systemPrompt = "If asked about billing, escalate to a human. Never guess."
 		t.Errorf("kept the wrong prompt: %s", prompts[0].Context)
 	}
 }
+
+func TestScanTypeScriptDeniedCallees(t *testing.T) {
+	// realworld.ts contains assertions, error constructors, diagnostics, UI
+	// input boxes, SQL handles and codegen templates: none may surface. The
+	// only expected prompts remain the three legitimate ones.
+	found := promptsForFile(scanTestdata(t, Low), "realworld.ts")
+	if len(found) != 1 {
+		for _, p := range found {
+			t.Logf("found: %s:%d [%s] %s %q", p.File, p.Line, p.Confidence, p.Context, p.Text)
+		}
+		t.Fatalf("found %d prompts in realworld.ts, want 1", len(found))
+	}
+}
+
+func TestScanSkipsStorybookFiles(t *testing.T) {
+	for _, p := range scanTestdata(t, Low) {
+		if strings.Contains(p.File, ".stories.") {
+			t.Errorf("storybook file should be skipped: %s:%d", p.File, p.Line)
+		}
+	}
+}
+
+func TestIsDeniedCallee(t *testing.T) {
+	tests := []struct {
+		callee string
+		want   bool
+	}{
+		{"expect(response.text)->toBe", true},
+		{"expect(text).toContain", true},
+		{"new Error", true},
+		{"new PrismException", true},
+		{"RuntimeError", true},
+		{"console.error", true},
+		{"Logger.warn", true},
+		{"vscode.window.showInputBox", true},
+		{"db.prepare", true},
+		{"styled.div", true},
+		{"input", true},
+		{"client.messages.create", false},
+		{"openai.chat.completions.create", false},
+		{"buildPrompt", false},
+	}
+	for _, tt := range tests {
+		if got := isDeniedCallee(tt.callee); got != tt.want {
+			t.Errorf("isDeniedCallee(%q) = %v, want %v", tt.callee, got, tt.want)
+		}
+	}
+}
+
+func TestLooksLikeSQLDML(t *testing.T) {
+	tests := []struct {
+		in   string
+		want bool
+	}{
+		{"INSERT OR IGNORE INTO cron_event_log (id, kind) VALUES (?, ?)", true},
+		{"UPDATE cron_runs SET status = ? WHERE id = ?", true},
+		{"INSERT INTO sessions (id) VALUES (?) ON CONFLICT DO NOTHING", true},
+		{"Update the summary when the user confirms, then send it.", false},
+	}
+	for _, tt := range tests {
+		if got := looksLikeSQL(tt.in); got != tt.want {
+			t.Errorf("looksLikeSQL(%q) = %v, want %v", tt.in, got, tt.want)
+		}
+	}
+}
+
+func TestLooksLikeGenerated(t *testing.T) {
+	if !looksLikeGenerated("# AUTO-GENERATED FILE. DO NOT EDIT.") {
+		t.Error("codegen header should be detected")
+	}
+	if looksLikeGenerated("If the user asks about generated content, explain the policy.") {
+		t.Error("prose mentioning generation should not be detected")
+	}
+}

@@ -62,3 +62,16 @@ function handle(message) {
   }
 }
 `;
+
+// Not prompts: expected MODEL OUTPUT asserted in tests, error constructors,
+// diagnostics, UI input boxes and SQL handles.
+expect(response.text).toBe("The meaning of life is subjective and depends on each individual.");
+expect(response.text).toContain("If you refactor the loop, the function gets simpler and easier to test.");
+throw new Error("Wrap your component inside PromptInputProvider before using the usePromptInput hook in the tree.");
+console.error("Failed to track prompt submission, the telemetry endpoint rejected the payload with a timeout.");
+vscode.window.showInputBox({ prompt: "Enter your prompt for generating the notebook cell (press Enter to confirm)" });
+db.prepare("UPDATE sessions SET status = ?, updated_at = ? WHERE id = ?");
+const insertSpec = "INSERT OR IGNORE INTO cron_event_log (id, run_id, kind, message) VALUES (?, ?, ?, ?)";
+
+// Not a prompt: codegen template written to disk.
+const header = `# AUTO-GENERATED FILE, DO NOT EDIT. Regenerate with the build-proto script whenever the protobuf definitions change in any way.`;
