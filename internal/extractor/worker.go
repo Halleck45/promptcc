@@ -166,10 +166,16 @@ func (w *worker) finishPrompt(lang *language, n *sitter.Node, src []byte, path, 
 	if confidence != High && (looksLikeSQL(text) || looksLikeSpec(text) || looksLikeMarkup(text)) {
 		return Prompt{}, false
 	}
-	// Embedded shell and PowerShell scripts read like branchy prose. This
-	// veto only applies to heuristic hits: prompts legitimately contain
-	// code examples, and prompt-named bindings keep the benefit of the doubt.
-	if confidence == Low && looksLikeScript(text) {
+	// Embedded scripts and source code read like branchy prose (mock
+	// servers in tests, hook scripts). These vetoes only apply to heuristic
+	// hits: prompts legitimately contain code examples, and prompt-named
+	// bindings keep the benefit of the doubt.
+	if confidence == Low && (looksLikeScript(text) || looksLikeCode(text)) {
+		return Prompt{}, false
+	}
+	// A single line of hyphenated utility tokens is a CSS class list, even
+	// when bound to a Prompt* component name.
+	if confidence != High && looksLikeStyleList(text) {
 		return Prompt{}, false
 	}
 	if len([]rune(text)) < minLength(confidence) {
@@ -445,6 +451,46 @@ func looksLikeScript(s string) bool {
 		}
 	}
 	return false
+}
+
+// looksLikeCode reports whether a multi-line string is more plausibly
+// source code than prose: a large share of lines ending in braces or
+// semicolons, or starting like statements and comments.
+func looksLikeCode(s string) bool {
+	lines, codeLines := 0, 0
+	for _, line := range strings.Split(s, "\n") {
+		l := strings.TrimSpace(line)
+		if l == "" {
+			continue
+		}
+		lines++
+		if strings.HasSuffix(l, "{") || strings.HasSuffix(l, "}") ||
+			strings.HasSuffix(l, ";") || strings.HasSuffix(l, "});") ||
+			strings.HasPrefix(l, "}") || strings.HasPrefix(l, "//") ||
+			strings.HasPrefix(l, "#!") {
+			codeLines++
+		}
+	}
+	return lines >= 5 && codeLines*5 >= lines*2 // at least 40% code-shaped lines
+}
+
+// looksLikeStyleList reports whether a one-line string is a CSS utility
+// class list ("mb-2 px-3 font-medium text-xs").
+func looksLikeStyleList(s string) bool {
+	if strings.Contains(strings.TrimSpace(s), "\n") {
+		return false
+	}
+	fields := strings.Fields(s)
+	if len(fields) < 3 {
+		return false
+	}
+	hyphenated := 0
+	for _, f := range fields {
+		if strings.Contains(f, "-") || strings.Contains(f, ":") {
+			hyphenated++
+		}
+	}
+	return hyphenated*10 >= len(fields)*6 // at least 60% utility-shaped tokens
 }
 
 func letterRatio(s string) float64 {

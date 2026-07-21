@@ -514,3 +514,60 @@ func TestScanJSXExtension(t *testing.T) {
 		t.Fatalf("found %d prompts in .jsx, want 1", len(prompts))
 	}
 }
+
+func TestLooksLikeCode(t *testing.T) {
+	mock := `let buffer = "";
+function handle(message) {
+  if (message.method === "initialize") {
+    write({ jsonrpc: "2.0" });
+    return;
+  }
+}`
+	if !looksLikeCode(mock) {
+		t.Error("embedded JavaScript should be detected as code")
+	}
+	prompt := `You are a support agent.
+If the user asks for a refund, check the purchase date first.
+When the date is recent, use the refund tool.
+Otherwise, escalate to a human.
+Never answer off-topic questions.
+Always respond in French.`
+	if looksLikeCode(prompt) {
+		t.Error("a bullet prompt should not be detected as code")
+	}
+}
+
+func TestLooksLikeStyleList(t *testing.T) {
+	if !looksLikeStyleList("mb-2 px-3 font-medium text-muted-foreground text-xs") {
+		t.Error("tailwind class list should be detected")
+	}
+	if looksLikeStyleList("If the user asks for a refund, escalate to a human.") {
+		t.Error("prose should not be detected as a style list")
+	}
+	if looksLikeStyleList("You must double-check the follow-up e-mail.") {
+		t.Error("hyphenated prose should not be detected as a style list")
+	}
+}
+
+func TestDenyByLastIdentifierWord(t *testing.T) {
+	dir := t.TempDir()
+	code := `const PromptInputTabLabel = "Pick a template to start from and adjust it";
+const promptButtonTitle = "Send the current prompt to the assistant now";
+const systemPrompt = "If asked about billing, escalate to a human. Never guess.";`
+	if err := os.WriteFile(filepath.Join(dir, "ui.ts"), []byte(code), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	prompts, err := Scan([]string{dir}, Options{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(prompts) != 1 {
+		for _, p := range prompts {
+			t.Logf("found: %s:%d [%s] %s", p.File, p.Line, p.Confidence, p.Context)
+		}
+		t.Fatalf("found %d prompts, want 1 (Label and Title bindings must be denied)", len(prompts))
+	}
+	if !strings.Contains(prompts[0].Context, "systemPrompt") {
+		t.Errorf("kept the wrong prompt: %s", prompts[0].Context)
+	}
+}

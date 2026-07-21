@@ -1,9 +1,5 @@
 apps/cli/src/acp/auth.ts:43  [medium]  arg onPrompt
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-apps/cli/src/commands/auth.test.ts:109  [low]  heuristic: natural language literal
-    score 6.83 [MODERATE]  decisions=3 density=0.333 routes=0 inject=0 guards=0
-apps/cli/src/commands/plugin.test.ts:832  [low]  heuristic: natural language literal
-    score 2.5 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 apps/cli/src/connectors/adapters/discord.ts:74  [low]  heuristic: natural language literal
     score 8.37 [MODERATE]  decisions=2 density=0.667 routes=0 inject=0 guards=1
 apps/cli/src/connectors/adapters/discord.ts:75  [low]  heuristic: natural language literal
@@ -42,48 +38,12 @@ apps/cli/src/utils/team-command.test.ts:25  [medium]  arg prompt
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 apps/cli/src/utils/team-command.ts:25  [medium]  arg prompt
     score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
-apps/cline-hub/src/server/http.ts:25  [low]  heuristic: natural language literal
-    score 3.5 [LOW]  decisions=1 density=0.1 routes=0 inject=0 guards=0
-apps/cline-hub/src/webview/src/components/ai-elements/agent.tsx:72  [medium]  var AgentInstructions
-    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 apps/cline-hub/src/webview/src/components/ai-elements/prompt-input.tsx:225  [medium]  var usePromptInputController
     score 1 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
 apps/cline-hub/src/webview/src/components/ai-elements/prompt-input.tsx:390  [medium]  var usePromptInputAttachments
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 apps/cline-hub/src/webview/src/components/ai-elements/prompt-input.tsx:414  [medium]  var usePromptInputReferencedSources
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-apps/cline-hub/src/webview/src/components/ai-elements/prompt-input.tsx:1142  [medium]  var PromptInputTools
-    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-apps/cline-hub/src/webview/src/components/ai-elements/prompt-input.tsx:1317  [medium]  var PromptInputSelectTrigger
-    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-apps/cline-hub/src/webview/src/components/ai-elements/prompt-input.tsx:1318  [medium]  var PromptInputSelectTrigger
-    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-apps/cline-hub/src/webview/src/components/ai-elements/prompt-input.tsx:1410  [medium]  var PromptInputTabLabel
-    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-apps/cline-hub/src/webview/src/components/ai-elements/prompt-input.tsx:1434  [medium]  var PromptInputTabItem
-    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-apps/cline-hub/src/webview/src/components/ui/button.tsx:9  [low]  heuristic: natural language literal
-    score 1 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-apps/cline-hub/src/webview/src/components/ui/checkbox.tsx:12  [low]  heuristic: natural language literal
-    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-apps/cline-hub/src/webview/src/components/ui/combobox.tsx:114  [low]  heuristic: natural language literal
-    score 0.5 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-apps/cline-hub/src/webview/src/components/ui/input-group.tsx:15  [low]  heuristic: natural language literal
-    score 1 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-apps/cline-hub/src/webview/src/components/ui/input.tsx:12  [low]  heuristic: natural language literal
-    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-apps/cline-hub/src/webview/src/components/ui/native-select.tsx:26  [low]  heuristic: natural language literal
-    score 0.5 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-apps/cline-hub/src/webview/src/components/ui/radio-group.tsx:21  [low]  heuristic: natural language literal
-    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-apps/cline-hub/src/webview/src/components/ui/select.tsx:41  [low]  heuristic: natural language literal
-    score 1 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-apps/cline-hub/src/webview/src/components/ui/switch.tsx:19  [low]  heuristic: natural language literal
-    score 0.5 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-apps/cline-hub/src/webview/src/components/ui/tabs.tsx:61  [low]  heuristic: natural language literal
-    score 1 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-apps/cline-hub/src/webview/src/components/ui/tooltip.tsx:51  [low]  heuristic: natural language literal
-    score 0.5 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 apps/cline-hub/src/webview/src/components/views/settings/routine-view.tsx:383  [medium]  arg prompt
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 apps/cline-hub/src/webview/src/components/views/settings/routine-view.tsx:702  [medium]  arg prompt
@@ -96,16 +56,6 @@ apps/examples/code-review-bot/src/index.ts:1290  [medium]  arg systemPrompt
     score 6.33 [MODERATE]  decisions=3 density=0.333 routes=0 inject=0 guards=0
 apps/examples/desktop-app/sidecar/chat-test.ts:135  [medium]  arg prompt
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-apps/examples/desktop-app/webview/components/ui/calendar.tsx:207  [low]  heuristic: natural language literal
-    score 0.5 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-apps/examples/desktop-app/webview/components/ui/combobox.tsx:116  [low]  heuristic: natural language literal
-    score 0.5 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-apps/examples/desktop-app/webview/components/ui/select.tsx:40  [low]  heuristic: natural language literal
-    score 1 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-apps/examples/desktop-app/webview/components/ui/sidebar.tsx:613  [low]  heuristic: natural language literal
-    score 0.5 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-apps/examples/desktop-app/webview/components/ui/tabs.tsx:45  [low]  heuristic: natural language literal
-    score 1 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 apps/examples/desktop-app/webview/components/views/chat/welcome-chat.tsx:26  [medium]  arg prompt
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 apps/examples/desktop-app/webview/components/views/chat/welcome-chat.tsx:32  [medium]  arg prompt
@@ -130,46 +80,12 @@ apps/examples/multi-agent/src/index.ts:1047  [medium]  arg prompt
     score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
 apps/examples/multi-agent/src/index.ts:1101  [low]  heuristic: natural language literal
     score 1.2 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=1
-apps/examples/vscode/src/webview/src/components/ai-elements/agent.tsx:72  [medium]  var AgentInstructions
-    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 apps/examples/vscode/src/webview/src/components/ai-elements/prompt-input.tsx:225  [medium]  var usePromptInputController
     score 1 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
 apps/examples/vscode/src/webview/src/components/ai-elements/prompt-input.tsx:390  [medium]  var usePromptInputAttachments
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 apps/examples/vscode/src/webview/src/components/ai-elements/prompt-input.tsx:414  [medium]  var usePromptInputReferencedSources
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-apps/examples/vscode/src/webview/src/components/ai-elements/prompt-input.tsx:1142  [medium]  var PromptInputTools
-    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-apps/examples/vscode/src/webview/src/components/ai-elements/prompt-input.tsx:1317  [medium]  var PromptInputSelectTrigger
-    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-apps/examples/vscode/src/webview/src/components/ai-elements/prompt-input.tsx:1318  [medium]  var PromptInputSelectTrigger
-    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-apps/examples/vscode/src/webview/src/components/ai-elements/prompt-input.tsx:1410  [medium]  var PromptInputTabLabel
-    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-apps/examples/vscode/src/webview/src/components/ai-elements/prompt-input.tsx:1434  [medium]  var PromptInputTabItem
-    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-apps/examples/vscode/src/webview/src/components/ui/button.tsx:9  [low]  heuristic: natural language literal
-    score 1 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-apps/examples/vscode/src/webview/src/components/ui/checkbox.tsx:12  [low]  heuristic: natural language literal
-    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-apps/examples/vscode/src/webview/src/components/ui/combobox.tsx:111  [low]  heuristic: natural language literal
-    score 0.5 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-apps/examples/vscode/src/webview/src/components/ui/input-group.tsx:15  [low]  heuristic: natural language literal
-    score 1 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-apps/examples/vscode/src/webview/src/components/ui/input.tsx:12  [low]  heuristic: natural language literal
-    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-apps/examples/vscode/src/webview/src/components/ui/native-select.tsx:26  [low]  heuristic: natural language literal
-    score 0.5 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-apps/examples/vscode/src/webview/src/components/ui/radio-group.tsx:21  [low]  heuristic: natural language literal
-    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-apps/examples/vscode/src/webview/src/components/ui/select.tsx:41  [low]  heuristic: natural language literal
-    score 1 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-apps/examples/vscode/src/webview/src/components/ui/switch.tsx:19  [low]  heuristic: natural language literal
-    score 0.5 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-apps/examples/vscode/src/webview/src/components/ui/tabs.tsx:61  [low]  heuristic: natural language literal
-    score 1 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-apps/examples/vscode/src/webview/src/components/ui/tooltip.tsx:51  [low]  heuristic: natural language literal
-    score 0.5 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 apps/vscode/scripts/build-python-proto.mjs:114  [low]  heuristic: natural language literal
     score 3 [LOW]  decisions=2 density=0.08 routes=0 inject=0 guards=1
 apps/vscode/scripts/build-python-proto.mjs:178  [low]  heuristic: natural language literal
@@ -178,16 +94,6 @@ apps/vscode/scripts/build-python-proto.mjs:289  [low]  heuristic: natural langua
     score 1.2 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=1
 apps/vscode/scripts/build-python-proto.mjs:306  [low]  heuristic: natural language literal
     score 0.5 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-apps/vscode/scripts/generate-host-bridge-client.mjs:95  [low]  heuristic: natural language literal
-    score 1.2 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=1
-apps/vscode/scripts/generate-host-bridge-client.mjs:130  [low]  heuristic: natural language literal
-    score 4.59 [LOW]  decisions=1 density=0.059 routes=0 inject=1 guards=0
-apps/vscode/scripts/generate-host-bridge-client.mjs:195  [low]  heuristic: natural language literal
-    score 1.7 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=1
-apps/vscode/scripts/generate-protobus-setup.mjs:97  [low]  heuristic: natural language literal
-    score 1.2 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=1
-apps/vscode/scripts/generate-protobus-setup.mjs:179  [low]  heuristic: natural language literal
-    score 1.7 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=1
 apps/vscode/scripts/publish-nightly.mjs:581  [low]  heuristic: natural language literal
     score 0.5 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 apps/vscode/src/core/controller/commands/explainWithCline.ts:24  [medium]  var prompt
@@ -204,8 +110,6 @@ apps/vscode/src/core/hooks/__tests__/user-prompt-submit.test.ts:203  [medium]  a
     score 1 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
 apps/vscode/src/core/hooks/__tests__/user-prompt-submit.test.ts:411  [medium]  arg prompt
     score 1 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
-apps/vscode/src/core/hooks/hook-factory.ts:45  [low]  heuristic: natural language literal
-    score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
 apps/vscode/src/core/mentions/index.test.ts:152  [low]  heuristic: natural language literal
     score 0.5 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 apps/vscode/src/core/mentions/index.test.ts:361  [low]  heuristic: natural language literal
@@ -258,20 +162,14 @@ apps/vscode/src/core/prompts/responses.ts:343  [low]  heuristic: natural languag
     score 3.9 [LOW]  decisions=1 density=0.2 routes=0 inject=1 guards=2
 apps/vscode/src/core/prompts/responses.ts:369  [medium]  var toolUseInstructionsReminder
     score 1.2 [LOW]  decisions=0 density=0 routes=1 inject=0 guards=1
-apps/vscode/src/core/task/focus-chain/file-utils.ts:17  [low]  heuristic: natural language literal
-    score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
 apps/vscode/src/dev/commands/tasks.ts:60  [medium]  arg prompt
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-apps/vscode/src/dev/debug-harness/server.ts:1269  [low]  heuristic: natural language literal
-    score 2 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
 apps/vscode/src/dev/mcp-oauth-test-server/server.ts:159  [low]  heuristic: natural language literal
     score 0.9 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=2
 apps/vscode/src/extension.ts:421  [medium]  var NOTEBOOK_EDIT_INSTRUCTIONS
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=1
 apps/vscode/src/extension.ts:458  [medium]  var userPrompt
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-apps/vscode/src/extension.ts:465  [low]  heuristic: natural language literal
-    score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
 apps/vscode/src/extension.ts:501  [medium]  var userPrompt
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 apps/vscode/src/hosts/vscode/commit-message-generator.ts:53  [medium]  arg system
@@ -304,8 +202,6 @@ apps/vscode/src/sdk/sdk-mode-coordinator.ts:25  [medium]  var ACT_MODE_CONTINUAT
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 apps/vscode/src/sdk/sdk-session-lifecycle.test.ts:589  [medium]  arg prompt
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-apps/vscode/src/services/lg-cns-integration/webhook-hooks.ts:299  [low]  heuristic: natural language literal
-    score 2.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
 apps/vscode/src/services/uri/SharedUriHandler.ts:110  [medium]  var prompt
     score 1.2 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=1
 apps/vscode/src/services/uri/SharedUriHandler.ts:112  [medium]  var prompt
@@ -324,8 +220,6 @@ apps/vscode/src/test/e2e/fixtures/workspace_2/providers/openai.py:6  [high]  cal
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 apps/vscode/src/test/e2e/fixtures/workspace_2/providers/openrouter.py:10  [high]  call client.chat.completions.create
     score 1 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
-apps/vscode/src/test/e2e/fixtures/workspace_2/providers/openrouter.py:11  [high]  call client.chat.completions.create
-    score 1 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
 apps/vscode/src/test/e2e/fixtures/workspace_2/providers/openrouter.py:17  [high]  call client.chat.completions.create
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 apps/vscode/webview-ui/src/App.stories.tsx:44  [low]  heuristic: natural language literal
@@ -338,16 +232,6 @@ apps/vscode/webview-ui/src/App.stories.tsx:570  [low]  heuristic: natural langua
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 apps/vscode/webview-ui/src/App.stories.tsx:774  [low]  heuristic: natural language literal
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-apps/vscode/webview-ui/src/App.stories.tsx:913  [low]  heuristic: natural language literal
-    score 3.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
-apps/vscode/webview-ui/src/App.stories.tsx:1114  [low]  heuristic: natural language literal
-    score 3.13 [LOW]  decisions=1 density=0.063 routes=0 inject=0 guards=0
-apps/vscode/webview-ui/src/App.stories.tsx:1204  [low]  heuristic: natural language literal
-    score 2.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
-apps/vscode/webview-ui/src/components/chat/ChatTextArea.tsx:98  [low]  heuristic: natural language literal
-    score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
-apps/vscode/webview-ui/src/components/chat/ChatTextArea.tsx:155  [low]  heuristic: natural language literal
-    score 2 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
 apps/vscode/webview-ui/src/components/chat/ErrorRow.stories.tsx:54  [low]  heuristic: natural language literal
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 apps/vscode/webview-ui/src/components/chat/OrgClinePassRestrictionError.tsx:20  [medium]  var handleSwitchToPersonalAccount
@@ -356,30 +240,18 @@ apps/vscode/webview-ui/src/components/chat/OrgClinePassRestrictionError.tsx:22  
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 apps/vscode/webview-ui/src/components/chat/QuotedMessagePreview.tsx:5  [low]  heuristic: natural language literal
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-apps/vscode/webview-ui/src/components/chat/QuotedMessagePreview.tsx:19  [low]  heuristic: natural language literal
-    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-apps/vscode/webview-ui/src/components/chat/QuotedMessagePreview.tsx:30  [low]  heuristic: natural language literal
-    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-apps/vscode/webview-ui/src/components/chat/QuotedMessagePreview.tsx:46  [low]  heuristic: natural language literal
-    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-apps/vscode/webview-ui/src/components/chat/QuotedMessagePreview.tsx:58  [low]  heuristic: natural language literal
-    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 apps/vscode/webview-ui/src/components/chat/TypewriterText.stories.tsx:11  [low]  heuristic: natural language literal
     score 1.63 [LOW]  decisions=1 density=0.063 routes=0 inject=0 guards=0
 apps/vscode/webview-ui/src/components/chat/TypewriterText.stories.tsx:67  [low]  heuristic: natural language literal
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 apps/vscode/webview-ui/src/components/chat/TypewriterText.stories.tsx:73  [low]  heuristic: natural language literal
     score 3 [LOW]  decisions=1 density=0.2 routes=0 inject=0 guards=0
-apps/vscode/webview-ui/src/components/chat/auto-approve-menu/AutoApproveMenuItem.tsx:13  [low]  heuristic: natural language literal
-    score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
 apps/vscode/webview-ui/src/components/chat/chat-view/components/layout/QueuedPrompts.tsx:45  [medium]  var cancelQueuedPrompt
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 apps/vscode/webview-ui/src/components/chat/chat-view/hooks/useMessageHandlers.ts:79  [medium]  var trackPromptSubmitted
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 apps/vscode/webview-ui/src/components/chat/task-header/TaskHeader.stories.tsx:202  [low]  heuristic: natural language literal
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-apps/vscode/webview-ui/src/components/common/CodeBlock.tsx:26  [low]  heuristic: natural language literal
-    score 2 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
 apps/vscode/webview-ui/src/components/common/MarkdownBlock.stories.tsx:11  [low]  heuristic: natural language literal
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 apps/vscode/webview-ui/src/components/common/MarkdownBlock.stories.tsx:79  [low]  heuristic: natural language literal
@@ -392,26 +264,10 @@ apps/vscode/webview-ui/src/components/common/MarkdownBlock.stories.tsx:254  [low
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 apps/vscode/webview-ui/src/components/common/MarkdownBlock.stories.tsx:283  [low]  heuristic: natural language literal
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-apps/vscode/webview-ui/src/components/common/MermaidBlock.tsx:263  [low]  heuristic: natural language literal
-    score 0.5 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-apps/vscode/webview-ui/src/components/common/PopupModalContainer.tsx:15  [low]  heuristic: natural language literal
-    score 2 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
-apps/vscode/webview-ui/src/components/history/HistoryPreview.tsx:29  [low]  heuristic: natural language literal
-    score 0.5 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-apps/vscode/webview-ui/src/components/marketplace/MarketplaceView.tsx:169  [low]  heuristic: natural language literal
-    score 1 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 apps/vscode/webview-ui/src/components/mcp/chat-display/McpResponseDisplay.stories.tsx:76  [low]  heuristic: natural language literal
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-apps/vscode/webview-ui/src/components/mcp/chat-display/McpResponseDisplay.tsx:20  [low]  heuristic: natural language literal
-    score 0.5 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-apps/vscode/webview-ui/src/components/mcp/chat-display/McpResponseDisplay.tsx:47  [low]  heuristic: natural language literal
-    score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
-apps/vscode/webview-ui/src/components/mcp/configuration/McpConfigurationView.tsx:92  [low]  heuristic: natural language literal
-    score 2 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
 apps/vscode/webview-ui/src/components/mcp/configuration/tabs/installed/server-row/McpPromptRow.tsx:42  [medium]  var McpPromptRow
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-apps/vscode/webview-ui/src/components/settings/ThinkingBudgetSlider.tsx:19  [low]  heuristic: natural language literal
-    score 2 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
 apps/vscode/webview-ui/src/components/settings/providers/BedrockProvider.tsx:518  [low]  heuristic: natural language literal
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 apps/vscode/webview-ui/src/components/ui/button.stories.tsx:12  [low]  heuristic: natural language literal
@@ -420,8 +276,6 @@ apps/vscode/webview-ui/src/components/ui/dialog.stories.tsx:22  [low]  heuristic
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 apps/vscode/webview-ui/src/components/ui/select.stories.tsx:21  [low]  heuristic: natural language literal
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-apps/vscode/webview-ui/src/components/ui/select.tsx:34  [low]  heuristic: natural language literal
-    score 1 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 apps/vscode/webview-ui/src/components/welcome/quickWinTasks.ts:18  [medium]  arg prompt
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 apps/vscode/webview-ui/src/components/welcome/quickWinTasks.ts:27  [medium]  arg prompt
@@ -430,14 +284,10 @@ apps/vscode/webview-ui/src/components/welcome/quickWinTasks.ts:36  [medium]  arg
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 apps/vscode/webview-ui/src/components/worktrees/WorktreesView.tsx:224  [medium]  var prompt
     score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
-sdk/examples/hooks/custom-compaction-hook.example.ts:173  [low]  heuristic: natural language literal
-    score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
 sdk/examples/plugins/agents-squad/index.ts:463  [medium]  arg instructions
     score 6 [MODERATE]  decisions=1 density=0.5 routes=0 inject=0 guards=0
 sdk/examples/plugins/agents-squad/index.ts:493  [medium]  arg prompt
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-sdk/examples/plugins/custom-compaction.ts:159  [low]  heuristic: natural language literal
-    score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
 sdk/packages/agents/src/agent-runtime.ts:572  [low]  heuristic: natural language literal
     score 10.17 [MODERATE]  decisions=2 density=0.667 routes=0 inject=1 guards=0
 sdk/packages/core/src/auth/cline.ts:479  [medium]  arg instructions
@@ -476,8 +326,6 @@ sdk/packages/core/src/extensions/tools/definitions.ts:430  [low]  heuristic: nat
     score 11 [MODERATE]  decisions=3 density=0.5 routes=1 inject=1 guards=0
 sdk/packages/core/src/extensions/tools/definitions.ts:564  [low]  heuristic: natural language literal
     score 2.54 [LOW]  decisions=1 density=0.034 routes=0 inject=1 guards=1
-sdk/packages/core/src/extensions/tools/definitions.ts:726  [low]  heuristic: natural language literal
-    score 7.69 [MODERATE]  decisions=4 density=0.429 routes=0 inject=0 guards=2
 sdk/packages/core/src/extensions/tools/helpers.ts:25  [low]  heuristic: natural language literal
     score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
 sdk/packages/core/src/extensions/tools/helpers.ts:29  [low]  heuristic: natural language literal
@@ -538,10 +386,6 @@ sdk/packages/core/src/runtime/orchestration/runtime-builder.team-persistence.tes
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 sdk/packages/core/src/runtime/orchestration/runtime-builder.team-persistence.test.ts:252  [medium]  arg systemPrompt
     score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-sdk/packages/core/src/runtime/orchestration/runtime-builder.test.ts:416  [low]  heuristic: natural language literal
-    score 12.81 [HIGH]  decisions=6 density=0.261 routes=0 inject=0 guards=1
-sdk/packages/core/src/runtime/orchestration/runtime-builder.test.ts:487  [low]  heuristic: natural language literal
-    score 13.53 [HIGH]  decisions=7 density=0.233 routes=0 inject=0 guards=1
 sdk/packages/core/src/runtime/orchestration/runtime-builder.ts:693  [low]  heuristic: natural language literal
     score 2.7 [LOW]  decisions=0 density=0 routes=1 inject=1 guards=1
 sdk/packages/core/src/runtime/orchestration/session-runtime-orchestrator.test.ts:52  [medium]  arg systemPrompt
@@ -586,20 +430,10 @@ sdk/packages/llms/src/providers/gateway.test.ts:815  [high]  call expect(streamT
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 sdk/packages/llms/src/providers/gateway.test.ts:1847  [high]  call expect(streamTextSpy).toHaveBeenCalledWith
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-sdk/packages/llms/src/providers/gateway.test.ts:1851  [high]  call expect(streamTextSpy).toHaveBeenCalledWith
-    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-sdk/packages/llms/src/providers/gateway.test.ts:1862  [high]  call expect(streamTextSpy).toHaveBeenCalledWith
-    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 sdk/packages/llms/src/providers/gateway.test.ts:1956  [high]  call streamTextSpy.mockReturnValueOnce
     score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
-sdk/packages/llms/src/providers/gateway.test.ts:2196  [high]  call streamTextSpy.mockReturnValue
-    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-sdk/packages/llms/src/providers/gateway.test.ts:2240  [high]  call streamTextSpy.mockReturnValue
-    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 sdk/packages/llms/src/providers/gateway.test.ts:2241  [high]  call streamTextSpy.mockReturnValue
     score 0.5 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-sdk/packages/llms/src/providers/gateway.test.ts:2246  [high]  call streamTextSpy.mockReturnValue
-    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 sdk/packages/llms/src/providers/gateway.test.ts:2247  [high]  call streamTextSpy.mockReturnValue
     score 0.5 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 sdk/packages/llms/src/providers/gateway.test.ts:2248  [high]  call streamTextSpy.mockReturnValue
@@ -659,16 +493,16 @@ sdk/packages/shared/src/tools/create.ts:50  [low]  heuristic: natural language l
 sdk/packages/shared/src/tools/create.ts:72  [low]  heuristic: natural language literal
     score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
 
-330 prompt(s) in 167 file(s)
+247 prompt(s) in 115 file(s)
 
 ── worst offenders ──────────────────────────
      14.50  HIGH      sdk/packages/core/src/extensions/tools/schemas.ts:208
-     13.53  HIGH      sdk/packages/core/src/runtime/orchestration/runtime-builder.test.ts:487
      13.00  HIGH      apps/vscode/src/hosts/vscode/commit-message-generator.ts:54
-     12.81  HIGH      sdk/packages/core/src/runtime/orchestration/runtime-builder.test.ts:416
      12.19  HIGH      apps/vscode/src/core/prompts/responses.ts:34
      12.00  HIGH      apps/cli/src/connectors/adapters/discord.ts:76
      11.55  MODERATE  sdk/packages/shared/src/prompt/system.ts:1
      11.50  MODERATE  sdk/packages/shared/src/prompt/cline.ts:21
      11.00  MODERATE  sdk/packages/core/src/extensions/tools/definitions.ts:430
      11.00  MODERATE  sdk/packages/shared/src/team/schema.ts:131
+     10.77  MODERATE  sdk/packages/core/src/extensions/tools/schemas.ts:284
+     10.67  MODERATE  apps/cli/src/connectors/adapters/discord.ts:75

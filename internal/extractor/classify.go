@@ -111,6 +111,9 @@ var denyKeys = map[string]bool{
 	"help": true, "usage": true, "label": true, "title": true,
 	"caption": true, "hint": true, "placeholder": true, "alt": true,
 	"signature": true, "slug": true,
+	// presentation: styling values, never prompts
+	"style": true, "styles": true, "class": true, "classname": true,
+	"classes": true, "css": true, "icon": true,
 }
 
 // normalizeBinding strips quotes and sigils from a binding name so that
@@ -183,9 +186,13 @@ func classify(lang *language, n *sitter.Node, src []byte) (Confidence, string, v
 			if segment := lastIdentSegment(raw); segment != "" {
 				// Deny decisions belong to the binding nearest to the
 				// literal; prompt-like evidence is accepted at any depth.
+				// The identifier's LAST word decides the deny: a
+				// PromptInputTabLabel is a label, whatever its prefix.
 				if !sawNearestBinding {
 					sawNearestBinding = true
-					if denyKeys[strings.ToLower(segment)] {
+					words := identWords(segment)
+					if denyKeys[strings.ToLower(segment)] ||
+						(len(words) > 0 && denyKeys[words[len(words)-1]]) {
 						return Low, "", notPrompt
 					}
 				}

@@ -122,14 +122,6 @@ scripts/30k-image.py:121  [low]  heuristic: natural language literal
     score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
 scripts/history_prompts.py:1  [medium]  var history_prompt
     score 8.24 [MODERATE]  decisions=5 density=0.294 routes=0 inject=1 guards=4
-scripts/issues.py:31  [low]  heuristic: natural language literal
-    score 4.5 [LOW]  decisions=1 density=0.2 routes=0 inject=1 guards=0
-scripts/issues.py:50  [low]  heuristic: natural language literal
-    score 5.83 [MODERATE]  decisions=1 density=0.333 routes=0 inject=1 guards=0
-scripts/issues.py:57  [low]  heuristic: natural language literal
-    score 5.83 [MODERATE]  decisions=1 density=0.333 routes=0 inject=1 guards=0
-scripts/logo_svg.py:85  [low]  heuristic: natural language literal
-    score 2.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
 tests/basic/test_editblock.py:169  [low]  heuristic: natural language literal
     score 0.5 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 tests/basic/test_editblock.py:204  [low]  heuristic: natural language literal
@@ -143,7 +135,7 @@ tests/basic/test_wholefile.py:195  [low]  heuristic: natural language literal
 tests/basic/test_wholefile.py:300  [low]  heuristic: natural language literal
     score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
 
-72 prompt(s) in 34 file(s)
+68 prompt(s) in 32 file(s)
 
 ── worst offenders ──────────────────────────
      13.05  HIGH      aider/coders/editblock_fenced_prompts.py:97

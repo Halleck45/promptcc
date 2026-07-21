@@ -40,3 +40,25 @@ const POST_HOOK_POWERSHELL = `try {
 Invoke-RestMethod -Method Post -Uri $config.webhook_url -Body ($payload | ConvertTo-Json) | Out-Null
 @{ cancel = $false } | ConvertTo-Json -Compress
 `;
+
+// Not a prompt: component class names, even under a Prompt* binding.
+const PromptInputTabLabel = "mb-2 px-3 font-medium text-muted-foreground text-xs";
+
+// Not a prompt: embedded mock server source code used in tests.
+const MOCK_MCP_SERVER = `
+let buffer = "";
+function write(payload) {
+  const body = JSON.stringify(payload);
+  process.stdout.write("Content-Length: " + body.length + "\r\n\r\n" + body);
+}
+function handle(message) {
+  if (message.method === "initialize") {
+    write({ jsonrpc: "2.0", id: message.id, result: { capabilities: { tools: {} } } });
+    return;
+  }
+  if (message.method === "tools/list") {
+    write({ jsonrpc: "2.0", id: message.id, result: { tools: [] } });
+    return;
+  }
+}
+`;
