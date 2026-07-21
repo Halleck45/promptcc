@@ -469,7 +469,7 @@ var htmlTemplate = template.Must(template.New("report").Funcs(template.FuncMap{"
     </header>
 
     {{- if .HasDist}}
-    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-6">
+    <div class="grid grid-cols-2 sm:grid-cols-4 xl:grid-cols-7 gap-3 mb-6">
       {{template "kpi" dict "V" (len .Rows) "K" "prompts"}}
       {{template "kpi" dict "V" .TotalLines "K" "prompt lines"}}
       {{template "kpi" dict "V" .Files "K" "files"}}

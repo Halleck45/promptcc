@@ -1,6 +1,8 @@
-# promptcc
+<p align="center">
+  <img src="docs/logo-promptcc.png" alt="promptcc" width="360">
+</p>
 
-Cyclomatic complexity for prompts.
+<p align="center"><b>Cyclomatic complexity for prompts.</b></p>
 
 Static analysis tools assume the behavior of a program lives in its code. In LLM-integrated applications, part of that behavior has moved into prompts: routing decisions, guardrails, business rules. A two-line function carrying a fifty-line prompt shows up green in every linter while its git history screams hotspot.
 
