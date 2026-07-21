@@ -305,15 +305,39 @@ func TestLastIdentSegment(t *testing.T) {
 		want string
 	}{
 		{"'prompt'", "prompt"},
-		{"$systemPrompt", "systemprompt"},
-		{"$this->systemPrompt", "systemprompt"},
+		{"$systemPrompt", "systemPrompt"},
+		{"$this->systemPrompt", "systemPrompt"},
 		{"prompt.required_without", "required_without"},
-		{"self::PROMPT", "prompt"},
+		{"self::PROMPT", "PROMPT"},
 		{"", ""},
 	}
 	for _, tt := range tests {
 		if got := lastIdentSegment(tt.in); got != tt.want {
 			t.Errorf("lastIdentSegment(%q) = %q, want %q", tt.in, got, tt.want)
+		}
+	}
+}
+
+func TestIsPromptish(t *testing.T) {
+	tests := []struct {
+		in   string
+		want bool
+	}{
+		{"systemPrompt", true},
+		{"SYSTEM_PROMPT", true},
+		{"system", true},
+		{"SystemMessage", true},
+		{"system_message", true},
+		{"instructions", true},
+		{"persona", true},
+		{"FileSystemError", false},
+		{"subsystem", false},
+		{"fileSystemWatcher", false},
+		{"ecosystem", false},
+	}
+	for _, tt := range tests {
+		if got := isPromptish(tt.in); got != tt.want {
+			t.Errorf("isPromptish(%q) = %v, want %v", tt.in, got, tt.want)
 		}
 	}
 }

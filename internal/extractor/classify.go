@@ -3,6 +3,7 @@ package extractor
 import (
 	"regexp"
 	"strings"
+	"unicode"
 
 	sitter "github.com/tree-sitter/go-tree-sitter"
 )
@@ -30,14 +31,61 @@ var sdkCallees = []string{
 	"ollama.chat", "ollama.generate",
 }
 
-// promptishRe matches identifiers that conventionally hold prompts.
-var promptishRe = regexp.MustCompile(`(?i)prompt|system|instruction|persona`)
+// promptishRe matches identifiers that conventionally hold prompts. "system"
+// is handled separately in isPromptish: as a substring it drowns in compound
+// words (FileSystemError, subsystem), so it only counts as the identifier's
+// first word (system, systemPrompt, system_message).
+var promptishRe = regexp.MustCompile(`(?i)prompt|instruction|persona`)
+
+// isPromptish reports whether an identifier segment conventionally names a
+// prompt value.
+func isPromptish(segment string) bool {
+	if promptishRe.MatchString(segment) {
+		return true
+	}
+	words := identWords(segment)
+	return len(words) > 0 && words[0] == "system"
+}
+
+// identWords splits an identifier into lowercase words on underscores,
+// hyphens, digits and camelCase boundaries: "FileSystemError" yields
+// ["file", "system", "error"].
+func identWords(s string) []string {
+	var words []string
+	var cur []rune
+	runes := []rune(s)
+	flush := func() {
+		if len(cur) > 0 {
+			words = append(words, strings.ToLower(string(cur)))
+			cur = nil
+		}
+	}
+	for i, r := range runes {
+		switch {
+		case !unicode.IsLetter(r):
+			flush()
+		case unicode.IsUpper(r):
+			prevLower := i > 0 && unicode.IsLower(runes[i-1])
+			acronymEnd := i > 0 && unicode.IsUpper(runes[i-1]) &&
+				i+1 < len(runes) && unicode.IsLower(runes[i+1])
+			if prevLower || acronymEnd {
+				flush()
+			}
+			cur = append(cur, r)
+		default:
+			cur = append(cur, r)
+		}
+	}
+	flush()
+	return words
+}
 
 // segmentRe extracts identifier segments from a binding name, so that
-// "$this->systemPrompt" yields "systemprompt" and "prompt.required_without"
+// "$this->systemPrompt" yields "systemPrompt" and "prompt.required_without"
 // yields "required_without". Deny and promptish decisions look at the LAST
 // segment: it is the one that names the value ("prompt.hint" is a hint).
-var segmentRe = regexp.MustCompile(`[a-z0-9_-]+`)
+// Case is preserved so that camelCase word boundaries survive.
+var segmentRe = regexp.MustCompile(`[A-Za-z0-9_-]+`)
 
 func lastIdentSegment(s string) string {
 	segments := segmentRe.FindAllString(normalizeBinding(s), -1)
@@ -65,10 +113,11 @@ var denyKeys = map[string]bool{
 	"signature": true, "slug": true,
 }
 
-// normalizeBinding lowercases a binding name and strips quotes and sigils
-// so that '$systemPrompt', '"prompt"' and 'prompt' compare equal.
+// normalizeBinding strips quotes and sigils from a binding name so that
+// '$systemPrompt', '"prompt"' and 'prompt' compare equal. Case is preserved
+// for camelCase analysis; callers lowercase where needed.
 func normalizeBinding(s string) string {
-	return strings.Trim(strings.ToLower(s), "'\"$ \t")
+	return strings.Trim(s, "'\"$ \t")
 }
 
 // maxClimb bounds the ancestor walk during classification.
@@ -131,16 +180,16 @@ func classify(lang *language, n *sitter.Node, src []byte) (Confidence, string, v
 				return Low, "", notPrompt // the string IS a key, not a value
 			}
 			raw := nameNode.Utf8Text(src)
-			if name := lastIdentSegment(raw); name != "" {
+			if segment := lastIdentSegment(raw); segment != "" {
 				// Deny decisions belong to the binding nearest to the
 				// literal; prompt-like evidence is accepted at any depth.
 				if !sawNearestBinding {
 					sawNearestBinding = true
-					if denyKeys[name] {
+					if denyKeys[strings.ToLower(segment)] {
 						return Low, "", notPrompt
 					}
 				}
-				if promptishRe.MatchString(name) && mediumContext == "" {
+				if isPromptish(segment) && mediumContext == "" {
 					mediumContext = prefix + raw
 				}
 			}

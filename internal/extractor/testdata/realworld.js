@@ -42,3 +42,6 @@ const stepConfig = {
     "the invariant is violated, the step also fails critically, so that " +
     "the pipeline never persists a partially generated activity.",
 };
+
+// Not a prompt: "system" inside a compound word is not prompt evidence.
+const fileSystemError = "The file system returned an unexpected error while scanning the workspace folders. If the path does not exist, create it first.";

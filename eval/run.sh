@@ -37,9 +37,9 @@ fetch() { # fetch <name> <url> <sha>
     git -C "$dir" -c advice.detachedHead=false checkout -qf "$sha"
 }
 
-summarize() { # summarize <name>: scan summary with repo-relative paths
+summarize() { # summarize <name>: full per-prompt listing, repo-relative paths
     name=$1
-    "$BIN" scan "$CACHE/$name" 2>/dev/null \
+    "$BIN" scan --verbose "$CACHE/$name" 2>/dev/null \
         | sed "s|$CACHE/$name/||g" \
         | grep -v '^Use --verbose'
 }

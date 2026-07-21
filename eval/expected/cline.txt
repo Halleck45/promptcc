@@ -1,13 +1,674 @@
-342 prompt(s) in 172 file(s)
+apps/cli/src/acp/auth.ts:43  [medium]  arg onPrompt
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/cli/src/commands/auth.test.ts:109  [low]  heuristic: natural language literal
+    score 6.83 [MODERATE]  decisions=3 density=0.333 routes=0 inject=0 guards=0
+apps/cli/src/commands/plugin.test.ts:832  [low]  heuristic: natural language literal
+    score 2.5 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/cli/src/connectors/adapters/discord.ts:74  [low]  heuristic: natural language literal
+    score 8.37 [MODERATE]  decisions=2 density=0.667 routes=0 inject=0 guards=1
+apps/cli/src/connectors/adapters/discord.ts:75  [low]  heuristic: natural language literal
+    score 10.67 [MODERATE]  decisions=3 density=0.667 routes=0 inject=1 guards=0
+apps/cli/src/connectors/adapters/discord.ts:76  [low]  heuristic: natural language literal
+    score 12 [HIGH]  decisions=2 density=1 routes=0 inject=0 guards=0
+apps/cli/src/connectors/adapters/discord.ts:77  [low]  heuristic: natural language literal
+    score 6 [MODERATE]  decisions=1 density=0.5 routes=0 inject=0 guards=0
+apps/cli/src/connectors/adapters/prompts.ts:1  [medium]  var CONNECTOR_SYSTEM_PROMPT
+    score 3.95 [LOW]  decisions=1 density=0.125 routes=0 inject=1 guards=1
+apps/cli/src/main.ts:346  [low]  heuristic: natural language literal
+    score 2.25 [LOW]  decisions=1 density=0.125 routes=0 inject=0 guards=0
+apps/cli/src/runtime/interactive/config-data.test.ts:608  [medium]  arg instructions
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/cli/src/runtime/interactive/config-data.test.ts:627  [medium]  arg instructions
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/cli/src/runtime/interactive/config-data.test.ts:768  [medium]  arg instructions
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/cli/src/runtime/interactive/mode.test.ts:17  [medium]  arg resolveSystemPrompt
+    score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+apps/cli/src/runtime/interactive/mode.ts:29  [medium]  var ACT_MODE_CONTINUATION_PROMPT
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/cli/src/runtime/interactive/session-runtime.ts:578  [medium]  var updatePendingPrompt
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/cli/src/tui/root.tsx:529  [medium]  var promoteQueuedPrompt
+    score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+apps/cli/src/tui/root.tsx:767  [medium]  var saveQueuedPromptEdit
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/cli/src/tui/root.tsx:777  [medium]  var saveQueuedPromptEdit
+    score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+apps/cli/src/utils/helpers.test.ts:315  [medium]  arg rolePrompt
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/cli/src/utils/team-command.test.ts:15  [medium]  arg prompt
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/cli/src/utils/team-command.test.ts:25  [medium]  arg prompt
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/cli/src/utils/team-command.ts:25  [medium]  arg prompt
+    score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+apps/cline-hub/src/server/http.ts:25  [low]  heuristic: natural language literal
+    score 3.5 [LOW]  decisions=1 density=0.1 routes=0 inject=0 guards=0
+apps/cline-hub/src/webview/src/components/ai-elements/agent.tsx:72  [medium]  var AgentInstructions
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/cline-hub/src/webview/src/components/ai-elements/prompt-input.tsx:225  [medium]  var usePromptInputController
+    score 1 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+apps/cline-hub/src/webview/src/components/ai-elements/prompt-input.tsx:390  [medium]  var usePromptInputAttachments
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/cline-hub/src/webview/src/components/ai-elements/prompt-input.tsx:414  [medium]  var usePromptInputReferencedSources
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/cline-hub/src/webview/src/components/ai-elements/prompt-input.tsx:1142  [medium]  var PromptInputTools
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/cline-hub/src/webview/src/components/ai-elements/prompt-input.tsx:1317  [medium]  var PromptInputSelectTrigger
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/cline-hub/src/webview/src/components/ai-elements/prompt-input.tsx:1318  [medium]  var PromptInputSelectTrigger
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/cline-hub/src/webview/src/components/ai-elements/prompt-input.tsx:1410  [medium]  var PromptInputTabLabel
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/cline-hub/src/webview/src/components/ai-elements/prompt-input.tsx:1434  [medium]  var PromptInputTabItem
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/cline-hub/src/webview/src/components/ui/button.tsx:9  [low]  heuristic: natural language literal
+    score 1 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/cline-hub/src/webview/src/components/ui/checkbox.tsx:12  [low]  heuristic: natural language literal
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/cline-hub/src/webview/src/components/ui/combobox.tsx:114  [low]  heuristic: natural language literal
+    score 0.5 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/cline-hub/src/webview/src/components/ui/input-group.tsx:15  [low]  heuristic: natural language literal
+    score 1 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/cline-hub/src/webview/src/components/ui/input.tsx:12  [low]  heuristic: natural language literal
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/cline-hub/src/webview/src/components/ui/native-select.tsx:26  [low]  heuristic: natural language literal
+    score 0.5 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/cline-hub/src/webview/src/components/ui/radio-group.tsx:21  [low]  heuristic: natural language literal
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/cline-hub/src/webview/src/components/ui/select.tsx:41  [low]  heuristic: natural language literal
+    score 1 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/cline-hub/src/webview/src/components/ui/switch.tsx:19  [low]  heuristic: natural language literal
+    score 0.5 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/cline-hub/src/webview/src/components/ui/tabs.tsx:61  [low]  heuristic: natural language literal
+    score 1 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/cline-hub/src/webview/src/components/ui/tooltip.tsx:51  [low]  heuristic: natural language literal
+    score 0.5 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/cline-hub/src/webview/src/components/views/settings/routine-view.tsx:383  [medium]  arg prompt
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/cline-hub/src/webview/src/components/views/settings/routine-view.tsx:702  [medium]  arg prompt
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/examples/cli-agent/src/index.ts:9  [medium]  arg systemPrompt
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/examples/cline-core-cli-agent/src/index.ts:15  [medium]  var systemPrompt
+    score 4.33 [LOW]  decisions=1 density=0.333 routes=0 inject=0 guards=0
+apps/examples/code-review-bot/src/index.ts:1290  [medium]  arg systemPrompt
+    score 6.33 [MODERATE]  decisions=3 density=0.333 routes=0 inject=0 guards=0
+apps/examples/desktop-app/sidecar/chat-test.ts:135  [medium]  arg prompt
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/examples/desktop-app/webview/components/ui/calendar.tsx:207  [low]  heuristic: natural language literal
+    score 0.5 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/examples/desktop-app/webview/components/ui/combobox.tsx:116  [low]  heuristic: natural language literal
+    score 0.5 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/examples/desktop-app/webview/components/ui/select.tsx:40  [low]  heuristic: natural language literal
+    score 1 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/examples/desktop-app/webview/components/ui/sidebar.tsx:613  [low]  heuristic: natural language literal
+    score 0.5 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/examples/desktop-app/webview/components/ui/tabs.tsx:45  [low]  heuristic: natural language literal
+    score 1 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/examples/desktop-app/webview/components/views/chat/welcome-chat.tsx:26  [medium]  arg prompt
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/examples/desktop-app/webview/components/views/chat/welcome-chat.tsx:32  [medium]  arg prompt
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/examples/desktop-app/webview/components/views/settings/routine-view.tsx:383  [medium]  arg prompt
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/examples/desktop-app/webview/components/views/settings/routine-view.tsx:702  [medium]  arg prompt
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/examples/desktop-app/webview/hooks/use-session-history.ts:701  [high]  call ...ent)=>sum+(event.totalCost??0),0,),};}returnusage;}).then
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/examples/desktop-app/webview/hooks/use-session-history.ts:709  [high]  call ...ent)=>sum+(event.totalCost??0),0,),};}returnusage;}).then
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/examples/desktop-app/webview/hooks/use-session-history.ts:985  [high]  call ...turnitem;}return{...item,status:nextStatus};}),);}).catch
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/examples/multi-agent/src/index.ts:1029  [medium]  arg prompt
+    score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+apps/examples/multi-agent/src/index.ts:1035  [medium]  arg prompt
+    score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+apps/examples/multi-agent/src/index.ts:1041  [medium]  arg prompt
+    score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+apps/examples/multi-agent/src/index.ts:1047  [medium]  arg prompt
+    score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+apps/examples/multi-agent/src/index.ts:1101  [low]  heuristic: natural language literal
+    score 1.2 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=1
+apps/examples/vscode/src/webview/src/components/ai-elements/agent.tsx:72  [medium]  var AgentInstructions
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/examples/vscode/src/webview/src/components/ai-elements/prompt-input.tsx:225  [medium]  var usePromptInputController
+    score 1 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+apps/examples/vscode/src/webview/src/components/ai-elements/prompt-input.tsx:390  [medium]  var usePromptInputAttachments
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/examples/vscode/src/webview/src/components/ai-elements/prompt-input.tsx:414  [medium]  var usePromptInputReferencedSources
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/examples/vscode/src/webview/src/components/ai-elements/prompt-input.tsx:1142  [medium]  var PromptInputTools
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/examples/vscode/src/webview/src/components/ai-elements/prompt-input.tsx:1317  [medium]  var PromptInputSelectTrigger
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/examples/vscode/src/webview/src/components/ai-elements/prompt-input.tsx:1318  [medium]  var PromptInputSelectTrigger
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/examples/vscode/src/webview/src/components/ai-elements/prompt-input.tsx:1410  [medium]  var PromptInputTabLabel
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/examples/vscode/src/webview/src/components/ai-elements/prompt-input.tsx:1434  [medium]  var PromptInputTabItem
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/examples/vscode/src/webview/src/components/ui/button.tsx:9  [low]  heuristic: natural language literal
+    score 1 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/examples/vscode/src/webview/src/components/ui/checkbox.tsx:12  [low]  heuristic: natural language literal
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/examples/vscode/src/webview/src/components/ui/combobox.tsx:111  [low]  heuristic: natural language literal
+    score 0.5 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/examples/vscode/src/webview/src/components/ui/input-group.tsx:15  [low]  heuristic: natural language literal
+    score 1 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/examples/vscode/src/webview/src/components/ui/input.tsx:12  [low]  heuristic: natural language literal
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/examples/vscode/src/webview/src/components/ui/native-select.tsx:26  [low]  heuristic: natural language literal
+    score 0.5 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/examples/vscode/src/webview/src/components/ui/radio-group.tsx:21  [low]  heuristic: natural language literal
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/examples/vscode/src/webview/src/components/ui/select.tsx:41  [low]  heuristic: natural language literal
+    score 1 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/examples/vscode/src/webview/src/components/ui/switch.tsx:19  [low]  heuristic: natural language literal
+    score 0.5 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/examples/vscode/src/webview/src/components/ui/tabs.tsx:61  [low]  heuristic: natural language literal
+    score 1 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/examples/vscode/src/webview/src/components/ui/tooltip.tsx:51  [low]  heuristic: natural language literal
+    score 0.5 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/vscode/scripts/build-python-proto.mjs:114  [low]  heuristic: natural language literal
+    score 3 [LOW]  decisions=2 density=0.08 routes=0 inject=0 guards=1
+apps/vscode/scripts/build-python-proto.mjs:178  [low]  heuristic: natural language literal
+    score 3.79 [LOW]  decisions=2 density=0.059 routes=0 inject=1 guards=1
+apps/vscode/scripts/build-python-proto.mjs:289  [low]  heuristic: natural language literal
+    score 1.2 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=1
+apps/vscode/scripts/build-python-proto.mjs:306  [low]  heuristic: natural language literal
+    score 0.5 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/vscode/scripts/generate-host-bridge-client.mjs:95  [low]  heuristic: natural language literal
+    score 1.2 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=1
+apps/vscode/scripts/generate-host-bridge-client.mjs:130  [low]  heuristic: natural language literal
+    score 4.59 [LOW]  decisions=1 density=0.059 routes=0 inject=1 guards=0
+apps/vscode/scripts/generate-host-bridge-client.mjs:195  [low]  heuristic: natural language literal
+    score 1.7 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=1
+apps/vscode/scripts/generate-protobus-setup.mjs:97  [low]  heuristic: natural language literal
+    score 1.2 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=1
+apps/vscode/scripts/generate-protobus-setup.mjs:179  [low]  heuristic: natural language literal
+    score 1.7 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=1
+apps/vscode/scripts/publish-nightly.mjs:581  [low]  heuristic: natural language literal
+    score 0.5 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/vscode/src/core/controller/commands/explainWithCline.ts:24  [medium]  var prompt
+    score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+apps/vscode/src/core/controller/commands/improveWithCline.ts:28  [medium]  var prompt
+    score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+apps/vscode/src/core/controller/commands/improveWithCline.ts:29  [medium]  var prompt
+    score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+apps/vscode/src/core/controller/file/createSkillFile.ts:12  [low]  heuristic: natural language literal
+    score 4 [LOW]  decisions=1 density=0.1 routes=0 inject=1 guards=0
+apps/vscode/src/core/hooks/HookError.ts:63  [low]  heuristic: natural language literal
+    score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+apps/vscode/src/core/hooks/__tests__/user-prompt-submit.test.ts:203  [medium]  arg prompt
+    score 1 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+apps/vscode/src/core/hooks/__tests__/user-prompt-submit.test.ts:411  [medium]  arg prompt
+    score 1 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+apps/vscode/src/core/hooks/hook-factory.ts:45  [low]  heuristic: natural language literal
+    score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+apps/vscode/src/core/mentions/index.test.ts:152  [low]  heuristic: natural language literal
+    score 0.5 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/vscode/src/core/mentions/index.test.ts:361  [low]  heuristic: natural language literal
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/vscode/src/core/prompts/responses.ts:14  [low]  heuristic: natural language literal
+    score 0.5 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/vscode/src/core/prompts/responses.ts:21  [low]  heuristic: natural language literal
+    score 2.25 [LOW]  decisions=1 density=0.125 routes=0 inject=0 guards=0
+apps/vscode/src/core/prompts/responses.ts:34  [low]  heuristic: natural language literal
+    score 12.19 [HIGH]  decisions=4 density=0.429 routes=2 inject=1 guards=2
+apps/vscode/src/core/prompts/responses.ts:57  [low]  heuristic: natural language literal
+    score 8.5 [MODERATE]  decisions=2 density=0.5 routes=0 inject=1 guards=0
+apps/vscode/src/core/prompts/responses.ts:67  [low]  heuristic: natural language literal
+    score 3.03 [LOW]  decisions=1 density=0.143 routes=0 inject=1 guards=3
+apps/vscode/src/core/prompts/responses.ts:79  [low]  heuristic: natural language literal
+    score 3.33 [LOW]  decisions=1 density=0.143 routes=0 inject=1 guards=2
+apps/vscode/src/core/prompts/responses.ts:90  [low]  heuristic: natural language literal
+    score 6.83 [MODERATE]  decisions=2 density=0.333 routes=0 inject=1 guards=0
+apps/vscode/src/core/prompts/responses.ts:101  [low]  heuristic: natural language literal
+    score 3.41 [LOW]  decisions=1 density=0.091 routes=0 inject=1 guards=0
+apps/vscode/src/core/prompts/responses.ts:261  [medium]  arg planModeInstructions
+    score 1.83 [LOW]  decisions=1 density=0.143 routes=0 inject=0 guards=2
+apps/vscode/src/core/prompts/responses.ts:272  [low]  heuristic: natural language literal
+    score 3.81 [LOW]  decisions=2 density=0.091 routes=0 inject=1 guards=2
+apps/vscode/src/core/prompts/responses.ts:291  [low]  heuristic: natural language literal
+    score 3.63 [LOW]  decisions=1 density=0.143 routes=0 inject=1 guards=1
+apps/vscode/src/core/prompts/responses.ts:301  [low]  heuristic: natural language literal
+    score 6.46 [MODERATE]  decisions=3 density=0.286 routes=0 inject=1 guards=3
+apps/vscode/src/core/prompts/responses.ts:307  [low]  heuristic: natural language literal
+    score 3.2 [LOW]  decisions=0 density=0 routes=1 inject=1 guards=1
+apps/vscode/src/core/prompts/responses.ts:310  [low]  heuristic: natural language literal
+    score 3.5 [LOW]  decisions=0 density=0 routes=1 inject=1 guards=0
+apps/vscode/src/core/prompts/responses.ts:313  [medium]  arg clineIgnoreInstructions
+    score 5 [MODERATE]  decisions=1 density=0.25 routes=0 inject=1 guards=0
+apps/vscode/src/core/prompts/responses.ts:316  [medium]  arg clineRulesGlobalDirectoryInstructions
+    score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+apps/vscode/src/core/prompts/responses.ts:319  [medium]  arg clineRulesLocalDirectoryInstructions
+    score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+apps/vscode/src/core/prompts/responses.ts:322  [medium]  arg clineRulesLocalFileInstructions
+    score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+apps/vscode/src/core/prompts/responses.ts:325  [medium]  arg windsurfRulesLocalFileInstructions
+    score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+apps/vscode/src/core/prompts/responses.ts:328  [medium]  arg cursorRulesLocalFileInstructions
+    score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+apps/vscode/src/core/prompts/responses.ts:331  [medium]  arg cursorRulesLocalDirectoryInstructions
+    score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+apps/vscode/src/core/prompts/responses.ts:334  [medium]  arg agentsRulesLocalFileInstructions
+    score 5 [MODERATE]  decisions=1 density=0.25 routes=0 inject=1 guards=0
+apps/vscode/src/core/prompts/responses.ts:343  [low]  heuristic: natural language literal
+    score 3.9 [LOW]  decisions=1 density=0.2 routes=0 inject=1 guards=2
+apps/vscode/src/core/prompts/responses.ts:369  [medium]  var toolUseInstructionsReminder
+    score 1.2 [LOW]  decisions=0 density=0 routes=1 inject=0 guards=1
+apps/vscode/src/core/task/focus-chain/file-utils.ts:17  [low]  heuristic: natural language literal
+    score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+apps/vscode/src/dev/commands/tasks.ts:60  [medium]  arg prompt
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/vscode/src/dev/debug-harness/server.ts:1269  [low]  heuristic: natural language literal
+    score 2 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+apps/vscode/src/dev/mcp-oauth-test-server/server.ts:159  [low]  heuristic: natural language literal
+    score 0.9 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=2
+apps/vscode/src/extension.ts:421  [medium]  var NOTEBOOK_EDIT_INSTRUCTIONS
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=1
+apps/vscode/src/extension.ts:458  [medium]  var userPrompt
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/vscode/src/extension.ts:465  [low]  heuristic: natural language literal
+    score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+apps/vscode/src/extension.ts:501  [medium]  var userPrompt
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/vscode/src/hosts/vscode/commit-message-generator.ts:53  [medium]  arg system
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/vscode/src/hosts/vscode/commit-message-generator.ts:54  [medium]  var PROMPT
+    score 13 [HIGH]  decisions=1 density=1 routes=0 inject=1 guards=0
+apps/vscode/src/hosts/vscode/commit-message-generator.ts:55  [medium]  arg instruction
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/vscode/src/hosts/vscode/terminal/VscodeTerminalProcess.ts:450  [low]  heuristic: natural language literal
+    score 0.5 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/vscode/src/hosts/vscode/vscode-to-file-migration.ts:227  [low]  heuristic: natural language literal
+    score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+apps/vscode/src/sdk/SdkController.ts:805  [medium]  var this.userInstructionService
+    score 0.5 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/vscode/src/sdk/auth-service.test.ts:370  [medium]  arg instructions
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/vscode/src/sdk/auth-service.test.ts:385  [medium]  arg instructions
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/vscode/src/sdk/cline-session-factory.ts:786  [medium]  var systemPrompt
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/vscode/src/sdk/cline-session-factory.ts:795  [medium]  var systemPrompt
+    score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+apps/vscode/src/sdk/message-translator.test.ts:212  [medium]  arg prompt
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/vscode/src/sdk/sdk-followup-coordinator.ts:200  [medium]  var effectivePrompt
+    score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+apps/vscode/src/sdk/sdk-followup-coordinator.ts:201  [medium]  var effectivePrompt
+    score 0.5 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/vscode/src/sdk/sdk-mode-coordinator.ts:25  [medium]  var ACT_MODE_CONTINUATION_PROMPT
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/vscode/src/sdk/sdk-session-lifecycle.test.ts:589  [medium]  arg prompt
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/vscode/src/services/lg-cns-integration/webhook-hooks.ts:299  [low]  heuristic: natural language literal
+    score 2.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+apps/vscode/src/services/uri/SharedUriHandler.ts:110  [medium]  var prompt
+    score 1.2 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=1
+apps/vscode/src/services/uri/SharedUriHandler.ts:112  [medium]  var prompt
+    score 6 [MODERATE]  decisions=1 density=0.5 routes=0 inject=0 guards=0
+apps/vscode/src/services/uri/SharedUriHandler.ts:114  [medium]  var prompt
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/vscode/src/shared/content-limits.ts:38  [low]  heuristic: natural language literal
+    score 2 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+apps/vscode/src/standalone/cline-core.ts:318  [low]  heuristic: natural language literal
+    score 2.5 [LOW]  decisions=0 density=0 routes=0 inject=2 guards=0
+apps/vscode/src/test/e2e/fixtures/server/api.ts:53  [low]  heuristic: natural language literal
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/vscode/src/test/e2e/fixtures/workspace_2/providers/anthropic.py:7  [high]  call anthropic.Anthropic().messages.create
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/vscode/src/test/e2e/fixtures/workspace_2/providers/openai.py:6  [high]  call client.responses.create
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/vscode/src/test/e2e/fixtures/workspace_2/providers/openrouter.py:10  [high]  call client.chat.completions.create
+    score 1 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+apps/vscode/src/test/e2e/fixtures/workspace_2/providers/openrouter.py:11  [high]  call client.chat.completions.create
+    score 1 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+apps/vscode/src/test/e2e/fixtures/workspace_2/providers/openrouter.py:17  [high]  call client.chat.completions.create
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/vscode/webview-ui/src/App.stories.tsx:44  [low]  heuristic: natural language literal
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/vscode/webview-ui/src/App.stories.tsx:201  [low]  heuristic: natural language literal
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/vscode/webview-ui/src/App.stories.tsx:218  [low]  heuristic: natural language literal
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/vscode/webview-ui/src/App.stories.tsx:570  [low]  heuristic: natural language literal
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/vscode/webview-ui/src/App.stories.tsx:774  [low]  heuristic: natural language literal
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/vscode/webview-ui/src/App.stories.tsx:913  [low]  heuristic: natural language literal
+    score 3.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+apps/vscode/webview-ui/src/App.stories.tsx:1114  [low]  heuristic: natural language literal
+    score 3.13 [LOW]  decisions=1 density=0.063 routes=0 inject=0 guards=0
+apps/vscode/webview-ui/src/App.stories.tsx:1204  [low]  heuristic: natural language literal
+    score 2.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+apps/vscode/webview-ui/src/components/chat/ChatTextArea.tsx:98  [low]  heuristic: natural language literal
+    score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+apps/vscode/webview-ui/src/components/chat/ChatTextArea.tsx:155  [low]  heuristic: natural language literal
+    score 2 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+apps/vscode/webview-ui/src/components/chat/ErrorRow.stories.tsx:54  [low]  heuristic: natural language literal
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/vscode/webview-ui/src/components/chat/OrgClinePassRestrictionError.tsx:20  [medium]  var handleSwitchToPersonalAccount
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/vscode/webview-ui/src/components/chat/OrgClinePassRestrictionError.tsx:22  [medium]  var handleSwitchToPersonalAccount
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/vscode/webview-ui/src/components/chat/QuotedMessagePreview.tsx:5  [low]  heuristic: natural language literal
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/vscode/webview-ui/src/components/chat/QuotedMessagePreview.tsx:19  [low]  heuristic: natural language literal
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/vscode/webview-ui/src/components/chat/QuotedMessagePreview.tsx:30  [low]  heuristic: natural language literal
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/vscode/webview-ui/src/components/chat/QuotedMessagePreview.tsx:46  [low]  heuristic: natural language literal
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/vscode/webview-ui/src/components/chat/QuotedMessagePreview.tsx:58  [low]  heuristic: natural language literal
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/vscode/webview-ui/src/components/chat/TypewriterText.stories.tsx:11  [low]  heuristic: natural language literal
+    score 1.63 [LOW]  decisions=1 density=0.063 routes=0 inject=0 guards=0
+apps/vscode/webview-ui/src/components/chat/TypewriterText.stories.tsx:67  [low]  heuristic: natural language literal
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/vscode/webview-ui/src/components/chat/TypewriterText.stories.tsx:73  [low]  heuristic: natural language literal
+    score 3 [LOW]  decisions=1 density=0.2 routes=0 inject=0 guards=0
+apps/vscode/webview-ui/src/components/chat/auto-approve-menu/AutoApproveMenuItem.tsx:13  [low]  heuristic: natural language literal
+    score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+apps/vscode/webview-ui/src/components/chat/chat-view/components/layout/QueuedPrompts.tsx:45  [medium]  var cancelQueuedPrompt
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/vscode/webview-ui/src/components/chat/chat-view/hooks/useMessageHandlers.ts:79  [medium]  var trackPromptSubmitted
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/vscode/webview-ui/src/components/chat/task-header/TaskHeader.stories.tsx:202  [low]  heuristic: natural language literal
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/vscode/webview-ui/src/components/common/CodeBlock.tsx:26  [low]  heuristic: natural language literal
+    score 2 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+apps/vscode/webview-ui/src/components/common/MarkdownBlock.stories.tsx:11  [low]  heuristic: natural language literal
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/vscode/webview-ui/src/components/common/MarkdownBlock.stories.tsx:79  [low]  heuristic: natural language literal
+    score 3 [LOW]  decisions=0 density=0 routes=0 inject=2 guards=0
+apps/vscode/webview-ui/src/components/common/MarkdownBlock.stories.tsx:147  [low]  heuristic: natural language literal
+    score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+apps/vscode/webview-ui/src/components/common/MarkdownBlock.stories.tsx:179  [low]  heuristic: natural language literal
+    score 0.5 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/vscode/webview-ui/src/components/common/MarkdownBlock.stories.tsx:254  [low]  heuristic: natural language literal
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/vscode/webview-ui/src/components/common/MarkdownBlock.stories.tsx:283  [low]  heuristic: natural language literal
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/vscode/webview-ui/src/components/common/MermaidBlock.tsx:263  [low]  heuristic: natural language literal
+    score 0.5 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/vscode/webview-ui/src/components/common/PopupModalContainer.tsx:15  [low]  heuristic: natural language literal
+    score 2 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+apps/vscode/webview-ui/src/components/history/HistoryPreview.tsx:29  [low]  heuristic: natural language literal
+    score 0.5 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/vscode/webview-ui/src/components/marketplace/MarketplaceView.tsx:169  [low]  heuristic: natural language literal
+    score 1 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/vscode/webview-ui/src/components/mcp/chat-display/McpResponseDisplay.stories.tsx:76  [low]  heuristic: natural language literal
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/vscode/webview-ui/src/components/mcp/chat-display/McpResponseDisplay.tsx:20  [low]  heuristic: natural language literal
+    score 0.5 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/vscode/webview-ui/src/components/mcp/chat-display/McpResponseDisplay.tsx:47  [low]  heuristic: natural language literal
+    score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+apps/vscode/webview-ui/src/components/mcp/configuration/McpConfigurationView.tsx:92  [low]  heuristic: natural language literal
+    score 2 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+apps/vscode/webview-ui/src/components/mcp/configuration/tabs/installed/server-row/McpPromptRow.tsx:42  [medium]  var McpPromptRow
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/vscode/webview-ui/src/components/settings/ThinkingBudgetSlider.tsx:19  [low]  heuristic: natural language literal
+    score 2 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+apps/vscode/webview-ui/src/components/settings/providers/BedrockProvider.tsx:518  [low]  heuristic: natural language literal
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/vscode/webview-ui/src/components/ui/button.stories.tsx:12  [low]  heuristic: natural language literal
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/vscode/webview-ui/src/components/ui/dialog.stories.tsx:22  [low]  heuristic: natural language literal
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/vscode/webview-ui/src/components/ui/select.stories.tsx:21  [low]  heuristic: natural language literal
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/vscode/webview-ui/src/components/ui/select.tsx:34  [low]  heuristic: natural language literal
+    score 1 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/vscode/webview-ui/src/components/welcome/quickWinTasks.ts:18  [medium]  arg prompt
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/vscode/webview-ui/src/components/welcome/quickWinTasks.ts:27  [medium]  arg prompt
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/vscode/webview-ui/src/components/welcome/quickWinTasks.ts:36  [medium]  arg prompt
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+apps/vscode/webview-ui/src/components/worktrees/WorktreesView.tsx:224  [medium]  var prompt
+    score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+sdk/examples/hooks/custom-compaction-hook.example.ts:173  [low]  heuristic: natural language literal
+    score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+sdk/examples/plugins/agents-squad/index.ts:463  [medium]  arg instructions
+    score 6 [MODERATE]  decisions=1 density=0.5 routes=0 inject=0 guards=0
+sdk/examples/plugins/agents-squad/index.ts:493  [medium]  arg prompt
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/examples/plugins/custom-compaction.ts:159  [low]  heuristic: natural language literal
+    score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+sdk/packages/agents/src/agent-runtime.ts:572  [low]  heuristic: natural language literal
+    score 10.17 [MODERATE]  decisions=2 density=0.667 routes=0 inject=1 guards=0
+sdk/packages/core/src/auth/cline.ts:479  [medium]  arg instructions
+    score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+sdk/packages/core/src/auth/cline.ts:506  [medium]  arg instructions
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/core/src/auth/codex.ts:316  [medium]  arg instructions
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/core/src/auth/oca.ts:393  [medium]  arg instructions
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/core/src/cron/runner/cron-runner.test.ts:176  [medium]  arg prompt
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/core/src/cron/store/sqlite-cron-store.ts:809  [low]  heuristic: natural language literal
+    score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+sdk/packages/core/src/cron/store/sqlite-cron-store.ts:873  [low]  heuristic: natural language literal
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/core/src/cron/store/sqlite-cron-store.ts:1103  [low]  heuristic: natural language literal
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/core/src/cron/store/sqlite-cron-store.ts:1478  [low]  heuristic: natural language literal
+    score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+sdk/packages/core/src/cron/store/sqlite-cron-store.ts:1513  [low]  heuristic: natural language literal
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/core/src/extensions/config/runtime-commands.test.ts:58  [medium]  arg instructions
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/core/src/extensions/config/runtime-commands.test.ts:146  [medium]  arg instructions
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/core/src/extensions/context/compaction-shared.ts:453  [low]  heuristic: natural language literal
+    score 3.21 [LOW]  decisions=1 density=0.071 routes=0 inject=1 guards=0
+sdk/packages/core/src/extensions/context/compaction.live.test.ts:292  [medium]  arg systemPrompt
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/core/src/extensions/tools/definitions.ts:398  [medium]  var RUN_COMMANDS_SHARED_INSTRUCTIONS
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/core/src/extensions/tools/definitions.ts:415  [low]  heuristic: natural language literal
+    score 10.5 [MODERATE]  decisions=3 density=0.6 routes=0 inject=1 guards=0
+sdk/packages/core/src/extensions/tools/definitions.ts:430  [low]  heuristic: natural language literal
+    score 11 [MODERATE]  decisions=3 density=0.5 routes=1 inject=1 guards=0
+sdk/packages/core/src/extensions/tools/definitions.ts:564  [low]  heuristic: natural language literal
+    score 2.54 [LOW]  decisions=1 density=0.034 routes=0 inject=1 guards=1
+sdk/packages/core/src/extensions/tools/definitions.ts:726  [low]  heuristic: natural language literal
+    score 7.69 [MODERATE]  decisions=4 density=0.429 routes=0 inject=0 guards=2
+sdk/packages/core/src/extensions/tools/helpers.ts:25  [low]  heuristic: natural language literal
+    score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+sdk/packages/core/src/extensions/tools/helpers.ts:29  [low]  heuristic: natural language literal
+    score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+sdk/packages/core/src/extensions/tools/schemas.ts:59  [low]  heuristic: natural language literal
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=1
+sdk/packages/core/src/extensions/tools/schemas.ts:177  [medium]  arg prompt
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/core/src/extensions/tools/schemas.ts:203  [low]  heuristic: natural language literal
+    score 10.17 [MODERATE]  decisions=2 density=0.667 routes=0 inject=1 guards=0
+sdk/packages/core/src/extensions/tools/schemas.ts:208  [low]  heuristic: natural language literal
+    score 14.5 [HIGH]  decisions=3 density=1 routes=0 inject=1 guards=0
+sdk/packages/core/src/extensions/tools/schemas.ts:220  [low]  heuristic: natural language literal
+    score 9.67 [MODERATE]  decisions=3 density=0.667 routes=0 inject=0 guards=0
+sdk/packages/core/src/extensions/tools/schemas.ts:236  [low]  heuristic: natural language literal
+    score 4.33 [LOW]  decisions=1 density=0.333 routes=0 inject=0 guards=0
+sdk/packages/core/src/extensions/tools/schemas.ts:284  [low]  heuristic: natural language literal
+    score 10.77 [MODERATE]  decisions=5 density=0.667 routes=0 inject=0 guards=3
+sdk/packages/core/src/extensions/tools/team/configured-agent-tool.ts:31  [medium]  arg prompt
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/core/src/extensions/tools/team/multi-agent.lifecycle.test.ts:65  [medium]  arg systemPrompt
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/core/src/extensions/tools/team/multi-agent.lifecycle.test.ts:102  [medium]  arg systemPrompt
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/core/src/extensions/tools/team/multi-agent.lifecycle.test.ts:143  [medium]  arg systemPrompt
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/core/src/extensions/tools/team/multi-agent.lifecycle.test.ts:154  [medium]  arg rolePrompt
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/core/src/extensions/tools/team/multi-agent.lifecycle.test.ts:191  [medium]  arg systemPrompt
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/core/src/extensions/tools/team/multi-agent.lifecycle.test.ts:247  [medium]  arg systemPrompt
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/core/src/extensions/tools/team/multi-agent.ts:173  [low]  heuristic: natural language literal
+    score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+sdk/packages/core/src/extensions/tools/team/spawn-agent-tool.test.ts:264  [medium]  arg systemPrompt
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/core/src/extensions/tools/team/spawn-agent-tool.test.ts:290  [medium]  var inputSystemPrompt
+    score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/core/src/extensions/tools/team/spawn-agent-tool.ts:33  [medium]  arg systemPrompt
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/core/src/extensions/tools/team/team-tools.test.ts:115  [medium]  arg rolePrompt
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/core/src/extensions/tools/team/team-tools.test.ts:535  [medium]  arg rolePrompt
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/core/src/extensions/tools/team/team-tools.test.ts:569  [medium]  arg systemPrompt
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/core/src/runtime/config/agent-runtime-config-builder.test.ts:31  [medium]  arg systemPrompt
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/core/src/runtime/host/local-runtime-host.test.ts:111  [medium]  arg getPendingPrompts
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/core/src/runtime/host/local-runtime-host.test.ts:5611  [medium]  arg prompt
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/core/src/runtime/host/local-runtime-host.test.ts:5719  [medium]  arg prompt
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/core/src/runtime/orchestration/runtime-builder.team-persistence.test.ts:176  [medium]  arg rolePrompt
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/core/src/runtime/orchestration/runtime-builder.team-persistence.test.ts:226  [medium]  arg rolePrompt
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/core/src/runtime/orchestration/runtime-builder.team-persistence.test.ts:252  [medium]  arg systemPrompt
+    score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/core/src/runtime/orchestration/runtime-builder.test.ts:416  [low]  heuristic: natural language literal
+    score 12.81 [HIGH]  decisions=6 density=0.261 routes=0 inject=0 guards=1
+sdk/packages/core/src/runtime/orchestration/runtime-builder.test.ts:487  [low]  heuristic: natural language literal
+    score 13.53 [HIGH]  decisions=7 density=0.233 routes=0 inject=0 guards=1
+sdk/packages/core/src/runtime/orchestration/runtime-builder.ts:693  [low]  heuristic: natural language literal
+    score 2.7 [LOW]  decisions=0 density=0 routes=1 inject=1 guards=1
+sdk/packages/core/src/runtime/orchestration/session-runtime-orchestrator.test.ts:52  [medium]  arg systemPrompt
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/core/src/services/session-data.test.ts:54  [medium]  var prompt
+    score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+sdk/packages/core/src/services/storage/sqlite-session-store.ts:86  [low]  heuristic: natural language literal
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/core/src/session/models/session-row.ts:89  [low]  heuristic: natural language literal
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/core/src/session/services/session-service.ts:35  [low]  heuristic: natural language literal
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/core/src/session/services/session-service.ts:119  [low]  heuristic: natural language literal
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/core/src/session/services/session-service.ts:280  [low]  heuristic: natural language literal
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/core/src/session/team/team-child-session-manager.ts:156  [medium]  var prompt
+    score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+sdk/packages/core/src/session/team/team-session-coordinator.ts:224  [medium]  var instruction
+    score 7.5 [MODERATE]  decisions=1 density=0.5 routes=0 inject=1 guards=0
+sdk/packages/core/src/session/team/team-session-coordinator.ts:225  [medium]  var instruction
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/llms/scripts/generate-models.ts:90  [low]  heuristic: natural language literal
+    score 1.7 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=1
+sdk/packages/llms/src/providers/ai-sdk.ts:1228  [high]  call streamText
+    score 0.5 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/llms/src/providers/ai-sdk.ts:1234  [high]  call streamText
+    score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+sdk/packages/llms/src/providers/ai-sdk.ts:1241  [high]  call streamText
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/llms/src/providers/gateway.test.ts:553  [high]  call streamTextSpy.mockReturnValue
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/llms/src/providers/gateway.test.ts:661  [high]  call streamTextSpy.mockReturnValue
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/llms/src/providers/gateway.test.ts:662  [high]  call streamTextSpy.mockReturnValue
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/llms/src/providers/gateway.test.ts:696  [high]  call streamTextSpy.mockReturnValue
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/llms/src/providers/gateway.test.ts:812  [high]  call expect(streamTextSpy).toHaveBeenCalledWith
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/llms/src/providers/gateway.test.ts:815  [high]  call expect(streamTextSpy).toHaveBeenCalledWith
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/llms/src/providers/gateway.test.ts:1847  [high]  call expect(streamTextSpy).toHaveBeenCalledWith
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/llms/src/providers/gateway.test.ts:1851  [high]  call expect(streamTextSpy).toHaveBeenCalledWith
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/llms/src/providers/gateway.test.ts:1862  [high]  call expect(streamTextSpy).toHaveBeenCalledWith
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/llms/src/providers/gateway.test.ts:1956  [high]  call streamTextSpy.mockReturnValueOnce
+    score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+sdk/packages/llms/src/providers/gateway.test.ts:2196  [high]  call streamTextSpy.mockReturnValue
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/llms/src/providers/gateway.test.ts:2240  [high]  call streamTextSpy.mockReturnValue
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/llms/src/providers/gateway.test.ts:2241  [high]  call streamTextSpy.mockReturnValue
+    score 0.5 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/llms/src/providers/gateway.test.ts:2246  [high]  call streamTextSpy.mockReturnValue
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/llms/src/providers/gateway.test.ts:2247  [high]  call streamTextSpy.mockReturnValue
+    score 0.5 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/llms/src/providers/gateway.test.ts:2248  [high]  call streamTextSpy.mockReturnValue
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/llms/src/providers/gateway.test.ts:2382  [high]  call expect(streamTextSpy).toHaveBeenCalledWith
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/llms/src/providers/gateway.test.ts:3802  [high]  call streamTextSpy.mockReturnValue
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/llms/src/providers/middleware/split-tool-images.test.ts:19  [medium]  var prompt
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/llms/src/tests/provider-live-minimax-routing.test.ts:28  [medium]  var DEFAULT_PROMPT
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/llms/src/tests/provider-live-reasoning.test.ts:39  [medium]  var DEFAULT_SYSTEM_PROMPT
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/llms/src/tests/provider-live-reasoning.test.ts:41  [medium]  var DEFAULT_USER_PROMPT
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/llms/src/tests/provider-live-tools.test.ts:54  [medium]  var DEFAULT_SYSTEM_PROMPT
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/llms/src/tests/provider-live-tools.test.ts:56  [medium]  var DEFAULT_USER_PROMPT
+    score 2 [LOW]  decisions=0 density=0 routes=1 inject=0 guards=0
+sdk/packages/llms/src/tests/provider-live-tools.test.ts:57  [medium]  var DEFAULT_USER_PROMPT
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/llms/src/tests/provider-live.test.ts:39  [medium]  var DEFAULT_SYSTEM_PROMPT
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/llms/src/tests/provider-live.test.ts:40  [medium]  var DEFAULT_USER_PROMPT
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/llms/src/tests/provider-live.test.ts:42  [medium]  var DEFAULT_CACHE_PROBE_PROMPT
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/llms/src/tests/provider-live.test.ts:43  [medium]  var DEFAULT_CACHE_PROBE_PROMPT
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=1
+sdk/packages/llms/src/tests/provider-vcr.test.ts:17  [medium]  var SYSTEM_PROMPT
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/llms/src/tests/provider-vcr.test.ts:18  [medium]  var USER_PROMPT
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/shared/src/connectors/platforms.ts:215  [medium]  arg prompt
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/shared/src/connectors/platforms.ts:278  [medium]  arg prompt
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/shared/src/db/sqlite-db.test.ts:117  [low]  heuristic: natural language literal
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/shared/src/prompt/cline.test.ts:60  [medium]  var prompt
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=1
+sdk/packages/shared/src/prompt/cline.ts:21  [medium]  var MODE_TAG_INSTRUCTIONS
+    score 11.5 [MODERATE]  decisions=3 density=0.75 routes=0 inject=1 guards=0
+sdk/packages/shared/src/prompt/cline.ts:32  [medium]  var PLAN_MODE_INSTRUCTIONS
+    score 4.5 [LOW]  decisions=3 density=0.3 routes=0 inject=0 guards=5
+sdk/packages/shared/src/prompt/system.ts:1  [medium]  var DEFAULT_CLINE_SYSTEM_PROMPT
+    score 11.55 [MODERATE]  decisions=11 density=0.275 routes=0 inject=1 guards=14
+sdk/packages/shared/src/prompt/system.ts:38  [medium]  var YOLO_CLINE_SYSTEM_PROMPT
+    score 6.09 [MODERATE]  decisions=5 density=0.179 routes=0 inject=1 guards=9
+sdk/packages/shared/src/team/schema.ts:68  [medium]  arg rolePrompt
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/shared/src/team/schema.ts:131  [low]  heuristic: natural language literal
+    score 11 [MODERATE]  decisions=1 density=1 routes=0 inject=0 guards=0
+sdk/packages/shared/src/tools/create.ts:50  [low]  heuristic: natural language literal
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+sdk/packages/shared/src/tools/create.ts:72  [low]  heuristic: natural language literal
+    score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+
+330 prompt(s) in 167 file(s)
 
 ── worst offenders ──────────────────────────
      14.50  HIGH      sdk/packages/core/src/extensions/tools/schemas.ts:208
      13.53  HIGH      sdk/packages/core/src/runtime/orchestration/runtime-builder.test.ts:487
-     13.00  HIGH      apps/cli/src/connectors/adapters/prompts.ts:16
      13.00  HIGH      apps/vscode/src/hosts/vscode/commit-message-generator.ts:54
      12.81  HIGH      sdk/packages/core/src/runtime/orchestration/runtime-builder.test.ts:416
      12.19  HIGH      apps/vscode/src/core/prompts/responses.ts:34
      12.00  HIGH      apps/cli/src/connectors/adapters/discord.ts:76
-     11.70  MODERATE  apps/cli/src/connectors/adapters/linear.ts:61
-     11.70  MODERATE  apps/cli/src/connectors/adapters/prompts.ts:18
      11.55  MODERATE  sdk/packages/shared/src/prompt/system.ts:1
+     11.50  MODERATE  sdk/packages/shared/src/prompt/cline.ts:21
+     11.00  MODERATE  sdk/packages/core/src/extensions/tools/definitions.ts:430
+     11.00  MODERATE  sdk/packages/shared/src/team/schema.ts:131
