@@ -1,5 +1,8 @@
 <p align="center">
-  <img src="docs/logo-promptcc.png" alt="promptcc" width="340">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/logo-promptcc-dark.png">
+    <img src="docs/logo-promptcc.png" alt="promptcc" width="340">
+  </picture>
 </p>
 
 <p align="center"><b>Cyclomatic complexity, but for LLM prompts.</b></p>
