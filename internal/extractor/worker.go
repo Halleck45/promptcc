@@ -166,6 +166,12 @@ func (w *worker) finishPrompt(lang *language, n *sitter.Node, src []byte, path, 
 	if confidence != High && (looksLikeSQL(text) || looksLikeSpec(text) || looksLikeMarkup(text)) {
 		return Prompt{}, false
 	}
+	// Embedded shell and PowerShell scripts read like branchy prose. This
+	// veto only applies to heuristic hits: prompts legitimately contain
+	// code examples, and prompt-named bindings keep the benefit of the doubt.
+	if confidence == Low && looksLikeScript(text) {
+		return Prompt{}, false
+	}
 	if len([]rune(text)) < minLength(confidence) {
 		return Prompt{}, false
 	}
@@ -401,6 +407,36 @@ func looksLikeMarkup(s string) bool {
 	l := strings.ToLower(s)
 	score := 0
 	for _, m := range markupMarkers {
+		if strings.Contains(l, m.marker) {
+			score += m.weight
+			if score >= 4 {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+// scriptMarkers score shell and PowerShell constructs found in scripts
+// embedded as string literals (hook scripts, installers).
+var scriptMarkers = []struct {
+	marker string
+	weight int
+}{
+	{"#!/", 4},
+	{"| out-null", 2}, {"convertto-json", 2}, {"convertfrom-json", 2},
+	{"[console]::", 2}, {"invoke-restmethod", 2}, {"invoke-webrequest", 2},
+	{"join-path", 2}, {"$env:", 2}, {"} catch", 2}, {"set -e", 2},
+	{"process.exit", 2}, {"os.system(", 2}, {"subprocess.", 2},
+	{"try {", 1}, {"exit 0", 1}, {"exit 1", 1}, {"esac", 1},
+}
+
+// looksLikeScript reports whether a string is more plausibly an embedded
+// script than a prompt.
+func looksLikeScript(s string) bool {
+	l := strings.ToLower(s)
+	score := 0
+	for _, m := range scriptMarkers {
 		if strings.Contains(l, m.marker) {
 			score += m.weight
 			if score >= 4 {

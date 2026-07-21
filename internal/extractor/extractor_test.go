@@ -423,3 +423,23 @@ func TestLooksLikeSQLDDL(t *testing.T) {
 		t.Error("prose mentioning tables should not be detected as SQL")
 	}
 }
+
+func TestLooksLikeScript(t *testing.T) {
+	tests := []struct {
+		name string
+		in   string
+		want bool
+	}{
+		{"powershell hook", "try {\n $x = [Console]::In.ReadToEnd() | ConvertFrom-Json\n} catch {}", true},
+		{"bash script", "#!/bin/sh\nset -e\necho hi", true},
+		{"prompt with code example", "If the user asks for a loop, show:\nfor i in range(3): print(i)\nNever run the code yourself.", false},
+		{"plain prompt", "You are a support agent. Always cite sources.", false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := looksLikeScript(tt.in); got != tt.want {
+				t.Errorf("looksLikeScript(%q) = %v, want %v", tt.in, got, tt.want)
+			}
+		})
+	}
+}

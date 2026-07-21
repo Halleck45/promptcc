@@ -26,3 +26,17 @@ const systemPrompt =
   "You are a grader. If the answer is off-topic, give zero. " +
   getRubric(context) +
   " Never explain your reasoning. Respond in JSON.";
+
+// Not a prompt: an embedded PowerShell hook script. Branchy prose to a
+// naive heuristic, but it is code, not instructions for a model.
+const POST_HOOK_POWERSHELL = `try {
+    $rawInput = [Console]::In.ReadToEnd()
+    if ($rawInput) {
+        $inputData = $rawInput | ConvertFrom-Json -Depth 100
+    }
+} catch {
+    $inputData = $null
+}
+Invoke-RestMethod -Method Post -Uri $config.webhook_url -Body ($payload | ConvertTo-Json) | Out-Null
+@{ cancel = $false } | ConvertTo-Json -Compress
+`;
