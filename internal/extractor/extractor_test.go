@@ -208,3 +208,31 @@ func TestSlotName(t *testing.T) {
 		}
 	}
 }
+
+func TestScanLaravelValidationIsNotAPrompt(t *testing.T) {
+	// Regression: Laravel FormRequest rules and messages use "prompt" as a
+	// key ('prompt' => 'required|string', 'prompt.required_without' => ...)
+	// but none of these strings are prompts.
+	found := promptsForFile(scanTestdata(t, Low), "laravel_request.php")
+	for _, p := range found {
+		t.Errorf("false positive: %s:%d [%s] %s %q", p.File, p.Line, p.Confidence, p.Context, p.Text)
+	}
+}
+
+func TestLooksLikeInstruction(t *testing.T) {
+	tests := []struct {
+		in   string
+		want bool
+	}{
+		{"required_without:prompt_template|string|max:4000", false},
+		{"gpt-4o", false},
+		{"Answer the question briefly and cite sources.", true},
+		{"You are a helpful billing assistant.", true},
+		{"a b c", false},
+	}
+	for _, tt := range tests {
+		if got := looksLikeInstruction(tt.in); got != tt.want {
+			t.Errorf("looksLikeInstruction(%q) = %v, want %v", tt.in, got, tt.want)
+		}
+	}
+}

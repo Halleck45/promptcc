@@ -33,6 +33,10 @@ var sdkCallees = []string{
 // promptishRe matches identifiers that conventionally hold prompts.
 var promptishRe = regexp.MustCompile(`(?i)prompt|system|instruction|persona`)
 
+// identKeyRe matches plain identifier keys. Keys that are paths or specs
+// ("prompt.required_without", "rules.*") never name a prompt argument.
+var identKeyRe = regexp.MustCompile(`^[a-z_$][a-z0-9_-]*$`)
+
 // denyKeys are argument and object keys whose string values are never
 // prompts, even inside an SDK call: model ids, roles, urls, api keys...
 // Only the key nearest to the string literal is considered.
@@ -80,11 +84,13 @@ func classify(lang *language, n *sitter.Node, src []byte) (Confidence, string, b
 			if !sawNearestKey {
 				sawNearestKey = true
 				key := strings.ToLower(strings.Trim(keyNode.Utf8Text(src), `'"`))
-				if denyKeys[key] {
-					return Low, "", false
-				}
-				if promptishRe.MatchString(key) && mediumContext == "" {
-					mediumContext = "arg " + key
+				if identKeyRe.MatchString(key) {
+					if denyKeys[key] {
+						return Low, "", false
+					}
+					if promptishRe.MatchString(key) && mediumContext == "" {
+						mediumContext = "arg " + key
+					}
 				}
 			}
 		}

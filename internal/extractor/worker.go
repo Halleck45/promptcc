@@ -80,6 +80,11 @@ func (w *worker) extractString(lang *language, n *sitter.Node, src []byte, path 
 		}
 		confidence, context = Low, "heuristic: natural language literal"
 	}
+	// A prompt-like name is not enough: the value itself must read like
+	// natural-language instructions ('prompt' => 'required|string' does not).
+	if confidence == Medium && !looksLikeInstruction(text) {
+		return Prompt{}, false
+	}
 	if len([]rune(text)) < minLength(confidence) {
 		return Prompt{}, false
 	}
@@ -225,10 +230,17 @@ func looksLikeProse(s string) bool {
 	if len([]rune(s)) < 200 {
 		return false
 	}
-	words := strings.Fields(s)
-	if len(words) < 30 {
-		return false
-	}
+	return len(strings.Fields(s)) >= 30 && letterRatio(s) >= 0.5
+}
+
+// looksLikeInstruction is the lighter gate applied to medium-confidence
+// candidates: a few words of mostly letters. It rejects rule specs, ids and
+// enum values bound to prompt-like names.
+func looksLikeInstruction(s string) bool {
+	return len(strings.Fields(s)) >= 4 && letterRatio(s) >= 0.5
+}
+
+func letterRatio(s string) float64 {
 	letters, total := 0, 0
 	for _, r := range s {
 		total++
@@ -236,7 +248,10 @@ func looksLikeProse(s string) bool {
 			letters++
 		}
 	}
-	return total > 0 && float64(letters)/float64(total) >= 0.5
+	if total == 0 {
+		return 0
+	}
+	return float64(letters) / float64(total)
 }
 
 func isLetter(r rune) bool {
