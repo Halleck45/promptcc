@@ -227,6 +227,28 @@ func classify(lang *language, n *sitter.Node, src []byte) (Confidence, string, v
 			}
 		}
 
+		// A prompt-like enclosing function, method or class name is evidence
+		// too: a heredoc returned by StoryGroupPromptBuilder::buildSystemMessage
+		// is a prompt even when nothing else names it. Error and exception
+		// scopes veto instead (their strings are diagnostics), and assertion
+		// helpers (assertPrompt, expectPrompt) carry no evidence.
+		if field, ok := lang.declKinds[kind]; ok {
+			if name := fieldText(p, field, src); name != "" {
+				lower := strings.ToLower(name)
+				if strings.HasSuffix(lower, "error") || strings.HasSuffix(lower, "exception") {
+					return Low, "", notPrompt
+				}
+				// Assertion helpers hold expected output, never prompts.
+				if words := identWords(name); len(words) > 0 &&
+					(words[0] == "assert" || words[0] == "expect") {
+					return Low, "", notPrompt
+				}
+				if isPromptish(name) && mediumContext == "" {
+					mediumContext = "in " + name
+				}
+			}
+		}
+
 		if nameNode != nil {
 			if child.Id() == nameNode.Id() {
 				return Low, "", notPrompt // the string IS a key, not a value

@@ -1,62 +1,120 @@
-aider/coders/architect_prompts.py:7  [low]  heuristic: natural language literal
+aider/coders/architect_prompts.py:7  [medium]  in ArchitectPrompts
     score 0.9 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=2
-aider/coders/architect_prompts.py:21  [low]  heuristic: natural language literal
+aider/coders/architect_prompts.py:21  [medium]  in ArchitectPrompts
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-aider/coders/architect_prompts.py:35  [low]  heuristic: natural language literal
+aider/coders/architect_prompts.py:27  [medium]  in ArchitectPrompts
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+aider/coders/architect_prompts.py:30  [medium]  in ArchitectPrompts
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+aider/coders/architect_prompts.py:35  [medium]  in ArchitectPrompts
     score 4.33 [LOW]  decisions=1 density=0.333 routes=0 inject=0 guards=0
+aider/coders/ask_prompts.py:7  [medium]  in AskPrompts
+    score 4.7 [LOW]  decisions=1 density=0.25 routes=0 inject=1 guards=1
 aider/coders/ask_prompts.py:14  [medium]  var overeager_prompt
     score 3.2 [LOW]  decisions=1 density=0.25 routes=0 inject=0 guards=1
-aider/coders/ask_prompts.py:22  [low]  heuristic: natural language literal
+aider/coders/ask_prompts.py:22  [medium]  in AskPrompts
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-aider/coders/ask_prompts.py:36  [low]  heuristic: natural language literal
+aider/coders/ask_prompts.py:28  [medium]  in AskPrompts
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+aider/coders/ask_prompts.py:31  [medium]  in AskPrompts
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+aider/coders/ask_prompts.py:36  [medium]  in AskPrompts
     score 4.33 [LOW]  decisions=1 density=0.333 routes=0 inject=0 guards=0
+aider/coders/base_coder.py:1205  [medium]  in fmt_system_prompt
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+aider/coders/base_prompts.py:4  [medium]  in CoderPrompts
+    score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+aider/coders/base_prompts.py:8  [medium]  in CoderPrompts
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+aider/coders/base_prompts.py:10  [medium]  in CoderPrompts
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 aider/coders/base_prompts.py:12  [medium]  var lazy_prompt
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=2
 aider/coders/base_prompts.py:17  [medium]  var overeager_prompt
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=1
-aider/coders/base_prompts.py:24  [low]  heuristic: natural language literal
+aider/coders/base_prompts.py:24  [medium]  in CoderPrompts
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-aider/coders/base_prompts.py:34  [low]  heuristic: natural language literal
+aider/coders/base_prompts.py:30  [medium]  in CoderPrompts
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+aider/coders/base_prompts.py:32  [medium]  in CoderPrompts
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+aider/coders/base_prompts.py:34  [medium]  in CoderPrompts
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=2
-aider/coders/base_prompts.py:45  [low]  heuristic: natural language literal
-    score 4.03 [LOW]  decisions=1 density=0.333 routes=0 inject=0 guards=1
-aider/coders/context_prompts.py:7  [low]  heuristic: natural language literal
-    score 3.37 [LOW]  decisions=2 density=0.077 routes=0 inject=1 guards=3
-aider/coders/context_prompts.py:47  [low]  heuristic: natural language literal
+aider/coders/base_prompts.py:41  [medium]  in CoderPrompts
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
-aider/coders/context_prompts.py:61  [low]  heuristic: natural language literal
+aider/coders/base_prompts.py:45  [medium]  in CoderPrompts
+    score 4.03 [LOW]  decisions=1 density=0.333 routes=0 inject=0 guards=1
+aider/coders/base_prompts.py:50  [medium]  in CoderPrompts
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=1
+aider/coders/context_prompts.py:7  [medium]  in ContextPrompts
+    score 3.37 [LOW]  decisions=2 density=0.077 routes=0 inject=1 guards=3
+aider/coders/context_prompts.py:47  [medium]  in ContextPrompts
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+aider/coders/context_prompts.py:53  [medium]  in ContextPrompts
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+aider/coders/context_prompts.py:56  [medium]  in ContextPrompts
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+aider/coders/context_prompts.py:61  [medium]  in ContextPrompts
     score 4.33 [LOW]  decisions=1 density=0.333 routes=0 inject=0 guards=0
-aider/coders/context_prompts.py:70  [low]  heuristic: natural language literal
+aider/coders/context_prompts.py:70  [medium]  in ContextPrompts
     score 8 [MODERATE]  decisions=3 density=0.5 routes=0 inject=0 guards=0
-aider/coders/editblock_fenced_prompts.py:14  [low]  heuristic: natural language literal
+aider/coders/editblock_fenced_prompts.py:10  [medium]  in EditBlockFencedPrompts
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+aider/coders/editblock_fenced_prompts.py:14  [medium]  in EditBlockFencedPrompts
     score 3.57 [LOW]  decisions=2 density=0.057 routes=0 inject=0 guards=0
-aider/coders/editblock_fenced_prompts.py:64  [low]  heuristic: natural language literal
+aider/coders/editblock_fenced_prompts.py:60  [medium]  in EditBlockFencedPrompts
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+aider/coders/editblock_fenced_prompts.py:64  [medium]  in EditBlockFencedPrompts
     score 1 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 aider/coders/editblock_fenced_prompts.py:97  [medium]  var system_reminder
     score 13.05 [HIGH]  decisions=9 density=0.235 routes=0 inject=1 guards=1
-aider/coders/editblock_func_prompts.py:7  [low]  heuristic: natural language literal
+aider/coders/editblock_func_prompts.py:7  [medium]  in EditBlockFunctionPrompts
     score 3.2 [LOW]  decisions=1 density=0.25 routes=0 inject=0 guards=1
 aider/coders/editblock_func_prompts.py:14  [medium]  var system_reminder
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=1
-aider/coders/editblock_prompts.py:8  [low]  heuristic: natural language literal
+aider/coders/editblock_func_prompts.py:19  [medium]  in EditBlockFunctionPrompts
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+aider/coders/editblock_func_prompts.py:20  [medium]  in EditBlockFunctionPrompts
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+aider/coders/editblock_func_prompts.py:25  [medium]  in EditBlockFunctionPrompts
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=1
+aider/coders/editblock_prompts.py:8  [medium]  in EditBlockPrompts
     score 8.73 [MODERATE]  decisions=5 density=0.313 routes=0 inject=1 guards=3
-aider/coders/editblock_prompts.py:38  [low]  heuristic: natural language literal
+aider/coders/editblock_prompts.py:34  [medium]  in EditBlockPrompts
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+aider/coders/editblock_prompts.py:38  [medium]  in EditBlockPrompts
     score 3.59 [LOW]  decisions=2 density=0.059 routes=0 inject=0 guards=0
-aider/coders/editblock_prompts.py:87  [low]  heuristic: natural language literal
+aider/coders/editblock_prompts.py:83  [medium]  in EditBlockPrompts
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+aider/coders/editblock_prompts.py:87  [medium]  in EditBlockPrompts
     score 1 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 aider/coders/editblock_prompts.py:120  [medium]  var system_reminder
     score 9.7 [MODERATE]  decisions=6 density=0.2 routes=0 inject=1 guards=1
-aider/coders/editblock_prompts.py:165  [low]  heuristic: natural language literal
+aider/coders/editblock_prompts.py:161  [medium]  in EditBlockPrompts
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+aider/coders/editblock_prompts.py:165  [medium]  in EditBlockPrompts
     score 13 [HIGH]  decisions=3 density=1 routes=0 inject=0 guards=0
-aider/coders/editor_editblock_prompts.py:7  [low]  heuristic: natural language literal
+aider/coders/editor_editblock_prompts.py:7  [medium]  in EditorEditBlockPrompts
     score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
-aider/coders/help_prompts.py:7  [low]  heuristic: natural language literal
+aider/coders/editor_whole_prompts.py:7  [medium]  in EditorWholeFilePrompts
+    score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+aider/coders/help_prompts.py:7  [medium]  in HelpPrompts
     score 8.1 [MODERATE]  decisions=5 density=0.25 routes=0 inject=1 guards=3
-aider/coders/patch_prompts.py:11  [low]  heuristic: natural language literal
+aider/coders/help_prompts.py:36  [medium]  in HelpPrompts
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+aider/coders/help_prompts.py:39  [medium]  in HelpPrompts
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+aider/coders/help_prompts.py:44  [medium]  in HelpPrompts
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+aider/coders/patch_prompts.py:11  [medium]  in PatchPrompts
     score 8.73 [MODERATE]  decisions=5 density=0.313 routes=0 inject=1 guards=3
-aider/coders/patch_prompts.py:46  [low]  heuristic: natural language literal
+aider/coders/patch_prompts.py:42  [medium]  in PatchPrompts
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+aider/coders/patch_prompts.py:46  [medium]  in PatchPrompts
     score 2.83 [LOW]  decisions=2 density=0.083 routes=0 inject=0 guards=0
-aider/coders/patch_prompts.py:87  [low]  heuristic: natural language literal
+aider/coders/patch_prompts.py:83  [medium]  in PatchPrompts
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+aider/coders/patch_prompts.py:87  [medium]  in PatchPrompts
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 aider/coders/patch_prompts.py:116  [medium]  var system_reminder
     score 7.23 [MODERATE]  decisions=5 density=0.133 routes=0 inject=1 guards=2
@@ -66,28 +124,42 @@ aider/coders/shell.py:22  [medium]  var no_shell_cmd_prompt
     score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
 aider/coders/shell.py:27  [low]  heuristic: natural language literal
     score 12.14 [HIGH]  decisions=5 density=0.714 routes=0 inject=0 guards=0
-aider/coders/single_wholefile_func_prompts.py:7  [low]  heuristic: natural language literal
+aider/coders/single_wholefile_func_prompts.py:7  [medium]  in SingleWholeFileFunctionPrompts
     score 3.2 [LOW]  decisions=1 density=0.25 routes=0 inject=0 guards=1
 aider/coders/single_wholefile_func_prompts.py:14  [medium]  var system_reminder
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=1
+aider/coders/single_wholefile_func_prompts.py:19  [medium]  in SingleWholeFileFunctionPrompts
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+aider/coders/single_wholefile_func_prompts.py:20  [medium]  in SingleWholeFileFunctionPrompts
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 aider/coders/udiff_coder.py:16  [low]  heuristic: natural language literal
     score 1.2 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=1
 aider/coders/udiff_coder.py:29  [low]  heuristic: natural language literal
     score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
-aider/coders/udiff_prompts.py:8  [low]  heuristic: natural language literal
+aider/coders/udiff_prompts.py:8  [medium]  in UnifiedDiffPrompts
     score 6.06 [MODERATE]  decisions=2 density=0.286 routes=0 inject=1 guards=1
-aider/coders/udiff_prompts.py:26  [low]  heuristic: natural language literal
+aider/coders/udiff_prompts.py:22  [medium]  in UnifiedDiffPrompts
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+aider/coders/udiff_prompts.py:26  [medium]  in UnifiedDiffPrompts
     score 8.03 [MODERATE]  decisions=4 density=0.103 routes=2 inject=0 guards=0
 aider/coders/udiff_prompts.py:74  [medium]  var system_reminder
     score 1.76 [LOW]  decisions=1 density=0.043 routes=0 inject=1 guards=4
 aider/coders/udiff_simple_prompts.py:13  [medium]  var system_reminder
     score 1.2 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=1
-aider/coders/wholefile_func_prompts.py:7  [low]  heuristic: natural language literal
+aider/coders/wholefile_func_prompts.py:7  [medium]  in WholeFileFunctionPrompts
     score 3.2 [LOW]  decisions=1 density=0.25 routes=0 inject=0 guards=1
 aider/coders/wholefile_func_prompts.py:14  [medium]  var system_reminder
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=1
-aider/coders/wholefile_prompts.py:7  [low]  heuristic: natural language literal
+aider/coders/wholefile_func_prompts.py:19  [medium]  in WholeFileFunctionPrompts
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+aider/coders/wholefile_func_prompts.py:20  [medium]  in WholeFileFunctionPrompts
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+aider/coders/wholefile_prompts.py:7  [medium]  in WholeFilePrompts
     score 7.95 [MODERATE]  decisions=3 density=0.375 routes=0 inject=1 guards=1
+aider/coders/wholefile_prompts.py:20  [medium]  in WholeFilePrompts
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+aider/coders/wholefile_prompts.py:24  [medium]  in WholeFilePrompts
+    score 4 [LOW]  decisions=1 density=0.1 routes=0 inject=1 guards=0
 aider/coders/wholefile_prompts.py:42  [medium]  var system_reminder
     score 1.2 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=5
 aider/gui.py:290  [medium]  var self.old_prompt
@@ -104,6 +176,8 @@ aider/repo.py:338  [medium]  var language_instruction
     score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
 aider/report.py:70  [medium]  var prompt
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+aider/voice.py:104  [medium]  in get_prompt
+    score 7.5 [MODERATE]  decisions=1 density=0.5 routes=0 inject=1 guards=0
 aider/watch_prompts.py:1  [medium]  var watch_code_prompt
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 aider/watch_prompts.py:9  [medium]  var watch_ask_prompt
@@ -122,6 +196,8 @@ tests/basic/test_editblock.py:204  [low]  heuristic: natural language literal
     score 0.5 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 tests/basic/test_repo.py:180  [medium]  var custom_prompt
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
+tests/basic/test_repo.py:715  [medium]  in test_get_commit_message_uses_system_prompt_prefix
+    score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 tests/basic/test_udiff.py:72  [low]  heuristic: natural language literal
     score 8.5 [MODERATE]  decisions=5 density=0.1 routes=0 inject=2 guards=0
 tests/basic/test_wholefile.py:195  [low]  heuristic: natural language literal
@@ -129,7 +205,7 @@ tests/basic/test_wholefile.py:195  [low]  heuristic: natural language literal
 tests/basic/test_wholefile.py:300  [low]  heuristic: natural language literal
     score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
 
-65 prompt(s) in 31 file(s)
+103 prompt(s) in 34 file(s)
 
 ── worst offenders ──────────────────────────
      13.05  HIGH      aider/coders/editblock_fenced_prompts.py:97

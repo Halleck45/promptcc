@@ -234,8 +234,21 @@ func decodeString(lang *language, root *sitter.Node, src []byte) (string, []stri
 			writeContentWithEscapes(&b, n, src)
 		case lang.delimiterKinds[kind]:
 			// skip quotes and heredoc markers
-		case n.Id() != root.Id() && n.IsNamed() &&
-			!lang.stringRoots[kind] && !lang.containerKinds[kind]:
+		case lang.containerKinds[kind]:
+			// Structural node (e.g. PHP heredoc_body). Its literal lines are
+			// separate children; the line breaks between them are raw bytes
+			// that belong to no child. Preserve those newlines (real content
+			// is always a child), but not other gap bytes such as the {} that
+			// delimit an interpolation, which the slot already renders.
+			pos := n.StartByte()
+			for i := uint(0); i < n.NamedChildCount(); i++ {
+				c := n.NamedChild(i)
+				writeNewlines(&b, src[pos:c.StartByte()])
+				visit(c)
+				pos = c.EndByte()
+			}
+			writeNewlines(&b, src[pos:n.EndByte()])
+		case n.Id() != root.Id() && n.IsNamed() && !lang.stringRoots[kind]:
 			// Anything else named inside a string literal is an interpolation.
 			expr := n.Utf8Text(src)
 			slots = append(slots, expr)
@@ -270,6 +283,16 @@ func writeContentWithEscapes(b *strings.Builder, n *sitter.Node, src []byte) {
 		pos = c.EndByte()
 	}
 	b.Write(src[pos:n.EndByte()])
+}
+
+// writeNewlines copies only the line-break bytes from a gap between literal
+// children, discarding structural punctuation such as interpolation braces.
+func writeNewlines(b *strings.Builder, gap []byte) {
+	for _, ch := range gap {
+		if ch == '\n' || ch == '\r' {
+			b.WriteByte(ch)
+		}
+	}
 }
 
 func unescape(seq string) string {

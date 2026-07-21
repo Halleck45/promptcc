@@ -38,6 +38,12 @@ type language struct {
 	// callKinds map a call node kind to a function that renders its callee.
 	callKinds map[string]func(n *sitter.Node, src []byte) string
 
+	// declKinds map enclosing declaration kinds (functions, methods,
+	// classes) to the field holding their name. A prompt-like enclosing
+	// name ("StoryGroupPromptBuilder", "build_prompt") is medium-confidence
+	// evidence for the strings inside it.
+	declKinds map[string]string
+
 	// concatKind and concatOp identify string concatenation expressions
 	// ("a" . $x in PHP, "a" + x elsewhere), which are merged into a single
 	// prompt whose non-literal operands become injection slots.
@@ -73,6 +79,10 @@ var pythonLang = &language{
 			return fieldText(n, "function", src)
 		},
 	},
+	declKinds: map[string]string{
+		"function_definition": "name",
+		"class_definition":    "name",
+	},
 	concatKind: "binary_operator",
 	concatOp:   "+",
 }
@@ -99,6 +109,11 @@ var typescriptLang = &language{
 		"new_expression": func(n *sitter.Node, src []byte) string {
 			return "new " + fieldText(n, "constructor", src)
 		},
+	},
+	declKinds: map[string]string{
+		"function_declaration": "name",
+		"method_definition":    "name",
+		"class_declaration":    "name",
 	},
 	concatKind: "binary_expression",
 	concatOp:   "+",
@@ -158,6 +173,11 @@ var phpLang = &language{
 		"object_creation_expression": func(n *sitter.Node, src []byte) string {
 			return "new " + firstNamedChildText(n, src)
 		},
+	},
+	declKinds: map[string]string{
+		"function_definition": "name",
+		"method_declaration":  "name",
+		"class_declaration":   "name",
 	},
 	concatKind: "binary_expression",
 	concatOp:   ".",

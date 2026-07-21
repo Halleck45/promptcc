@@ -119,6 +119,13 @@ func TestScanPHP(t *testing.T) {
 	if !strings.Contains(heredoc.Text, "{companyName}") {
 		t.Errorf("PHP interpolation should become a slot:\n%s", heredoc.Text)
 	}
+	if strings.Contains(heredoc.Text, "{{companyName}}") {
+		t.Errorf("heredoc interpolation braces double-counted:\n%s", heredoc.Text)
+	}
+	// Heredoc line breaks must survive decoding (each source line stays a line).
+	if !strings.Contains(heredoc.Text, "collections.\nUnless") {
+		t.Errorf("heredoc newlines not preserved:\n%q", heredoc.Text)
+	}
 	if heredoc.Confidence < Medium {
 		t.Errorf("heredoc confidence = %s, want at least medium (assigned to $systemPrompt)", heredoc.Confidence)
 	}
@@ -643,5 +650,34 @@ func TestLooksLikeGenerated(t *testing.T) {
 	}
 	if looksLikeGenerated("If the user asks about generated content, explain the policy.") {
 		t.Error("prose mentioning generation should not be detected")
+	}
+}
+
+func TestEnclosingDeclarationIsEvidence(t *testing.T) {
+	found := promptsForFile(scanTestdata(t, Low), "prompt_builder.php")
+	if len(found) != 1 {
+		for _, p := range found {
+			t.Logf("found: %s:%d [%s] %s", p.File, p.Line, p.Confidence, p.Context)
+		}
+		t.Fatalf("found %d prompts, want 1", len(found))
+	}
+	p := found[0]
+	if p.Confidence != Medium {
+		t.Errorf("confidence = %s, want medium (enclosing StoryPromptBuilder)", p.Confidence)
+	}
+	if !strings.Contains(p.Context, "StoryPromptBuilder") {
+		t.Errorf("Context = %q, want the enclosing class name", p.Context)
+	}
+}
+
+func TestErrorScopesAndAssertHelpersCarryNoEvidence(t *testing.T) {
+	found := promptsForFile(scanTestdata(t, Low), "prompt_builder.php")
+	for _, p := range found {
+		if strings.Contains(p.Context, "Exception") || strings.Contains(p.Context, "assertPrompt") {
+			t.Errorf("false positive: %s:%d [%s] %s", p.File, p.Line, p.Confidence, p.Context)
+		}
+	}
+	if len(found) != 1 {
+		t.Fatalf("found %d prompts, want only the StoryPromptBuilder heredoc", len(found))
 	}
 }
