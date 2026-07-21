@@ -1,18 +1,35 @@
 <p align="center">
-  <img src="docs/logo-promptcc.png" alt="promptcc" width="360">
+  <img src="docs/logo-promptcc.png" alt="promptcc" width="340">
 </p>
 
-<p align="center"><b>Cyclomatic complexity for prompts.</b></p>
+<p align="center"><b>Cyclomatic complexity, but for LLM prompts.</b></p>
 
-Static analysis tools assume the behavior of a program lives in its code. In LLM-integrated applications, part of that behavior has moved into prompts: routing decisions, guardrails, business rules. A two-line function carrying a fifty-line prompt shows up green in every linter while its git history screams hotspot.
+<p align="center">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT"></a>
+  <img src="https://img.shields.io/badge/Go-1.24-00ADD8?logo=go&logoColor=white" alt="Go 1.24">
+  <img src="https://img.shields.io/badge/languages-Python%20·%20TS%2FJS%20·%20PHP-6d3fd4" alt="Supported languages">
+  <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs welcome">
+</p>
 
-`promptcc` measures what actually predicts prompt maintenance pain: **branching, not volume**. It counts distinct things (decision points, tool routing, injection surface, output schema depth) and reports a composite branching score, in the spirit of McCabe's cyclomatic complexity.
+<p align="center">
+  Find the business logic hidden in your prompts, score it, and gate it in CI.
+</p>
 
-Background reading (in French): [Quand la complexité du code vit dans le prompt](https://blog.lepine.pro/quand-la-complexite-du-code-vit-dans-le-prompt)
+<p align="center">
+  <img src="docs/screenshot-dashboard.png" alt="promptcc HTML report dashboard" width="900">
+</p>
+
+---
+
+Static analysis assumes a program's behavior lives in its code. In LLM-integrated apps, half of it has moved into prompts: routing decisions, guardrails, business rules. A two-line function wrapping a fifty-line prompt shows up green in every linter while its git history screams *hotspot*.
+
+**promptcc** measures what actually predicts prompt maintenance pain: **branching, not volume**. It counts distinct things (decision points, tool routing, injection surface, output schema depth) and reports a composite branching score, in the spirit of McCabe's cyclomatic complexity, extracted straight from your source code.
+
+> Background reading (in French): [Quand la complexité du code vit dans le prompt](https://blog.lepine.pro/quand-la-complexite-du-code-vit-dans-le-prompt)
 
 ## Install
 
-Download a binary from the [releases page](https://github.com/halleck45/promptcc/releases), or:
+Download a binary from the [releases page](https://github.com/halleck45/promptcc/releases), or install with Go:
 
 ```bash
 go install github.com/halleck45/promptcc/cmd/promptcc@latest
@@ -20,54 +37,46 @@ go install github.com/halleck45/promptcc/cmd/promptcc@latest
 
 Linux and Windows release binaries are fully static (no libc dependency). Building from source needs a C compiler (the tree-sitter grammars are C code).
 
-## Usage
-
-promptcc figures out what to do from what you give it: a directory or a source file is scanned for prompts in the code; any other file (or stdin) is analyzed as one prompt.
-
-### Analyze a prompt
+## Quick start
 
 ```bash
-promptcc prompt.txt              # analyze a prompt file
-cat prompt.txt | promptcc        # or pipe it in
-promptcc a.txt b.txt             # compare several prompts
-promptcc --json prompt.txt       # machine-readable output
-promptcc --fail-over 22 p.txt    # CI gate: exit 1 above the threshold
+# scan a codebase, print the worst offenders, and write an HTML report
+promptcc --report-html report.html ./src
+
+# gate a pull request: exit 1 if any prompt scores above 22
+promptcc --fail-over 22 ./src
 ```
+
+promptcc figures out what to do from what you give it: a **directory or source file** is scanned for prompts embedded in the code; **any other file, or stdin,** is analyzed as a single prompt.
+
+## Usage
 
 ### Scan a codebase
 
 Pointed at a directory or a source file, promptcc extracts prompts directly from the code (Python, TypeScript, JavaScript, PHP, parsed with tree-sitter) and analyzes each one where it lives:
 
 ```bash
-promptcc ./src                        # summary and worst offenders
+promptcc ./src                        # summary + worst offenders
 promptcc --verbose ./src              # one line per prompt
 promptcc --full ./src                 # full text report per prompt
-promptcc --report-html report.html .  # detailed, self-contained HTML report
+promptcc --report-html report.html .  # self-contained HTML report
 promptcc --json ./src                 # machine-readable output
 promptcc --min-confidence high ./src  # only prompts inside known SDK calls
 promptcc --fail-over 22 ./src         # CI gate
 ```
 
+<p align="center">
+  <img src="docs/screenshot-cli.png" alt="promptcc terminal output: worst offenders" width="820">
+</p>
+
+### Analyze a single prompt
+
+```bash
+promptcc prompt.txt              # analyze a prompt file
+cat prompt.txt | promptcc        # or pipe it in
+promptcc a.txt b.txt             # compare several prompts
+promptcc --json prompt.txt       # machine-readable output
 ```
-9 prompt(s) in 4 file(s)
-
-── worst offenders ──────────────────────────
-     14.40  HIGH      src/billing.php:3
-     13.20  HIGH      src/agent.py:5
-     12.50  HIGH      src/agent.py:19
-```
-
-The HTML report shows every metric per prompt (decision keywords, injection channels, interpolated values, the decoded prompt text) with severity chips, sorted worst first.
-
-A string literal is reported as a prompt with a confidence level:
-
-- **high**: passed to a known LLM SDK call (Anthropic, OpenAI, Google, LangChain, Vercel AI SDK, Bedrock, Ollama)
-- **medium**: bound to a prompt-like name (`system_prompt = ...`, `system:`, `'instructions' =>`)
-- **low**: a long natural-language literal with no other evidence
-
-Interpolations (f-strings, template literals, PHP `$variables`, heredocs) are decoded and counted as injection surface, exactly what a grep-based approach cannot see. Values under keys like `model`, `role` or `url` are never reported.
-
-Example output:
 
 ```
 ── prompt.txt ──────────────────────────────
@@ -86,7 +95,31 @@ Example output:
     60 words · 378 chars · 7 instruction units (lines)
 ```
 
-## Metrics
+## The HTML report
+
+`--report-html` writes a single, self-contained HTML file (no external assets) with three views:
+
+- **Dashboard**: score distribution, severity breakdown and headline stats across all prompts.
+- **Explorer**: every prompt sorted worst-first, each expanding to its per-signal breakdown and decoded source text. Low-confidence hits are hidden behind a toggle.
+- **Help**: the scoring model and how to read the report.
+
+<p align="center">
+  <img src="docs/screenshot-explorer.png" alt="promptcc HTML report explorer" width="900">
+</p>
+
+## How it works
+
+### Confidence
+
+Every reported string carries a confidence level, so you can tune the signal-to-noise ratio with `--min-confidence`:
+
+- **high**: passed to a known LLM SDK call (Anthropic, OpenAI, Google, LangChain, Vercel AI SDK, Bedrock, Ollama)
+- **medium**: bound to a prompt-like name (`system_prompt = ...`, `system:`, `'instructions' =>`)
+- **low**: a long natural-language literal with no other evidence
+
+Interpolations (f-strings, template literals, PHP `$variables`, heredocs) are decoded and counted as injection surface, exactly what a grep-based approach cannot see. Values under keys like `model`, `role` or `url` are never mistaken for prompts.
+
+### Metrics
 
 | Metric | What it counts | Signal |
 |---|---|---|
@@ -116,7 +149,7 @@ The weights are an honest v0 heuristic: the relative ordering follows published 
 
 ## Evaluation on real code
 
-`make eval` scans pinned commits of three open-source LLM projects (aider, cline, prism) and compares the results against the snapshots in [`eval/expected/`](eval/expected). Any change in extraction or scoring shows up as a diff; refresh intentional changes with `make eval-update`. This is how false-positive families are caught before release: every rule in the extractor was motivated by a real finding on real code and is locked by a regression fixture.
+`make eval` scans pinned commits of three open-source LLM projects (aider, cline, prism) and compares the results against the snapshots in [`eval/expected/`](eval/expected). Any change in extraction or scoring shows up as a diff; refresh intentional changes with `make eval-update`. Every rule in the extractor was motivated by a real finding on real code and is locked by a regression fixture, so false-positive families are caught before release.
 
 ## Roadmap
 
@@ -140,4 +173,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for the full workflow, including the real
 
 ## License
 
-MIT
+[MIT](LICENSE) © Jean-François Lépine
