@@ -4,14 +4,15 @@ Thanks for your interest. Small, focused pull requests are the easiest to review
 
 ## Development
 
-Requires Go 1.24+.
+Requires Go 1.24+ and a C compiler (tree-sitter grammars are C code).
 
 ```bash
-go build ./cmd/promptcc
-go test -race ./...
-gofmt -l .        # must print nothing
-go vet ./...
+make build   # build the promptcc binary
+make test    # gofmt check + go vet + go test -race
+make eval    # scan pinned real-world repos, diff against eval/expected/
 ```
+
+If `make eval` reports a mismatch caused by an intentional change (new rule, adjusted weights), refresh the snapshots with `make eval-update` and commit the diff in `eval/expected/` along with your change.
 
 ## Adding a language to the lexicons
 

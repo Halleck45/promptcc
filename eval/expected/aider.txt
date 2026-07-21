@@ -1,0 +1,13 @@
+74 prompt(s) in 35 file(s)
+
+── worst offenders ──────────────────────────
+     13.05  HIGH      aider/coders/editblock_fenced_prompts.py:97
+     13.00  HIGH      aider/coders/editblock_prompts.py:165
+     12.14  HIGH      aider/coders/shell.py:27
+      9.70  MODERATE  aider/coders/editblock_prompts.py:120
+      9.53  MODERATE  aider/coders/shell.py:1
+      8.73  MODERATE  aider/coders/editblock_prompts.py:8
+      8.73  MODERATE  aider/coders/patch_prompts.py:11
+      8.50  MODERATE  tests/basic/test_udiff.py:72
+      8.24  MODERATE  scripts/history_prompts.py:1
+      8.10  MODERATE  aider/coders/help_prompts.py:7

@@ -32,7 +32,7 @@ promptcc --fail-over 22 p.txt    # CI gate: exit 1 above the threshold
 
 ### Scan a codebase
 
-`promptcc scan` extracts prompts directly from source code (Python, TypeScript, PHP, parsed with tree-sitter) and analyzes each one where it lives:
+`promptcc scan` extracts prompts directly from source code (Python, TypeScript, JavaScript, PHP, parsed with tree-sitter) and analyzes each one where it lives:
 
 ```bash
 promptcc scan ./src                        # summary and worst offenders
@@ -110,10 +110,15 @@ Bands: `LOW` (< 5), `MODERATE` (< 12), `HIGH` (< 22), `CRITICAL` (>= 22).
 
 The weights are an honest v0 heuristic: the relative ordering follows published correlations for LLM-integrated applications (decision density dominates, prompt length predicts nothing, explicit guardrails correlate negatively with maintenance pain), but the absolute values are a judgment call. Calibrating them against a labeled corpus is on the roadmap.
 
+## Evaluation on real code
+
+`make eval` scans pinned commits of three open-source LLM projects (aider, cline, prism) and compares the results against the snapshots in [`eval/expected/`](eval/expected). Any change in extraction or scoring shows up as a diff; refresh intentional changes with `make eval-update`. This is how false-positive families are caught before release: every rule in the extractor was motivated by a real finding on real code and is locked by a regression fixture.
+
 ## Roadmap
 
-- [x] Extract prompts directly from source code (Python, TypeScript, PHP) via tree-sitter, so the tool works as a linter on repositories rather than on isolated text files
-- [ ] More grammars (JavaScript, Go, Java, Ruby)
+- [x] Extract prompts directly from source code (Python, TypeScript, JavaScript, PHP) via tree-sitter, so the tool works as a linter on repositories rather than on isolated text files
+- [ ] Prompt template files (.txt, .md, Jinja, Blade) referenced from code
+- [ ] More grammars (Go, Java, Ruby)
 - [ ] SARIF output for GitHub code scanning
 - [ ] pre-commit hook and GitHub Action
 - [ ] Score calibration against a labeled corpus

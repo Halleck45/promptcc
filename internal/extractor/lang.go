@@ -6,6 +6,7 @@ import (
 	"unsafe"
 
 	sitter "github.com/tree-sitter/go-tree-sitter"
+	tsjavascript "github.com/tree-sitter/tree-sitter-javascript/bindings/go"
 	tsphp "github.com/tree-sitter/tree-sitter-php/bindings/go"
 	tspython "github.com/tree-sitter/tree-sitter-python/bindings/go"
 	tstypescript "github.com/tree-sitter/tree-sitter-typescript/bindings/go"
@@ -107,6 +108,18 @@ var tsxLang = func() *language {
 	return &l
 }()
 
+// The TypeScript grammar is a superset of the JavaScript one: every node
+// kind promptcc relies on (string, template_string, variable_declarator,
+// pair, call_expression, binary_expression) is identical, so JavaScript
+// reuses the TypeScript configuration with its own grammar pointer. The JS
+// grammar also parses JSX.
+var javascriptLang = func() *language {
+	l := *typescriptLang
+	l.name = "javascript"
+	l.ptr = tsjavascript.Language()
+	return &l
+}()
+
 var phpLang = &language{
 	name: "php",
 	ptr:  tsphp.LanguagePHP(),
@@ -160,6 +173,10 @@ var extensions = map[string]*language{
 	".mts": typescriptLang,
 	".cts": typescriptLang,
 	".tsx": tsxLang,
+	".js":  javascriptLang,
+	".mjs": javascriptLang,
+	".cjs": javascriptLang,
+	".jsx": javascriptLang,
 	".php": phpLang,
 }
 

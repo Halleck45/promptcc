@@ -7,6 +7,9 @@ dist/
 *.out
 coverage.html
 
+# Evaluation harness cache (pinned clones of real repositories)
+eval/.cache/
+
 # Editor / OS
 .idea/
 .vscode/

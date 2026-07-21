@@ -443,3 +443,50 @@ func TestLooksLikeScript(t *testing.T) {
 		})
 	}
 }
+
+func TestScanJavaScript(t *testing.T) {
+	found := promptsForFile(scanTestdata(t, Low), "realworld.js")
+	if len(found) != 3 {
+		for _, p := range found {
+			t.Logf("found: %s:%d [%s] %s %q", p.File, p.Line, p.Confidence, p.Context, p.Text)
+		}
+		t.Fatalf("found %d prompts, want 3 (system template, user content, concat)", len(found))
+	}
+
+	system := found[0]
+	if !strings.Contains(system.Text, "{teamName}") {
+		t.Errorf("template substitution should become a slot:\n%s", system.Text)
+	}
+	if system.Confidence < Medium {
+		t.Errorf("systemPrompt confidence = %s, want at least medium", system.Confidence)
+	}
+
+	user := found[1]
+	if user.Confidence != High || !strings.Contains(user.Context, "messages.create") {
+		t.Errorf("user content = [%s] %s, want high via messages.create", user.Confidence, user.Context)
+	}
+	if !strings.Contains(user.Text, "{ticket}") {
+		t.Errorf("interpolation not slotted:\n%s", user.Text)
+	}
+
+	grader := found[2]
+	if !strings.Contains(grader.Text, "{getRubric_context}") {
+		t.Errorf("concatenation not merged with slot:\n%s", grader.Text)
+	}
+}
+
+func TestScanJSXExtension(t *testing.T) {
+	dir := t.TempDir()
+	code := "const systemPrompt = `If asked about billing, escalate to a human. Never guess numbers.`;\n" +
+		"export const App = () => <div>{systemPrompt}</div>;\n"
+	if err := os.WriteFile(filepath.Join(dir, "app.jsx"), []byte(code), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	prompts, err := Scan([]string{dir}, Options{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(prompts) != 1 {
+		t.Fatalf("found %d prompts in .jsx, want 1", len(prompts))
+	}
+}

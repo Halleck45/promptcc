@@ -1,0 +1,13 @@
+342 prompt(s) in 172 file(s)
+
+── worst offenders ──────────────────────────
+     14.50  HIGH      sdk/packages/core/src/extensions/tools/schemas.ts:208
+     13.53  HIGH      sdk/packages/core/src/runtime/orchestration/runtime-builder.test.ts:487
+     13.00  HIGH      apps/cli/src/connectors/adapters/prompts.ts:16
+     13.00  HIGH      apps/vscode/src/hosts/vscode/commit-message-generator.ts:54
+     12.81  HIGH      sdk/packages/core/src/runtime/orchestration/runtime-builder.test.ts:416
+     12.19  HIGH      apps/vscode/src/core/prompts/responses.ts:34
+     12.00  HIGH      apps/cli/src/connectors/adapters/discord.ts:76
+     11.70  MODERATE  apps/cli/src/connectors/adapters/linear.ts:61
+     11.70  MODERATE  apps/cli/src/connectors/adapters/prompts.ts:18
+     11.55  MODERATE  sdk/packages/shared/src/prompt/system.ts:1

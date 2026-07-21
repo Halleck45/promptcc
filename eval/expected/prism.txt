@@ -1,0 +1,13 @@
+56 prompt(s) in 26 file(s)
+
+── worst offenders ──────────────────────────
+      7.33  MODERATE  src/Providers/Anthropic/Handlers/StructuredStrategies/ToolStructuredStrategy.php:25
+      4.50  LOW       tests/Providers/Anthropic/AnthropicTextTest.php:569
+      4.33  LOW       tests/Providers/Anthropic/AnthropicTextTest.php:572
+      4.33  LOW       tests/Providers/DeepSeek/TextTest.php:75
+      4.33  LOW       tests/Providers/OpenRouter/TextTest.php:98
+      3.00  LOW       tests/Providers/Z/ZTextTest.php:104
+      1.50  LOW       src/Providers/Gemini/Handlers/Structured.php:181
+      0.50  LOW       tests/Providers/DeepSeek/MessageMapTest.php:195
+      0.50  LOW       tests/Providers/Gemini/MessageMapTest.php:253
+      0.50  LOW       tests/Providers/Gemini/MessageMapTest.php:260
