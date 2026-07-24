@@ -3,6 +3,12 @@
 /promptcc.exe
 dist/
 
+# Web playground build artifacts (`make web`)
+web/promptcc.wasm
+web/wasm_exec.js
+web/logo.webp
+web/logo-dark.png
+
 # Test and coverage artifacts
 *.out
 coverage.html

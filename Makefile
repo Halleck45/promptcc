@@ -1,12 +1,21 @@
 BIN := promptcc
 GO  ?= go
 
-.PHONY: all build test fmt vet clean eval eval-update
+.PHONY: all build web test fmt vet clean eval eval-update
 
 all: build
 
 build:
 	$(GO) build -o $(BIN) ./cmd/promptcc
+
+# Build the static web playground (web/) served on GitHub Pages. Only the
+# analyzer is compiled to WebAssembly; the extractor (cgo, tree-sitter) stays
+# CLI-only. Serve locally with: python3 -m http.server -d web
+web:
+	GOOS=js GOARCH=wasm $(GO) build -trimpath -ldflags="-s -w" -o web/promptcc.wasm ./cmd/promptcc-wasm
+	cp "$$($(GO) env GOROOT)/lib/wasm/wasm_exec.js" web/wasm_exec.js
+	cp docs/logo-promptcc.webp web/logo.webp
+	cp docs/logo-promptcc-dark.png web/logo-dark.png
 
 # gofmt is scoped to the project sources: eval/.cache holds third-party
 # clones that must not be reformatted or checked.

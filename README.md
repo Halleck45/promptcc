@@ -19,6 +19,10 @@
 </p>
 
 <p align="center">
+  <a href="https://halleck45.github.io/promptcc/#example"><b>Try it in your browser</b></a>: paste a prompt, get its score. No install, runs as WebAssembly.
+</p>
+
+<p align="center">
   <img src="docs/screenshot-dashboard.png" alt="promptcc HTML report dashboard" width="900">
 </p>
 
@@ -73,6 +77,8 @@ promptcc --fail-over 22 ./src         # CI gate
 </p>
 
 ### Analyze a single prompt
+
+No install needed for this one: the [web playground](https://halleck45.github.io/promptcc/) runs the same analyzer as WebAssembly, entirely client-side. Or from the CLI:
 
 ```bash
 promptcc prompt.txt              # analyze a prompt file
@@ -135,6 +141,8 @@ Interpolations (f-strings, template literals, PHP `$variables`, heredocs) are de
 | `n_roles` | role and persona definitions | informational |
 | `n_words`, `n_chars`, `n_instructions` | volume | none, kept as a control group |
 
+The metric set and the direction of each signal come from [Rethinking Complexity Metrics for LLM-Integrated Applications: Beyond Source Code](https://arxiv.org/abs/2607.01903) (Xu, Li, Deng, Liu, Xing; 2026), which correlates candidate metrics with maintenance effort across open-source LLM-integrated applications: decision density and injection surface predict maintenance pain, prompt length predicts nothing, and explicit guardrails correlate negatively.
+
 Matching is word-token based and Unicode-aware. English and French are built in; paired XML tags (`<context>...</context>`) are recognized as structure, not injection slots.
 
 ### The branching score
@@ -148,7 +156,7 @@ score  = raw - relief
 
 Bands: `LOW` (< 5), `MODERATE` (< 12), `HIGH` (< 22), `CRITICAL` (>= 22).
 
-The weights are an honest v0 heuristic: the relative ordering follows published correlations for LLM-integrated applications (decision density dominates, prompt length predicts nothing, explicit guardrails correlate negatively with maintenance pain), but the absolute values are a judgment call. Calibrating them against a labeled corpus is on the roadmap.
+The weights are an honest v0 heuristic: the relative ordering follows the [published correlations](https://arxiv.org/abs/2607.01903) for LLM-integrated applications (decision density dominates, prompt length predicts nothing, explicit guardrails correlate negatively with maintenance pain), but the absolute values are a judgment call. Calibrating them against a labeled corpus is on the roadmap.
 
 ## Roadmap
 
