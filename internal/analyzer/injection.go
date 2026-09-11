@@ -19,7 +19,8 @@ type injectionPattern struct {
 }
 
 var injectionPatterns = []injectionPattern{
-	{regexp.MustCompile(`\{\{\s*[a-zA-Z_]\w*\s*\}\}`), "template {{name}}"},
+	// Template engines allow dotted paths and filters: {{ user.name | upper }}.
+	{regexp.MustCompile(`\{\{\s*[a-zA-Z_][\w.]*(?:\s*\|[^{}]*)?\s*\}\}`), "template {{name}}"},
 	{regexp.MustCompile(`\[\[\s*[a-zA-Z_]\w*\s*\]\]`), "double bracket [[name]]"},
 	{regexp.MustCompile(`%\([a-zA-Z_]\w*\)[sdif]`), "printf %(name)s"},
 	// Both spellings of shell interpolation are one and the same channel.

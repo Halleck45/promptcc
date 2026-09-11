@@ -1,3 +1,36 @@
+.agents/skills/cline-sdk/SKILL.md:7  [high]  skill cline-sdk
+    score 4.92 [LOW]  decisions=2 density=0.222 routes=0 inject=1 guards=1  § Reference File Structure
+.agents/skills/create-pull-request/SKILL.md:5  [high]  skill create-pull-request
+    score 7.75 [MODERATE]  decisions=4 density=0.375 routes=0 inject=0 guards=0  § Branch Management
+.agents/skills/opentui/SKILL.md:7  [high]  skill opentui
+    score 4.7 [LOW]  decisions=2 density=0.2 routes=0 inject=1 guards=1  § Reference File Structure
+.claude/commands/hotfix-release.md:1  [high]  Claude Code command
+    score 4.5 [LOW]  decisions=1 density=0.2 routes=0 inject=1 guards=0  § Step 3: Analyze Selected Commits
+.claude/commands/release.md:1  [high]  Claude Code command
+    score 1 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0  § 3) Commit and tag
+.cline/skills/publish-cli/SKILL.md:5  [high]  skill publish-cli
+    score 12.46 [HIGH]  decisions=10 density=0.186 routes=0 inject=1 guards=3  § Step 0: Release the SDK first if it changed
+.cline/skills/publish-ui/SKILL.md:5  [high]  skill publish-ui
+    score 8.37 [MODERATE]  decisions=2 density=0.667 routes=0 inject=0 guards=1  § Final report
+.clinerules/bun-and-node.md:1  [high]  Cline rules
+    score 4.33 [LOW]  decisions=2 density=0.133 routes=0 inject=1 guards=0  § Node is the runtime — do NOT rewrite these to bun
+.clinerules/cline-overview.md:1  [high]  Cline rules
+    score 10.15 [MODERATE]  decisions=7 density=0.115 routes=0 inject=0 guards=0  § API Request & Token Management
+    info: 765 lines loaded into every session; move task-specific guidance into skills or imported files
+.clinerules/debug-harness.md:1  [high]  Cline rules
+    score 7.28 [MODERATE]  decisions=3 density=0.158 routes=0 inject=2 guards=1  § Caveats
+.clinerules/general.md:1  [high]  Cline rules
+    score 9.27 [MODERATE]  decisions=5 density=0.417 routes=0 inject=1 guards=3  § Miscellaneous
+.clinerules/network.md:1  [high]  Cline rules
+    score 5.56 [MODERATE]  decisions=2 density=0.286 routes=0 inject=0 guards=1  § 2. Using `axios`
+.clinerules/protobuf-development.md:1  [high]  Cline rules
+    score 2 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0  § 3. Implement the Backend Handler
+.clinerules/sdk-migration.md:1  [high]  Cline rules
+    score 2.73 [LOW]  decisions=1 density=0.083 routes=0 inject=1 guards=2  § Conventions
+.clinerules/storage.md:1  [high]  Cline rules
+    score 4.33 [LOW]  decisions=1 density=0.333 routes=0 inject=0 guards=0  § Adding New Storage Keys
+.github/copilot-instructions.md:1  [high]  Copilot instructions
+    score 2.93 [LOW]  decisions=1 density=0.143 routes=0 inject=0 guards=0  § Adding Tools to System Prompt (5+ file chain)
 apps/cli/src/connectors/adapters/discord.ts:74  [low]  heuristic: natural language literal
     score 8.37 [MODERATE]  decisions=2 density=0.667 routes=0 inject=0 guards=1
 apps/cli/src/connectors/adapters/discord.ts:75  [low]  heuristic: natural language literal
@@ -91,7 +124,7 @@ apps/vscode/src/core/hooks/__tests__/user-prompt-submit.test.ts:203  [medium]  a
 apps/vscode/src/core/hooks/__tests__/user-prompt-submit.test.ts:411  [medium]  arg prompt
     score 1 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
 apps/vscode/src/core/hooks/templates.ts:318  [medium]  in getUserPromptSubmitTemplate
-    score 6.93 [MODERATE]  decisions=3 density=0.143 routes=0 inject=1 guards=0
+    score 6.83 [MODERATE]  decisions=2 density=0.333 routes=0 inject=1 guards=0  § Parse input using jq (or fallback to basic parsing)
 apps/vscode/src/core/mentions/index.test.ts:152  [low]  heuristic: natural language literal
     score 0.5 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 apps/vscode/src/core/mentions/index.test.ts:361  [low]  heuristic: natural language literal
@@ -208,6 +241,16 @@ apps/vscode/webview-ui/src/components/welcome/quickWinTasks.ts:36  [medium]  arg
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 apps/vscode/webview-ui/src/components/worktrees/WorktreesView.tsx:224  [medium]  var prompt
     score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+sdk/AGENTS.md:6  [high]  AGENTS.md instructions
+    score 10 [MODERATE]  decisions=5 density=0.5 routes=0 inject=0 guards=0  § Documentation Responsibilities
+sdk/examples/plugins/agents-squad/agents/anvil.md:7  [high]  Claude Code subagent
+    score 5 [MODERATE]  decisions=4 density=0.25 routes=0 inject=0 guards=5
+sdk/examples/plugins/agents-squad/agents/inquisitor.md:7  [high]  Claude Code subagent
+    score 5.14 [MODERATE]  decisions=3 density=0.214 routes=0 inject=0 guards=0
+sdk/examples/plugins/agents-squad/agents/oracle.md:7  [high]  Claude Code subagent
+    score 3.13 [LOW]  decisions=2 density=0.143 routes=0 inject=0 guards=1
+sdk/examples/plugins/agents-squad/agents/phantom.md:7  [high]  Claude Code subagent
+    score 3.52 [LOW]  decisions=2 density=0.182 routes=0 inject=0 guards=1
 sdk/examples/plugins/agents-squad/index.ts:402  [medium]  in steerPrompt
     score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
 sdk/examples/plugins/agents-squad/index.ts:403  [medium]  in steerPrompt
@@ -320,6 +363,8 @@ sdk/packages/core/src/session/team/team-session-coordinator.ts:225  [medium]  va
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 sdk/packages/core/src/session/team/team-session-coordinator.ts:227  [medium]  in buildTeamRunContinuationPrompt
     score 1.5 [LOW]  decisions=0 density=0 routes=0 inject=1 guards=0
+sdk/packages/llms/AGENTS.md:6  [high]  AGENTS.md instructions
+    score 6.6 [MODERATE]  decisions=3 density=0.12 routes=2 inject=0 guards=2  § Provider Option Routing
 sdk/packages/llms/src/providers/gateway.test.ts:553  [high]  call streamTextSpy.mockReturnValue
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 sdk/packages/llms/src/providers/gateway.test.ts:1956  [high]  call streamTextSpy.mockReturnValueOnce
@@ -377,11 +422,13 @@ sdk/packages/shared/src/team/schema.ts:68  [medium]  arg rolePrompt
 sdk/packages/shared/src/team/schema.ts:131  [low]  heuristic: natural language literal
     score 11 [MODERATE]  decisions=1 density=1 routes=0 inject=0 guards=0
 
-189 prompt(s) in 85 file(s)
+211 prompt(s) in 107 file(s): 189 in code, 11 rules files, 5 skills, 4 subagents, 2 commands
+1 hint(s) on prompt files
 
 ── worst offenders ──────────────────────────
      14.50  HIGH      sdk/packages/core/src/extensions/tools/schemas.ts:208
      13.00  HIGH      apps/vscode/src/hosts/vscode/commit-message-generator.ts:54
+     12.46  HIGH      .cline/skills/publish-cli/SKILL.md:5
      12.19  HIGH      apps/vscode/src/core/prompts/responses.ts:34
      12.00  HIGH      apps/cli/src/connectors/adapters/discord.ts:76
      12.00  HIGH      sdk/packages/core/src/cron/runner/cron-runner.ts:91
@@ -389,4 +436,3 @@ sdk/packages/shared/src/team/schema.ts:131  [low]  heuristic: natural language l
      11.50  MODERATE  sdk/packages/shared/src/prompt/cline.ts:21
      11.00  MODERATE  sdk/packages/core/src/extensions/tools/definitions.ts:430
      11.00  MODERATE  sdk/packages/shared/src/team/schema.ts:131
-     10.77  MODERATE  sdk/packages/core/src/extensions/tools/schemas.ts:284

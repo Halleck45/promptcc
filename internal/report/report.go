@@ -21,15 +21,41 @@ func JSON(results []analyzer.Metrics) (string, error) {
 
 // Text renders one result as a human-readable report.
 func Text(m analyzer.Metrics) string {
+	return header(m) + body(m)
+}
+
+// EntryText renders a scan entry: the score, then what a prompt file adds
+// (description, hotspot sections, hints) since that is what the reader acts
+// on, then the metric detail.
+func EntryText(e ScanEntry) string {
+	return header(e.Metrics) + basis(e) + Extras(e) + body(e.Metrics)
+}
+
+// basis explains a section-based verdict on one line.
+func basis(e ScanEntry) string {
+	if e.ScoreBasis == "" {
+		return ""
+	}
+	out := fmt.Sprintf("  Judged by its hottest section: %s (line %d, %d sections)\n",
+		truncate(e.ScoreBasis, 60), e.Line-1+e.BasisLine, len(e.Sections))
+	if d := e.Document; d != nil {
+		out += fmt.Sprintf("  Whole file: %d decisions, %d guardrails, %d words\n", d.Decisions, d.Constraints, d.Words)
+	}
+	return out
+}
+
+func header(m analyzer.Metrics) string {
 	band := analyzer.BandFor(m.BranchingScore)
+	rule := strings.Repeat("─", max(1, 44-len([]rune(m.Name))))
+	return fmt.Sprintf("── %s %s\n  Branching score: %g  [%s]  %s\n",
+		m.Name, rule, m.BranchingScore, band.Label, band.Hint)
+}
+
+func body(m analyzer.Metrics) string {
 	var b strings.Builder
 	w := func(format string, args ...any) {
 		fmt.Fprintf(&b, format+"\n", args...)
 	}
-
-	rule := strings.Repeat("─", max(1, 44-len([]rune(m.Name))))
-	w("── %s %s", m.Name, rule)
-	w("  Branching score: %g  [%s]  %s", m.BranchingScore, band.Label, band.Hint)
 	w("")
 	w("  What matters (distinct things):")
 	w("    decision points          n_decisions   = %d", m.Decisions)
@@ -59,6 +85,56 @@ func Text(m analyzer.Metrics) string {
 		}
 	}
 	return b.String()
+}
+
+// maxHotspots caps the hotspot sections listed in text reports.
+const maxHotspots = 5
+
+// Extras renders what a prompt file adds to the metrics report: its
+// frontmatter description, the sections that carry the branching, and lint
+// hints. It returns "" for prompts embedded in code with no sections.
+func Extras(e ScanEntry) string {
+	var b strings.Builder
+	w := func(format string, args ...any) {
+		fmt.Fprintf(&b, format+"\n", args...)
+	}
+	if e.Description != "" {
+		w("")
+		w("  Description: %s", truncate(e.Description, 160))
+	}
+	if hot := analyzer.Hotspots(e.Sections, maxHotspots); len(hot) > 0 {
+		w("")
+		w("  Hotspot sections (%d sections):", len(e.Sections))
+		for _, s := range hot {
+			band := analyzer.BandFor(s.Metrics.BranchingScore)
+			w("    %6.2f  %-9s %s  (line %d, %d decisions)",
+				s.Metrics.BranchingScore, band.Label, truncate(s.Heading, 50),
+				e.Line-1+s.Line, s.Metrics.Decisions)
+			if a := analyzer.Advice(s.Metrics, e.Kind); a != "" {
+				w("                     → %s", a)
+			}
+		}
+	}
+	if len(e.Hints) > 0 {
+		w("")
+		w("  Hints:")
+		for _, h := range e.Hints {
+			loc := ""
+			if h.Line > 0 {
+				loc = fmt.Sprintf(" (line %d)", h.Line)
+			}
+			w("    %-4s %s%s", h.Severity, h.Message, loc)
+		}
+	}
+	return b.String()
+}
+
+func truncate(s string, n int) string {
+	r := []rune(s)
+	if len(r) <= n {
+		return s
+	}
+	return string(r[:n-1]) + "…"
 }
 
 // Comparison renders a score-sorted summary table for multiple results.

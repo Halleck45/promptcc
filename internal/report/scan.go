@@ -13,6 +13,7 @@ import (
 	"time"
 
 	"github.com/halleck45/promptcc/internal/analyzer"
+	"github.com/halleck45/promptcc/internal/promptfile"
 )
 
 //go:embed assets/logo-icon.png
@@ -22,16 +23,56 @@ var logoPNG []byte
 // stays a single self-contained file.
 var logoDataURI = template.URL("data:image/png;base64," + base64.StdEncoding.EncodeToString(logoPNG))
 
-// ScanEntry is one analyzed prompt found by promptcc scan.
+// ScanEntry is one analyzed prompt: a literal found in code, or a prompt
+// file (skill, CLAUDE.md, template) taken whole.
 type ScanEntry struct {
-	File       string           `json:"file"`
-	Line       int              `json:"line"`
-	EndLine    int              `json:"end_line"`
-	Confidence string           `json:"confidence"`
-	Context    string           `json:"context"`
-	Slots      []string         `json:"slots,omitempty"`
-	Text       string           `json:"-"`
-	Metrics    analyzer.Metrics `json:"metrics"`
+	File       string   `json:"file"`
+	Line       int      `json:"line"`
+	EndLine    int      `json:"end_line"`
+	Confidence string   `json:"confidence"`
+	Context    string   `json:"context"`
+	Slots      []string `json:"slots,omitempty"`
+	Text       string   `json:"-"`
+
+	// Prompt files only: kind (skill, agent, command, rules, template,
+	// prompt), frontmatter name and description, lint hints.
+	Kind        string            `json:"kind,omitempty"`
+	Name        string            `json:"name,omitempty"`
+	Description string            `json:"description,omitempty"`
+	Hints       []promptfile.Hint `json:"hints,omitempty"`
+
+	// Metrics carries the score the prompt is judged by. A prompt with
+	// Markdown sections is judged by its hottest section (see
+	// analyzer.Judge); ScoreBasis then names that section and Document
+	// holds the whole-text metrics.
+	Metrics    analyzer.Metrics  `json:"metrics"`
+	ScoreBasis string            `json:"score_basis,omitempty"`
+	BasisLine  int               `json:"score_basis_line,omitempty"`
+	Document   *analyzer.Metrics `json:"document,omitempty"`
+	// Sections holds per-heading metrics for Markdown prompts with at least
+	// two headings, in document order.
+	Sections []analyzer.Section `json:"sections,omitempty"`
+}
+
+// KindLabel is the human label of a kind, for summaries.
+func KindLabel(kind string, n int) string {
+	labels := map[string][2]string{
+		"skill":    {"skill", "skills"},
+		"agent":    {"subagent", "subagents"},
+		"command":  {"command", "commands"},
+		"rules":    {"rules file", "rules files"},
+		"template": {"template", "templates"},
+		"prompt":   {"prompt file", "prompt files"},
+		"":         {"in code", "in code"},
+	}
+	l, ok := labels[kind]
+	if !ok {
+		l = [2]string{kind, kind + "s"}
+	}
+	if n == 1 {
+		return l[0]
+	}
+	return l[1]
 }
 
 // distBins is the target number of histogram bins in the score distribution.
@@ -49,6 +90,28 @@ type card struct {
 type codeLine struct {
 	No   int
 	Text string
+}
+
+// hotspot is a Markdown section that carries branching, for the explorer.
+type hotspot struct {
+	Heading   string
+	Line      int
+	ScoreStr  string
+	BandClass string
+	Decisions int
+	Advice    string
+}
+
+// kindBadge is the short label shown next to a prompt file in the explorer.
+func kindBadge(kind string) string {
+	switch kind {
+	case "":
+		return ""
+	case "agent":
+		return "subagent"
+	default:
+		return kind
+	}
 }
 
 type bin struct {
@@ -167,20 +230,28 @@ func HTML(entries []ScanEntry, version string) (string, error) {
 
 	type row struct {
 		ScanEntry
-		Band      analyzer.Band
-		BandClass string
-		LowConf   bool
-		Dir, Base string
-		Ctx       string // display context, blank for internal heuristic markers
-		ScoreStr  string
-		Cards     []card
-		Channels  []kv
-		Code      []codeLine
+		Band         analyzer.Band
+		BandClass    string
+		LowConf      bool
+		Dir, Base    string
+		Ctx          string // display context, blank for internal heuristic markers
+		ScoreStr     string
+		Cards        []card
+		Channels     []kv
+		Code         []codeLine
+		KindLabel    string // "skill", "subagent", ... blank for code prompts
+		Hotspots     []hotspot
+		NSections    int
+		BasisLineAbs int
 	}
+	type hotspotRow = hotspot
+	_ = hotspotRow{}
 
 	bandCounts := map[string]int{}
 	lowConf := 0
 	totalLines := 0
+	promptFiles := 0
+	totalHints := 0
 	rows := make([]row, 0, len(sorted))
 	for _, e := range sorted {
 		m := e.Metrics
@@ -188,6 +259,22 @@ func HTML(entries []ScanEntry, version string) (string, error) {
 		bandCounts[band.Label]++
 		if e.Confidence == "low" {
 			lowConf++
+		}
+		if e.Kind != "" {
+			promptFiles++
+		}
+		totalHints += len(e.Hints)
+		var hot []hotspot
+		for _, sec := range analyzer.Hotspots(e.Sections, maxHotspots) {
+			b := analyzer.BandFor(sec.Metrics.BranchingScore)
+			hot = append(hot, hotspot{
+				Heading:   sec.Heading,
+				Line:      e.Line - 1 + sec.Line,
+				ScoreStr:  fscore(sec.Metrics.BranchingScore),
+				BandClass: bandClass(b.Label),
+				Decisions: sec.Metrics.Decisions,
+				Advice:    analyzer.Advice(sec.Metrics, e.Kind),
+			})
 		}
 		dir, base := path.Split(e.File)
 
@@ -224,17 +311,21 @@ func HTML(entries []ScanEntry, version string) (string, error) {
 		}
 
 		rows = append(rows, row{
-			ScanEntry: e,
-			Band:      band,
-			BandClass: bandClass(band.Label),
-			LowConf:   e.Confidence == "low",
-			Dir:       shortDir(dir),
-			Base:      base,
-			Ctx:       ctx,
-			ScoreStr:  fscore(m.BranchingScore),
-			Cards:     cards,
-			Channels:  sortedByCount(m.Detail.InjectionByChannel),
-			Code:      code,
+			ScanEntry:    e,
+			Band:         band,
+			BandClass:    bandClass(band.Label),
+			LowConf:      e.Confidence == "low",
+			Dir:          shortDir(dir),
+			Base:         base,
+			Ctx:          ctx,
+			ScoreStr:     fscore(m.BranchingScore),
+			Cards:        cards,
+			Channels:     sortedByCount(m.Detail.InjectionByChannel),
+			Code:         code,
+			KindLabel:    kindBadge(e.Kind),
+			Hotspots:     hot,
+			NSections:    len(e.Sections),
+			BasisLineAbs: e.Line - 1 + e.BasisLine,
 		})
 	}
 
@@ -320,41 +411,45 @@ func HTML(entries []ScanEntry, version string) (string, error) {
 		}
 	}
 	data := struct {
-		Rows       []row
-		Regions    []bandRegion
-		Bins       []bin
-		Ticks      []tick
-		Seps       []string
-		HasDist    bool
-		MedianPct  string
-		MedianStr  string
-		P90Str     string
-		Inert      int
-		MaxStr     string
-		Files      int
-		TotalLines int
-		LowConf    int
-		Logo       template.URL
-		Version    string
-		Date       string
+		Rows        []row
+		Regions     []bandRegion
+		Bins        []bin
+		Ticks       []tick
+		Seps        []string
+		HasDist     bool
+		MedianPct   string
+		MedianStr   string
+		P90Str      string
+		Inert       int
+		MaxStr      string
+		Files       int
+		TotalLines  int
+		LowConf     int
+		PromptFiles int
+		TotalHints  int
+		Logo        template.URL
+		Version     string
+		Date        string
 	}{
-		Rows:       rows,
-		Regions:    regions,
-		Bins:       bins,
-		Ticks:      ticks,
-		Seps:       seps,
-		HasDist:    total > 0,
-		MedianPct:  fpct(100 * med / axisMax),
-		MedianStr:  fscore(med),
-		P90Str:     fscore(p90),
-		Inert:      inert,
-		MaxStr:     fscore(maxScore),
-		Files:      len(files),
-		TotalLines: totalLines,
-		LowConf:    lowConf,
-		Logo:       logoDataURI,
-		Version:    version,
-		Date:       time.Now().Format("2006-01-02 15:04"),
+		Rows:        rows,
+		Regions:     regions,
+		Bins:        bins,
+		Ticks:       ticks,
+		Seps:        seps,
+		HasDist:     total > 0,
+		MedianPct:   fpct(100 * med / axisMax),
+		MedianStr:   fscore(med),
+		P90Str:      fscore(p90),
+		Inert:       inert,
+		MaxStr:      fscore(maxScore),
+		Files:       len(files),
+		TotalLines:  totalLines,
+		LowConf:     lowConf,
+		PromptFiles: promptFiles,
+		TotalHints:  totalHints,
+		Logo:        logoDataURI,
+		Version:     version,
+		Date:        time.Now().Format("2006-01-02 15:04"),
 	}
 
 	var b strings.Builder
@@ -469,14 +564,15 @@ var htmlTemplate = template.Must(template.New("report").Funcs(template.FuncMap{"
     </header>
 
     {{- if .HasDist}}
-    <div class="grid grid-cols-2 sm:grid-cols-4 xl:grid-cols-7 gap-3 mb-6">
+    <div class="grid grid-cols-2 sm:grid-cols-4 xl:grid-cols-8 gap-3 mb-6">
       {{template "kpi" dict "V" (len .Rows) "K" "prompts"}}
+      {{template "kpi" dict "V" .PromptFiles "K" "prompt files (skills, rules, templates)"}}
+      {{template "kpi" dict "V" .TotalHints "K" "hints on prompt files"}}
       {{template "kpi" dict "V" .TotalLines "K" "prompt lines"}}
-      {{template "kpi" dict "V" .Files "K" "files"}}
       {{template "kpi" dict "V" .MedianStr "K" "median score (scored > 0)"}}
       {{template "kpi" dict "V" .P90Str "K" "p90 (scored > 0)"}}
-      {{template "kpi" dict "V" .Inert "K" "inert fragments (score 0)"}}
       {{template "kpi" dict "V" .MaxStr "K" "max"}}
+      {{template "kpi" dict "V" .Inert "K" "inert fragments (score 0)"}}
     </div>
 
     <div class="rounded-xl border p-5 mb-5 bg-[var(--card)] border-[var(--hair)]">
@@ -534,12 +630,42 @@ var htmlTemplate = template.Must(template.New("report").Funcs(template.FuncMap{"
       <summary class="flex flex-wrap items-baseline gap-x-3 gap-y-1 px-4 py-3 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
         <span class="font-bold tabular-nums w-14 text-lg">{{.ScoreStr}}</span>
         <span class="inline-flex items-center gap-1.5 text-xs font-bold tracking-wide txt-{{.BandClass}}"><span class="dot {{.BandClass}} w-2 h-2 rounded-sm"></span>{{.Band.Label}}</span>
+        {{- if .KindLabel}}<span class="text-xs font-semibold uppercase tracking-wide px-1.5 py-0.5 rounded bg-[var(--c1)] text-white">{{.KindLabel}}</span>{{end}}
         <span class="font-mono text-sm" title="{{.File}}:{{.Line}}"><span class="text-[var(--muted)]">{{.Dir}}</span><b>{{.Base}}</b>:{{.Line}}</span>
         {{- if .Ctx}}<span class="text-sm text-[var(--muted)] truncate">{{.Ctx}}</span>{{end}}
+        {{- if .Hints}}<span class="text-xs px-1.5 py-0.5 rounded border border-[var(--warn)] text-[var(--warn)]">{{len .Hints}} hint{{if gt (len .Hints) 1}}s{{end}}</span>{{end}}
         <span class="ml-auto text-xs text-[var(--muted)] border rounded-full px-2 py-0.5 border-[var(--hair)]">confidence {{.Confidence}}</span>
         <span class="text-[var(--muted)] transition-transform group-open:rotate-90">›</span>
       </summary>
       <div class="px-4 pb-4 border-t border-[var(--hair)]">
+        {{- if .ScoreBasis}}
+        <p class="text-sm text-[var(--ink2)] mt-3">Judged by its hottest section, <b>{{.ScoreBasis}}</b> (line {{.BasisLineAbs}}, {{.NSections}} sections).
+          {{- if .Document}} Whole file: {{.Document.Decisions}} decisions, {{.Document.Constraints}} guardrails, {{.Document.Words}} words.{{end}}</p>
+        {{- end}}
+        {{- if .Description}}
+        <p class="text-sm text-[var(--ink2)] mt-3"><span class="text-xs font-semibold uppercase tracking-wider text-[var(--muted)] mr-2">Description</span>{{.Description}}</p>
+        {{- end}}
+        {{- if .Hints}}
+        <h3 class="text-xs font-semibold uppercase tracking-wider text-[var(--muted)] mt-3 mb-2">Hints</h3>
+        <ul class="text-sm space-y-1">
+          {{- range .Hints}}
+          <li class="flex gap-2"><span class="shrink-0 text-xs font-semibold uppercase w-10 {{if eq .Severity "warn"}}txt-moderate{{else}}text-[var(--muted)]{{end}}">{{.Severity}}</span><span class="text-[var(--ink2)]">{{.Message}}{{if .Line}} <span class="text-[var(--muted)]">(line {{.Line}})</span>{{end}}</span></li>
+          {{- end}}
+        </ul>
+        {{- end}}
+        {{- if .Hotspots}}
+        <h3 class="text-xs font-semibold uppercase tracking-wider text-[var(--muted)] mt-3 mb-2">Hotspot sections <span class="normal-case font-normal">({{.NSections}} sections, highest first)</span></h3>
+        <table class="text-sm border-collapse">
+          {{- range .Hotspots}}
+          <tr class="border-t border-[var(--hair)]">
+            <td class="py-1 pr-3 font-bold tabular-nums txt-{{.BandClass}} align-top">{{.ScoreStr}}</td>
+            <td class="py-1 pr-3 align-top">{{.Heading}}{{if .Advice}}<div class="text-xs text-[var(--muted)] mt-0.5">{{.Advice}}</div>{{end}}</td>
+            <td class="py-1 pr-3 text-[var(--muted)] tabular-nums whitespace-nowrap align-top">line {{.Line}}</td>
+            <td class="py-1 text-[var(--muted)] tabular-nums whitespace-nowrap align-top">{{.Decisions}} decisions</td>
+          </tr>
+          {{- end}}
+        </table>
+        {{- end}}
         <h3 class="text-xs font-semibold uppercase tracking-wider text-[var(--muted)] mt-3 mb-2">Signals</h3>
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
           {{- range .Cards}}
@@ -640,6 +766,7 @@ var htmlTemplate = template.Must(template.New("report").Funcs(template.FuncMap{"
       <h2 class="font-semibold mb-2">Reading a prompt</h2>
       <ul class="text-sm text-[var(--ink2)] space-y-2 list-disc pl-5">
         <li>The <b>Signals</b> cards decompose the score: each shows the metric and its point contribution, so you can see <i>why</i> a prompt is flagged. Zeroed signals are dimmed.</li>
+        <li><b>Prompt files</b> (badge on the row) are files loaded whole into a model's context: Claude Code skills, subagents and commands, CLAUDE.md and AGENTS.md, Cursor and Copilot rules, prompt templates. Their Markdown sections are scored separately and the file is <b>judged by its hottest section</b> (summing decisions over hundreds of lines would only measure length): the <b>hotspot sections</b> table tells where the branching lives, with a remedy for each HIGH or CRITICAL section, and <b>hints</b> flag what the score cannot: a skill without a trigger description, a body over the documented size, a reference to a file that does not exist.</li>
         <li><b>Confidence</b> is how sure the extractor is that the string is an LLM prompt:
           <span class="txt-low font-medium">high</span> = seen at an LLM API call site,
           <b>medium</b> = bound to a prompt-like name,

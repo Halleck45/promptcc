@@ -10,6 +10,7 @@ import (
 
 	"github.com/halleck45/promptcc/internal/analyzer"
 	"github.com/halleck45/promptcc/internal/extractor"
+	"github.com/halleck45/promptcc/internal/promptfile"
 	"github.com/halleck45/promptcc/internal/report"
 )
 
@@ -24,9 +25,14 @@ Usage:
 
 Each path may be:
   - a directory: scan its source files (Python, TypeScript, JavaScript, PHP)
-    and analyze every prompt found in the code
+    for prompts embedded in code, and pick up prompt files: agent
+    instructions (CLAUDE.md, AGENTS.md, SKILL.md, .claude/agents, Cursor and
+    Copilot rules, ...) and prompt templates (.prompt, prompts/*.md, files
+    referenced from code)
   - a source file: extract and analyze its prompts
   - any other file, or "-": analyze the whole content as one prompt
+    (YAML frontmatter is parsed, Markdown sections are scored separately
+    and the prompt is judged by its hottest section)
 
 Flags:
   --json                  output JSON instead of text
@@ -104,7 +110,6 @@ func run(args []string, stdin io.Reader, stdout, stderr io.Writer) int {
 		}
 	}
 
-	var textResults []analyzer.Metrics
 	var entries []report.ScanEntry
 
 	stopSpinner := startSpinner(!*jsonOut && len(scanPaths) > 0)
@@ -116,38 +121,23 @@ func run(args []string, stdin io.Reader, stdout, stderr io.Writer) int {
 			return 2
 		}
 		for _, p := range prompts {
-			name := fmt.Sprintf("%s:%d", p.File, p.Line)
-			entries = append(entries, report.ScanEntry{
-				File:       p.File,
-				Line:       p.Line,
-				EndLine:    p.EndLine,
-				Confidence: p.Confidence.String(),
-				Context:    p.Context,
-				Slots:      p.Slots,
-				Text:       p.Text,
-				Metrics:    analyzer.Analyze(p.Text, name),
-			})
+			entries = append(entries, entryFor(p, fmt.Sprintf("%s:%d", p.File, p.Line)))
 		}
 	}
 	stopSpinner()
 
 	for _, f := range textPaths {
-		text, name, err := readInput(f, stdin)
+		content, name, err := readInput(f, stdin)
 		if err != nil {
 			fmt.Fprintf(stderr, "promptcc: %v\n", err)
 			return 2
 		}
-		m := analyzer.Analyze(text, name)
-		textResults = append(textResults, m)
-		entries = append(entries, report.ScanEntry{
-			File:       name,
-			Line:       1,
-			EndLine:    1,
-			Confidence: "file",
-			Context:    "prompt file",
-			Text:       text,
-			Metrics:    m,
-		})
+		// An explicit file is always analyzed whole. Its location still
+		// tells what it is (a SKILL.md, a CLAUDE.md), which drives the hints.
+		m, _ := promptfile.Detect(name)
+		e := entryFor(extractor.PromptFromFile(promptfile.Parse(name, content, m)), name)
+		e.Confidence = "file"
+		entries = append(entries, e)
 	}
 
 	if *reportHTML != "" {
@@ -164,28 +154,23 @@ func run(args []string, stdin io.Reader, stdout, stderr io.Writer) int {
 
 	scanMode := len(scanPaths) > 0
 	switch {
-	case *jsonOut && scanMode:
+	case *jsonOut:
 		b, err := json.MarshalIndent(entries, "", "  ")
 		if err != nil {
 			fmt.Fprintf(stderr, "promptcc: %v\n", err)
 			return 2
 		}
 		fmt.Fprintln(stdout, string(b))
-	case *jsonOut:
-		out, err := report.JSON(textResults)
-		if err != nil {
-			fmt.Fprintf(stderr, "promptcc: %v\n", err)
-			return 2
-		}
-		fmt.Fprintln(stdout, out)
 	case scanMode:
 		renderScan(stdout, entries, *verbose || *full, *full)
 	default:
-		for _, m := range textResults {
-			fmt.Fprintln(stdout, report.Text(m))
+		var all []analyzer.Metrics
+		for _, e := range entries {
+			fmt.Fprintln(stdout, report.EntryText(e))
+			all = append(all, e.Metrics)
 		}
-		if len(textResults) > 1 {
-			fmt.Fprint(stdout, report.Comparison(textResults))
+		if len(all) > 1 {
+			fmt.Fprint(stdout, report.Comparison(all))
 		}
 	}
 
@@ -201,19 +186,43 @@ func run(args []string, stdin io.Reader, stdout, stderr io.Writer) int {
 	return 0
 }
 
-func readInput(path string, stdin io.Reader) (text, name string, err error) {
+// entryFor analyzes a prompt and wraps it as a report entry, scoring its
+// Markdown sections separately when it has any.
+func entryFor(p extractor.Prompt, name string) report.ScanEntry {
+	j := analyzer.Judge(p.Text, name)
+	return report.ScanEntry{
+		File:        p.File,
+		Line:        p.Line,
+		EndLine:     p.EndLine,
+		Confidence:  p.Confidence.String(),
+		Context:     p.Context,
+		Slots:       p.Slots,
+		Text:        p.Text,
+		Kind:        p.Kind,
+		Name:        p.Name,
+		Description: p.Description,
+		Hints:       p.Hints,
+		Metrics:     j.Metrics,
+		ScoreBasis:  j.Basis,
+		BasisLine:   j.BasisLine,
+		Document:    j.Document,
+		Sections:    j.Sections,
+	}
+}
+
+func readInput(path string, stdin io.Reader) (content []byte, name string, err error) {
 	if path == "-" {
 		b, err := io.ReadAll(stdin)
 		if err != nil {
-			return "", "", fmt.Errorf("reading stdin: %w", err)
+			return nil, "", fmt.Errorf("reading stdin: %w", err)
 		}
-		return string(b), "stdin", nil
+		return b, "stdin", nil
 	}
 	b, err := os.ReadFile(path)
 	if err != nil {
-		return "", "", err
+		return nil, "", err
 	}
-	return string(b), path, nil
+	return b, path, nil
 }
 
 func stdinIsPiped() bool {

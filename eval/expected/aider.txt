@@ -47,7 +47,7 @@ aider/coders/base_prompts.py:45  [medium]  in CoderPrompts
 aider/coders/base_prompts.py:50  [medium]  in CoderPrompts
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=1
 aider/coders/context_prompts.py:7  [medium]  in ContextPrompts
-    score 3.37 [LOW]  decisions=2 density=0.077 routes=0 inject=1 guards=3
+    score 3.78 [LOW]  decisions=2 density=0.118 routes=0 inject=1 guards=3  § (preamble)
 aider/coders/context_prompts.py:47  [medium]  in ContextPrompts
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 aider/coders/context_prompts.py:53  [medium]  in ContextPrompts
@@ -165,7 +165,7 @@ aider/coders/wholefile_prompts.py:42  [medium]  var system_reminder
 aider/gui.py:290  [medium]  var self.old_prompt
     score 0 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 aider/mdstream.py:16  [low]  heuristic: natural language literal
-    score 1.67 [LOW]  decisions=1 density=0.067 routes=0 inject=0 guards=0
+    score 2.25 [LOW]  decisions=1 density=0.125 routes=0 inject=0 guards=0  § Header
 aider/prompts.py:8  [low]  heuristic: natural language literal
     score 2.5 [LOW]  decisions=0 density=0 routes=0 inject=2 guards=0
 aider/prompts.py:26  [low]  heuristic: natural language literal

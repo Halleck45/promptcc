@@ -198,3 +198,113 @@ func TestRunScanHTMLReport(t *testing.T) {
 		t.Errorf("HTML report looks wrong (%d bytes)", len(b))
 	}
 }
+
+const skillDoc = `---
+name: deploy
+description: Deploys the application.
+---
+
+# Deploy
+
+Read ` + "`references/checklist.md`" + ` first.
+
+## Preflight
+
+If the tree is dirty, stop. Unless the user insists, never force push.
+
+## Reporting
+
+Always report the version.
+`
+
+func writeSkill(t *testing.T) string {
+	t.Helper()
+	dir := filepath.Join(t.TempDir(), ".claude", "skills", "deploy")
+	if err := os.MkdirAll(dir, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	path := filepath.Join(dir, "SKILL.md")
+	if err := os.WriteFile(path, []byte(skillDoc), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	return path
+}
+
+func TestRunSkillFileShowsHintsAndSections(t *testing.T) {
+	path := writeSkill(t)
+	var stdout, stderr bytes.Buffer
+	if code := run([]string{path}, strings.NewReader(""), &stdout, &stderr); code != 0 {
+		t.Fatalf("exit code = %d, stderr = %s", code, stderr.String())
+	}
+	out := stdout.String()
+	for _, want := range []string{
+		"Description: Deploys the application.",
+		"Hotspot sections",
+		"Preflight",
+		"Hints:",
+		"references/checklist.md",
+		"not when to use it",
+	} {
+		if !strings.Contains(out, want) {
+			t.Errorf("output lacks %q:\n%s", want, out)
+		}
+	}
+}
+
+func TestRunScanDirectoryWithSkill(t *testing.T) {
+	path := writeSkill(t)
+	root := filepath.Dir(filepath.Dir(filepath.Dir(filepath.Dir(path))))
+	var stdout, stderr bytes.Buffer
+	if code := run([]string{"--verbose", root}, strings.NewReader(""), &stdout, &stderr); code != 0 {
+		t.Fatalf("exit code = %d, stderr = %s", code, stderr.String())
+	}
+	out := stdout.String()
+	if !strings.Contains(out, "[high]  skill deploy") {
+		t.Errorf("verbose line should name the skill:\n%s", out)
+	}
+	if !strings.Contains(out, "1 prompt(s) in 1 file(s): 1 skill") {
+		t.Errorf("summary should count kinds:\n%s", out)
+	}
+	if !strings.Contains(out, "warn: references references/checklist.md") {
+		t.Errorf("verbose output should list hints:\n%s", out)
+	}
+}
+
+func TestRunJSONIncludesKindAndSections(t *testing.T) {
+	path := writeSkill(t)
+	var stdout, stderr bytes.Buffer
+	if code := run([]string{"--json", path}, strings.NewReader(""), &stdout, &stderr); code != 0 {
+		t.Fatalf("exit code = %d, stderr = %s", code, stderr.String())
+	}
+	var decoded []map[string]any
+	if err := json.Unmarshal(stdout.Bytes(), &decoded); err != nil {
+		t.Fatalf("invalid JSON: %v\n%s", err, stdout.String())
+	}
+	if len(decoded) != 1 {
+		t.Fatalf("decoded %d entries, want 1", len(decoded))
+	}
+	e := decoded[0]
+	if e["kind"] != "skill" || e["name"] != "deploy" {
+		t.Errorf("kind/name = %v/%v", e["kind"], e["name"])
+	}
+	if secs, _ := e["sections"].([]any); len(secs) != 3 {
+		t.Errorf("sections = %v, want 3 (blank preamble is skipped)", e["sections"])
+	}
+	if hints, _ := e["hints"].([]any); len(hints) != 2 {
+		t.Errorf("hints = %v, want 2", e["hints"])
+	}
+	if _, ok := e["metrics"].(map[string]any); !ok {
+		t.Errorf("metrics missing: %v", e)
+	}
+}
+
+func TestRunStdinWithFrontmatter(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := run([]string{"-"}, strings.NewReader(skillDoc), &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("exit code = %d, stderr = %s", code, stderr.String())
+	}
+	if !strings.Contains(stdout.String(), "Description: Deploys the application.") {
+		t.Errorf("stdin frontmatter should be parsed:\n%s", stdout.String())
+	}
+}

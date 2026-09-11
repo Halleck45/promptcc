@@ -1,3 +1,5 @@
+resources/boost/skills/developing-with-prism/SKILL.md:5  [high]  skill developing-with-prism
+    score 3 [LOW]  decisions=0 density=0 routes=1 inject=1 guards=0  § Tools / Function Calling
 src/Providers/Anthropic/Handlers/StructuredStrategies/ToolStructuredStrategy.php:25  [low]  heuristic: natural language literal
     score 7.33 [MODERATE]  decisions=1 density=0.333 routes=2 inject=0 guards=0
 tests/Providers/Anthropic/AnthropicTextTest.php:519  [low]  heuristic: natural language literal
@@ -55,11 +57,12 @@ tests/Providers/Z/MessageMapTest.php:28  [medium]  var $systemPrompts
 tests/Providers/Z/ZStructuredTest.php:67  [low]  heuristic: natural language literal
     score 0.5 [LOW]  decisions=0 density=0 routes=0 inject=0 guards=0
 
-28 prompt(s) in 16 file(s)
+29 prompt(s) in 17 file(s): 28 in code, 1 skill
 
 ── worst offenders ──────────────────────────
       7.33  MODERATE  src/Providers/Anthropic/Handlers/StructuredStrategies/ToolStructuredStrategy.php:25
       4.50  LOW       tests/Providers/Anthropic/AnthropicTextTest.php:569
+      3.00  LOW       resources/boost/skills/developing-with-prism/SKILL.md:5
       0.50  LOW       tests/Providers/DeepSeek/MessageMapTest.php:195
       0.50  LOW       tests/Providers/Gemini/MessageMapTest.php:253
       0.50  LOW       tests/Providers/Gemini/MessageMapTest.php:270
@@ -67,4 +70,3 @@ tests/Providers/Z/ZStructuredTest.php:67  [low]  heuristic: natural language lit
       0.50  LOW       tests/Providers/Mistral/MessageMapTest.php:157
       0.50  LOW       tests/Providers/OpenAI/MessageMapTest.php:247
       0.50  LOW       tests/Providers/OpenRouter/MessageMapTest.php:235
-      0.50  LOW       tests/Providers/XAI/MessageMapTest.php:133
