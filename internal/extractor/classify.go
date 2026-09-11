@@ -299,3 +299,34 @@ func compactCallee(callee string) string {
 	}
 	return callee
 }
+
+// referenceEvidence reports whether a path literal is handed to a prompt:
+// bound to a prompt-like name (prompt_path, systemPromptFile), passed to an
+// SDK call, or produced inside a prompt-named function. Unlike classify it
+// ignores the deny list: "path" and "file" bindings are exactly what a
+// template reference looks like.
+func referenceEvidence(lang *language, n *sitter.Node, src []byte) bool {
+	for p, depth := n.Parent(), 0; p != nil && depth < maxClimb; p, depth = p.Parent(), depth+1 {
+		kind := p.Kind()
+		if render, ok := lang.callKinds[kind]; ok {
+			callee := render(p, src)
+			if isSDKCallee(callee) || isPromptish(lastIdentSegment(callee)) {
+				return true
+			}
+		}
+		var name string
+		if field, ok := lang.keyedKinds[kind]; ok {
+			name = fieldText(p, field, src)
+		} else if field, ok := lang.assignmentKinds[kind]; ok {
+			name = fieldText(p, field, src)
+		} else if field, ok := lang.declKinds[kind]; ok {
+			name = fieldText(p, field, src)
+		} else if (kind == "array_element_initializer" || kind == "property_element" || kind == "argument") && p.NamedChildCount() >= 2 {
+			name = p.NamedChild(0).Utf8Text(src)
+		}
+		if name != "" && isPromptish(lastIdentSegment(name)) {
+			return true
+		}
+	}
+	return false
+}

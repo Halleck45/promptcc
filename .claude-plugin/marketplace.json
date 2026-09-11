@@ -1,0 +1,21 @@
+{
+  "name": "promptcc",
+  "owner": {
+    "name": "Jean-François Lépine",
+    "url": "https://github.com/halleck45"
+  },
+  "metadata": {
+    "description": "promptcc: cyclomatic complexity for prompts, CLAUDE.md and skills",
+    "homepage": "https://github.com/halleck45/promptcc"
+  },
+  "plugins": [
+    {
+      "name": "promptcc",
+      "source": "./plugin",
+      "description": "Audit your CLAUDE.md, skills, subagents and prompts for hidden branching logic: scores, hot sections, and hints for skills that will never trigger.",
+      "version": "0.1.0",
+      "category": "productivity",
+      "keywords": ["prompt", "complexity", "CLAUDE.md", "skills", "lint", "audit"]
+    }
+  ]
+}

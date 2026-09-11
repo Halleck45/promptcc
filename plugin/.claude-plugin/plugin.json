@@ -1,0 +1,12 @@
+{
+  "name": "promptcc",
+  "description": "Audit your CLAUDE.md, skills, subagents and prompts for hidden branching logic. Scores them, finds the hot sections, flags skills that will never trigger.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Jean-François Lépine"
+  },
+  "homepage": "https://github.com/halleck45/promptcc",
+  "repository": "https://github.com/halleck45/promptcc",
+  "license": "MIT",
+  "keywords": ["prompt", "complexity", "CLAUDE.md", "skills", "lint", "audit"]
+}

@@ -5,6 +5,7 @@ import (
 	"io"
 	"os"
 	"sort"
+	"strings"
 	"time"
 
 	"github.com/halleck45/promptcc/internal/analyzer"
@@ -21,23 +22,37 @@ func renderScan(w io.Writer, entries []report.ScanEntry, verbose, full bool) {
 		for _, e := range entries {
 			fmt.Fprintf(w, "%s  [%s]  %s\n", e.Metrics.Name, e.Confidence, e.Context)
 			if full {
-				fmt.Fprintln(w, report.Text(e.Metrics))
+				fmt.Fprintln(w, report.EntryText(e))
 				continue
 			}
 			band := analyzer.BandFor(e.Metrics.BranchingScore)
-			fmt.Fprintf(w, "    score %g [%s]  decisions=%d density=%g routes=%d inject=%d guards=%d\n",
+			basis := ""
+			if e.ScoreBasis != "" {
+				basis = fmt.Sprintf("  § %s", e.ScoreBasis)
+			}
+			fmt.Fprintf(w, "    score %g [%s]  decisions=%d density=%g routes=%d inject=%d guards=%d%s\n",
 				e.Metrics.BranchingScore, band.Label, e.Metrics.Decisions,
 				e.Metrics.DecisionRatio, e.Metrics.ToolRoutes,
-				e.Metrics.InjectionChannels, e.Metrics.Constraints)
+				e.Metrics.InjectionChannels, e.Metrics.Constraints, basis)
+			for _, h := range e.Hints {
+				fmt.Fprintf(w, "    %s: %s\n", h.Severity, h.Message)
+			}
 		}
 		fmt.Fprintln(w)
 	}
 
 	files := map[string]bool{}
+	byKind := map[string]int{}
+	hints := 0
 	for _, e := range entries {
 		files[e.File] = true
+		byKind[e.Kind]++
+		hints += len(e.Hints)
 	}
-	fmt.Fprintf(w, "%d prompt(s) in %d file(s)\n", len(entries), len(files))
+	fmt.Fprintf(w, "%d prompt(s) in %d file(s)%s\n", len(entries), len(files), kindSummary(byKind))
+	if hints > 0 {
+		fmt.Fprintf(w, "%d hint(s) on prompt files\n", hints)
+	}
 
 	sorted := make([]report.ScanEntry, len(entries))
 	copy(sorted, entries)
@@ -55,6 +70,21 @@ func renderScan(w io.Writer, entries []report.ScanEntry, verbose, full bool) {
 	if !verbose {
 		fmt.Fprintln(w, "\nUse --verbose for per-prompt detail, or --report-html report.html.")
 	}
+}
+
+// kindSummary renders ": 12 in code, 3 skills, 1 rules file" when the scan
+// found prompt files, and "" when everything came from code.
+func kindSummary(byKind map[string]int) string {
+	if len(byKind) == 1 && byKind[""] > 0 {
+		return ""
+	}
+	var parts []string
+	for _, k := range []string{"", "rules", "skill", "agent", "command", "template", "prompt"} {
+		if n := byKind[k]; n > 0 {
+			parts = append(parts, fmt.Sprintf("%d %s", n, report.KindLabel(k, n)))
+		}
+	}
+	return ": " + strings.Join(parts, ", ")
 }
 
 // startSpinner shows a scanning indicator on stderr while the scan runs.

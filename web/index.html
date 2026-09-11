@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>promptcc playground — branching complexity for LLM prompts</title>
-<meta name="description" content="Paste an LLM prompt and measure its branching complexity: decision points, routing, injection surface, output schema depth. Runs entirely in your browser.">
+<title>promptcc playground — branching complexity for LLM prompts, CLAUDE.md and skills</title>
+<meta name="description" content="Paste an LLM prompt, a CLAUDE.md or a SKILL.md and measure its branching complexity: decision points, routing, injection surface, output schema depth, hotspot sections. Runs entirely in your browser.">
 <link rel="icon" href="logo.webp">
 <style>
   :root {
@@ -76,7 +76,7 @@
     padding: 12px; font: 13px/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   }
   textarea:focus { outline: 2px solid var(--series); outline-offset: -1px; }
-  .input-foot { display: flex; justify-content: flex-end; margin-top: 10px; }
+  .input-foot { display: flex; justify-content: flex-end; gap: 8px; margin-top: 10px; }
   button {
     background: var(--surface); color: var(--text-primary);
     border: 1px solid var(--border); border-radius: 8px;
@@ -90,6 +90,10 @@
   .hero .band { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; }
   .hero .band .dot { width: 12px; height: 12px; border-radius: 50%; }
   .hero .hint { color: var(--text-secondary); }
+  .hero .share { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+  .hero .share img { height: 20px; }
+  .basis { color: var(--text-secondary); font-size: 14px; margin-top: 12px; }
+  .basis b { color: var(--text-primary); }
 
   /* Band meter */
   .meter { margin-top: 20px; }
@@ -144,8 +148,32 @@
     padding: 6px 10px; font-size: 12px; color: var(--text-primary); white-space: nowrap;
   }
 
+  /* Prompt file: frontmatter, hints, sections */
+  .file-head { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }
+  .badge {
+    display: inline-block; background: var(--series); color: #fff; border-radius: 4px;
+    padding: 1px 7px; font-size: 11px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;
+  }
+  .file-head .name { font-weight: 600; }
+  .file-head .ctx { color: var(--text-muted); font-size: 13px; }
+  .desc { color: var(--text-secondary); font-size: 14px; margin-bottom: 10px; }
+  .hints { list-style: none; padding: 0; }
+  .hints li { display: flex; gap: 10px; padding: 6px 0; border-top: 1px solid var(--grid); font-size: 14px; }
+  .hints .sev { flex: 0 0 44px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; padding-top: 3px; }
+  .hints .sev.warn { color: var(--serious); }
+  .hints .sev.info { color: var(--text-muted); }
+  .hints .none { color: var(--text-muted); font-size: 13px; }
+  .sections { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .sections td { padding: 5px 8px 5px 0; border-top: 1px solid var(--grid); vertical-align: top; }
+  .sections td.sc { width: 64px; font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .sections td.sc .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
+  .sections td.h { color: var(--text-primary); }
+  .sections td.h .lvl { color: var(--text-muted); font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 12px; margin-right: 6px; }
+  .sections td.meta { color: var(--text-muted); font-size: 13px; white-space: nowrap; text-align: right; font-variant-numeric: tabular-nums; }
+  .sections .advice { color: var(--text-muted); font-size: 12px; margin-top: 2px; }
+  .sections-note { color: var(--text-muted); font-size: 13px; margin-top: 10px; }
   .status-line { color: var(--text-muted); font-size: 13px; }
-  #results[hidden] { display: none; }
+  #results[hidden], .card[hidden], .desc[hidden] { display: none; }
   footer { color: var(--text-muted); font-size: 13px; margin-top: 32px; text-align: center; }
   footer a { color: var(--text-secondary); }
 </style>
@@ -177,6 +205,12 @@
   <p class="status-line" id="status">Loading analyzer…</p>
 
   <section id="results" hidden>
+    <div class="card" id="file-card" hidden>
+      <h2 id="file-title">What to fix</h2>
+      <div class="file-head" id="file-head"></div>
+      <p class="desc" id="file-desc" hidden></p>
+      <ul class="hints" id="file-hints"></ul>
+    </div>
     <div class="card">
       <div class="hero">
         <div class="score" id="score">0</div>
@@ -184,13 +218,23 @@
           <div class="band"><span class="dot" id="band-dot"></span><span id="band-label"></span></div>
           <div class="hint" id="band-hint"></div>
         </div>
+        <div class="share">
+          <img id="badge-img" alt="" hidden>
+          <button id="badge" type="button" title="Copy a Markdown badge for your README">Copy badge</button>
+        </div>
       </div>
+      <p class="basis" id="basis" hidden></p>
       <div class="meter">
         <div class="track" id="meter-track"></div>
         <div class="scale-labels" id="meter-labels"></div>
       </div>
     </div>
 
+    <div class="card" id="sections-card" hidden>
+      <h2>Hotspot sections</h2>
+      <table class="sections" id="sections"></table>
+      <p class="sections-note" id="sections-note"></p>
+    </div>
     <div class="card">
       <h2>What matters (distinct things)</h2>
       <div class="kpis" id="kpis"></div>
@@ -245,6 +289,35 @@ Order details: \${order_json}
 
 Respond in JSON: {"action": "...", "reply": "...", "escalate": true|false}`;
 
+const EXAMPLE_SKILL = `---
+name: deploy
+description: Deploys the application to production.
+---
+
+# Deploy
+
+Run the deployment for the current branch. Read \`references/checklist.md\` first.
+
+## Preflight
+
+- If the working tree is dirty, stop and ask the user to commit or stash.
+- If the branch is not main, ask whether to deploy a preview environment instead.
+- Never deploy when the CI status of the last commit is failing.
+- When the last deploy is less than 10 minutes old, warn the user and wait for confirmation.
+
+## Choosing a target
+
+- If the change only touches docs/, deploy to the docs site only.
+- If migrations are present, run them first, unless the user says the database is frozen.
+- When the change touches billing code, escalate to the on-call engineer before deploying.
+- Otherwise deploy to production with \`scripts/deploy.sh {{target}}\`.
+
+## Reporting
+
+Always report the deployed version and the URL. Respond in JSON:
+{"version": "...", "url": "...", "rollback": {"command": "...", "safe": true}}
+`;
+
 const SCALE_MAX = 30; // meter range; CRITICAL is open-ended past its Min
 const BAND_COLORS = {
   LOW: "var(--good)",
@@ -252,6 +325,12 @@ const BAND_COLORS = {
   HIGH: "var(--serious)",
   CRITICAL: "var(--critical)",
 };
+const BADGE_HEX = { LOW: "3fb950", MODERATE: "e3b341", HIGH: "f0883e", CRITICAL: "d03b3b" };
+
+function badgeUrl(score, band) {
+  const msg = `${fmt(score)} ${band}`.replace(/-/g, "--").replace(/_/g, "__").replace(/ /g, "%20");
+  return `https://img.shields.io/badge/promptcc-${msg}-${BADGE_HEX[band] || "8b949e"}`;
+}
 
 const $ = (id) => document.getElementById(id);
 
@@ -387,13 +466,105 @@ function renderEvidence(m) {
   fill("ev-injection", m.detail.injection_by_channel);
 }
 
+function renderFile(r) {
+  const card = $("file-card");
+  const f = r.file || {};
+  const hints = f.hints || [];
+  if (!f.frontmatter && !hints.length) { card.hidden = true; return; }
+  card.hidden = false;
+  $("file-title").textContent = hints.length ? "What to fix" : "Prompt file";
+
+  const head = $("file-head");
+  head.replaceChildren();
+  if (f.frontmatter) {
+    head.appendChild(el("span", "badge", f.kind));
+    head.appendChild(el("span", "name", f.name || "(no name in frontmatter)"));
+    head.appendChild(el("span", "ctx", f.context));
+  }
+  const desc = $("file-desc");
+  desc.textContent = f.description || "";
+  desc.hidden = !f.description;
+
+  const list = $("file-hints");
+  list.replaceChildren();
+  if (!hints.length) {
+    const li = el("li");
+    li.appendChild(el("span", "none", "No hints: frontmatter and size look fine."));
+    list.appendChild(li);
+    return;
+  }
+  for (const h of hints) {
+    const li = el("li");
+    li.appendChild(el("span", "sev " + h.severity, h.severity));
+    li.appendChild(el("span", null, h.message + (h.line ? ` (line ${h.line})` : "")));
+    list.appendChild(li);
+  }
+}
+
+function renderSections(r) {
+  const card = $("sections-card");
+  const secs = (r.sections || []).slice();
+  if (secs.length < 2) { card.hidden = true; return; }
+  card.hidden = false;
+  const offset = (r.file && r.file.body_line ? r.file.body_line : 1) - 1;
+  const advice = r.advice || [];
+  const rows = secs.map((s, i) => ({ s, advice: advice[i] || "" }));
+  rows.sort((a, b) => b.s.metrics.branching_score - a.s.metrics.branching_score);
+
+  const table = $("sections");
+  table.replaceChildren();
+  for (const { s, advice: tip } of rows) {
+    const m = s.metrics;
+    const tr = el("tr");
+    const sc = el("td", "sc");
+    const dot = el("span", "dot");
+    const band = r.scale.slice().reverse().find((b) => m.branching_score >= b.Min) || r.scale[0];
+    dot.style.background = BAND_COLORS[band.Label] || "var(--grid)";
+    sc.appendChild(dot);
+    sc.appendChild(document.createTextNode(fmt(m.branching_score)));
+    tr.appendChild(sc);
+    const h = el("td", "h");
+    h.appendChild(el("span", "lvl", s.level ? "#".repeat(s.level) : "·"));
+    h.appendChild(document.createTextNode(s.heading));
+    if (tip) h.appendChild(el("div", "advice", "→ " + tip));
+    tr.appendChild(h);
+    tr.appendChild(el("td", "meta", `line ${offset + s.line} · ${m.n_decisions} decisions`));
+    table.appendChild(tr);
+  }
+  $("sections-note").textContent =
+    `${secs.length} sections scored separately. The prompt is judged by its hottest section: ` +
+    `summing decisions over a long file would only measure length.`;
+}
+
+let lastBadge = "";
+
+function renderBasis(r) {
+  const p = $("basis");
+  if (!r.score_basis) { p.hidden = true; return; }
+  p.hidden = false;
+  p.replaceChildren();
+  p.appendChild(document.createTextNode("Judged by its hottest section, "));
+  p.appendChild(el("b", null, r.score_basis));
+  const line = (r.file && r.file.body_line ? r.file.body_line - 1 : 0) + (r.score_basis_line || 0);
+  let tail = ` (line ${line}, ${(r.sections || []).length} sections).`;
+  if (r.document) tail += ` Whole text: ${r.document.n_decisions} decisions, ${r.document.n_constraints} guardrails, ${r.document.n_words} words.`;
+  p.appendChild(document.createTextNode(tail));
+}
+
 function render(r) {
   const m = r.metrics;
   $("score").textContent = fmt(m.branching_score);
   $("band-dot").style.background = BAND_COLORS[r.band.Label] || "var(--grid)";
   $("band-label").textContent = r.band.Label;
   $("band-hint").textContent = r.band.Hint;
+  const url = badgeUrl(m.branching_score, r.band.Label);
+  lastBadge = `![promptcc](${url})`;
+  $("badge-img").src = url;
+  $("badge-img").hidden = false;
+  renderBasis(r);
   renderMeter(m.branching_score, r.scale);
+  renderFile(r);
+  renderSections(r);
   renderKpis(m);
   renderBreakdown(r);
   renderEvidence(m);
@@ -408,7 +579,7 @@ function analyze() {
   if (!wasmReady) return;
   if (!text.trim()) {
     $("results").hidden = true;
-    $("status").textContent = "Paste a prompt above to see its branching analysis.";
+    $("status").textContent = "Paste your CLAUDE.md, a SKILL.md or any prompt above. Hints first, then the score.";
     $("status").hidden = false;
     return;
   }
@@ -427,14 +598,31 @@ $("example").addEventListener("click", () => {
   $("prompt").value = EXAMPLE;
   analyze();
 });
+$("example-skill").addEventListener("click", () => {
+  $("prompt").value = EXAMPLE_SKILL;
+  analyze();
+});
+$("badge").addEventListener("click", async () => {
+  const btn = $("badge");
+  try {
+    await navigator.clipboard.writeText(lastBadge);
+    btn.textContent = "Copied!";
+  } catch (_) {
+    window.prompt("Copy this Markdown:", lastBadge);
+    btn.textContent = "Copy badge";
+    return;
+  }
+  setTimeout(() => { btn.textContent = "Copy badge"; }, 1800);
+});
 
 const go = new Go();
 WebAssembly.instantiateStreaming(fetch("promptcc.wasm"), go.importObject)
   .then((result) => {
     go.run(result.instance);
     wasmReady = true;
-    $("status").textContent = "Paste a prompt above to see its branching analysis.";
+    $("status").textContent = "Paste your CLAUDE.md, a SKILL.md or any prompt above. Hints first, then the score.";
     if (location.hash === "#example" && !$("prompt").value) $("prompt").value = EXAMPLE;
+    if (location.hash === "#skill" && !$("prompt").value) $("prompt").value = EXAMPLE_SKILL;
     analyze();
   })
   .catch((err) => {

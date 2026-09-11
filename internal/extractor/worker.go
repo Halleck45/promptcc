@@ -6,12 +6,16 @@ import (
 	"strings"
 
 	sitter "github.com/tree-sitter/go-tree-sitter"
+
+	"github.com/halleck45/promptcc/internal/promptfile"
 )
 
 // worker owns one parser per grammar. Parsers are not safe for concurrent
-// use, so each goroutine gets its own worker.
+// use, so each goroutine gets its own worker. Template references seen in
+// the current file accumulate in refs until the scan collects them.
 type worker struct {
 	parsers map[string]*sitter.Parser
+	refs    []reference
 }
 
 func newWorker() *worker {
@@ -140,6 +144,19 @@ func (w *worker) extractString(lang *language, n *sitter.Node, src []byte, path 
 		return Prompt{}, false
 	}
 	text, slots := decodeString(lang, n, src)
+	// A literal that names a template file is a pointer to a prompt, not a
+	// prompt: remember it so the file can be loaded once the scan is done.
+	if len(slots) == 0 {
+		if isPath, _ := promptfile.IsTemplatePath(text); isPath {
+			w.refs = append(w.refs, reference{
+				from:     path,
+				line:     int(n.StartPosition().Row) + 1,
+				target:   strings.TrimSpace(text),
+				evidence: referenceEvidence(lang, n, src),
+			})
+			return Prompt{}, false
+		}
+	}
 	return w.finishPrompt(lang, n, src, path, text, slots)
 }
 
