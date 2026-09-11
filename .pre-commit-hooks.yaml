@@ -1,0 +1,18 @@
+# pre-commit hook: score the prompts, CLAUDE.md, skills and rules touched by a
+# commit. Requires Go and a C compiler on the machine (pre-commit builds the
+# binary from this repository once and caches it).
+#
+#   repos:
+#     - repo: https://github.com/halleck45/promptcc
+#       rev: v0.3.0
+#       hooks:
+#         - id: promptcc
+#           args: [--fail-over, "22"]
+- id: promptcc
+  name: promptcc
+  description: Fail when a prompt, CLAUDE.md, skill or rules file scores above the threshold.
+  entry: promptcc
+  language: golang
+  files: \.(py|ts|tsx|js|jsx|mjs|cjs|php|md|mdc|txt|prompt|jinja|j2)$|(^|/)\.cursorrules$|(^|/)\.windsurfrules$|(^|/)\.clinerules$
+  pass_filenames: true
+  require_serial: true

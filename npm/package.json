@@ -1,0 +1,23 @@
+{
+  "name": "promptcc",
+  "version": "0.0.2",
+  "description": "Cyclomatic complexity for LLM prompts, CLAUDE.md and skills. Thin launcher that downloads the promptcc release binary for your platform.",
+  "bin": {
+    "promptcc": "bin/promptcc.js"
+  },
+  "files": [
+    "bin/promptcc.js",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/halleck45/promptcc.git"
+  },
+  "homepage": "https://github.com/halleck45/promptcc",
+  "keywords": ["prompt", "llm", "complexity", "lint", "claude", "CLAUDE.md", "skills", "cursor", "copilot"],
+  "license": "MIT",
+  "author": "Jean-François Lépine"
+}

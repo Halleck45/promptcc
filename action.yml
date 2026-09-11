@@ -1,0 +1,111 @@
+name: promptcc
+description: >-
+  Score the branching complexity of the prompts, CLAUDE.md, skills and agent
+  rules in a repository. Fails the job above a threshold, writes a job
+  summary and an HTML report.
+author: Jean-François Lépine
+branding:
+  icon: git-branch
+  color: purple
+
+inputs:
+  path:
+    description: Directory or file to scan.
+    default: "."
+  fail-over:
+    description: Fail the job if any prompt scores above this value (e.g. 22 for CRITICAL). Empty means never fail.
+    default: ""
+  min-confidence:
+    description: Only report prompts at this confidence or above (low, medium, high).
+    default: low
+  report:
+    description: Path of the HTML report to write. Empty disables the report.
+    default: promptcc-report.html
+  version:
+    description: promptcc release to use (a tag like v0.3.0, or latest).
+    default: latest
+
+outputs:
+  report:
+    description: Path of the HTML report, when one was written.
+    value: ${{ steps.run.outputs.report }}
+
+runs:
+  using: composite
+  steps:
+    - name: Install promptcc
+      shell: bash
+      env:
+        VERSION: ${{ inputs.version }}
+      run: |
+        set -euo pipefail
+        case "$RUNNER_OS" in
+          Linux)   os=linux ;;
+          macOS)   os=darwin ;;
+          Windows) os=windows ;;
+          *) echo "unsupported runner OS: $RUNNER_OS" >&2; exit 1 ;;
+        esac
+        case "$RUNNER_ARCH" in
+          X64)   arch=amd64 ;;
+          ARM64) arch=arm64 ;;
+          *) echo "unsupported runner arch: $RUNNER_ARCH" >&2; exit 1 ;;
+        esac
+        asset="promptcc_${os}_${arch}"
+        [ "$os" = windows ] && asset="$asset.exe"
+        if [ "$VERSION" = latest ]; then
+          url="https://github.com/halleck45/promptcc/releases/latest/download/$asset"
+        else
+          url="https://github.com/halleck45/promptcc/releases/download/$VERSION/$asset"
+        fi
+        dest="$RUNNER_TEMP/promptcc-bin"
+        mkdir -p "$dest"
+        curl -sSfL --retry 3 -o "$dest/promptcc" "$url"
+        chmod +x "$dest/promptcc"
+        echo "$dest" >> "$GITHUB_PATH"
+        "$dest/promptcc" --version
+
+    - name: Run promptcc
+      id: run
+      shell: bash
+      env:
+        SCAN_PATH: ${{ inputs.path }}
+        FAIL_OVER: ${{ inputs.fail-over }}
+        MIN_CONFIDENCE: ${{ inputs.min-confidence }}
+        REPORT: ${{ inputs.report }}
+      run: |
+        set -uo pipefail
+        args=(--min-confidence "$MIN_CONFIDENCE")
+        [ -n "$REPORT" ] && args+=(--report-html "$REPORT")
+        [ -n "$FAIL_OVER" ] && args+=(--fail-over "$FAIL_OVER")
+        set +e
+        promptcc "${args[@]}" "$SCAN_PATH" > promptcc-summary.txt 2> promptcc-stderr.txt
+        code=$?
+        set -e
+        cat promptcc-summary.txt
+        cat promptcc-stderr.txt >&2 || true
+        {
+          echo "## promptcc"
+          echo
+          echo '```'
+          cat promptcc-summary.txt
+          echo '```'
+          if [ -n "$FAIL_OVER" ]; then
+            if [ "$code" -eq 1 ]; then
+              echo
+              echo "**Threshold $FAIL_OVER exceeded.** $(grep -m1 'above threshold' promptcc-stderr.txt || true)"
+            else
+              echo
+              echo "All prompts at or below $FAIL_OVER."
+            fi
+          fi
+        } >> "$GITHUB_STEP_SUMMARY"
+        [ -n "$REPORT" ] && echo "report=$REPORT" >> "$GITHUB_OUTPUT"
+        exit "$code"
+
+    - name: Upload HTML report
+      if: ${{ always() && inputs.report != '' }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: promptcc-report
+        path: ${{ inputs.report }}
+        if-no-files-found: ignore
